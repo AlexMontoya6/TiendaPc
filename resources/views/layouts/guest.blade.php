@@ -11,7 +11,7 @@
 </head>
 <body class="bg-gray-100">
     <!-- Barra de navegación -->
-    <x-navigation.navigation />
+    @livewire('navigation-menu')
 
 
 
