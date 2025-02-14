@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('slug')->unique();
             $table->text('description')->nullable();
-            $table->foreignIdFor(ProductType::class)->constrained()->onDelete('restrict');
+            $table->foreignIdFor(ProductType::class)->nullable()->constrained()->onDelete('restrict');
             $table->timestamps();
         });
     }

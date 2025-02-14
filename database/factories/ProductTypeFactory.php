@@ -2,27 +2,24 @@
 
 namespace Database\Factories;
 
-use App\Models\Product;
-use App\Models\Image;
-use App\Models\Category;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class ProductFactory extends Factory
+/**
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\ProductType>
+ */
+class ProductTypeFactory extends Factory
 {
-    protected $model = Product::class;
-
-    public function definition()
+    /**
+     * Define the model's default state.
+     *
+     * @return array<string, mixed>
+     */
+    public function definition(): array
     {
         return [
-            'name' => $this->faker->word(),
-            'category_id' => Category::inRandomOrder()->first()->id ?? Category::factory(),
+            'name' => $this->faker->unique()->word(),
+            'slug' => $this->faker->slug(),
+            'description' => $this->faker->sentence(),
         ];
-    }
-
-    public function configure()
-    {
-        return $this->afterCreating(function (Product $product) {
-            Image::factory(rand(1, 5))->create(['product_id' => $product->id]);
-        });
     }
 }

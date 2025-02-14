@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Category;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -16,8 +17,18 @@ class SubcategoryFactory extends Factory
      */
     public function definition(): array
     {
+
+        $category = Category::first();
+
+
+        if (!$category) {
+            throw new \Exception("Debe existir al menos una Category en la base de datos.");
+        }
+
         return [
-            //
+            'name' => 'Subcategoría ' . $this->faker->unique()->word(),
+            'slug' => 'subcategoria-' . $this->faker->unique()->slug(),
+            'category_id' => $category ? $category->id : null,
         ];
     }
 }

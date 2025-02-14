@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Category;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -13,6 +14,10 @@ return new class extends Migration
     {
         Schema::create('subcategories', function (Blueprint $table) {
             $table->id();
+            $table->string('name');  // Nombre de la subcategoría
+            $table->string('slug')->unique();  // Slug único para SEO
+            $table->text('description')->nullable();  // Descripción opcional
+            $table->foreignIdFor(Category::class)->nullable()->constrained()->onDelete('restrict');  // Relación con Category
             $table->timestamps();
         });
     }
