@@ -12,8 +12,15 @@ class ImageFactory extends Factory
 
     public function definition(): array
     {
+        // URL de Picsum para obtener una imagen aleatoria
+        $imageUrl = 'https://picsum.photos/640/480';  // Puedes cambiar el tamaño de la imagen aquí
+        $imagePath = storage_path('app/public/products/' . uniqid() . '.jpg');  // Ruta completa de la imagen generada
+
+        // Descargar la imagen y guardarla en el directorio especificado
+        file_put_contents($imagePath, file_get_contents($imageUrl));
+
         return [
-            'path' => 'products/' . $this->faker->image('storage/app/public/products', 640, 480, null, false),  // Genera una ruta de imagen
+            'path' => 'products/' . basename($imagePath),  // Guardamos la ruta relativa de la imagen en la base de datos
         ];
     }
 }
