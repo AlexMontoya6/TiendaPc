@@ -17,19 +17,13 @@ class DatabaseSeeder extends Seeder
 
         Artisan::call('images:clear');
 
-        // User::factory(10)->create();
-
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@mail.com',
-            'password'=> bcrypt('12345678'),
-        ]);
 
         $this->call([
             ProductTypeSeeder::class,
             CategorySeeder::class,
             SubcategorySeeder::class,
             ProductSeeder::class,
+            UserSeeder::class,
         ]);
     }
 }
