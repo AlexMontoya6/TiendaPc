@@ -21,7 +21,7 @@
                             <p class="text-gray-600 mt-2">{{ Str::limit($product->description, 60) }}</p>
                             <div class="mt-4 flex justify-between items-center">
                                 <span
-                                    class="text-xl font-bold text-blue-600">{{ number_format($product->price, 2) }}€</span>
+                                    class="text-xl font-bold text-blue-600">{{ $product->getFormattedPriceAttribute() }}</span>
                                 <a href="#" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Ver
                                     más</a>
                             </div>
