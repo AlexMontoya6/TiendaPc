@@ -25,7 +25,7 @@ class UserSeeder extends Seeder
             'email' => 'superadmin@mail.com',
             'password' => bcrypt('superadmin123'),
         ]);
-        $superAdmin->assignRole($superAdminRole); // Asignar el rol SuperAdmin
+        $superAdmin->assignSingleRole($superAdminRole); // Asignar el rol SuperAdmin
 
         // Admin (tiene permisos de administración pero no todos)
         $admin = User::factory()->create([
@@ -33,7 +33,7 @@ class UserSeeder extends Seeder
             'email' => 'admin@mail.com',
             'password' => bcrypt('admin123'),
         ]);
-        $admin->assignRole($adminRole); // Asignar el rol Admin
+        $admin->assignSingleRole($adminRole); // Asignar el rol Admin
 
         // Customer (tiene permisos básicos de usuario registrado en ecommerce)
         $customer = User::factory()->create([
@@ -41,6 +41,6 @@ class UserSeeder extends Seeder
             'email' => 'customer@mail.com',
             'password' => bcrypt('customer123'),
         ]);
-        $customer->assignRole($customerRole); // Asignar el rol Customer
+        $customer->assignSingleRole($customerRole); // Asignar el rol Customer
     }
 }

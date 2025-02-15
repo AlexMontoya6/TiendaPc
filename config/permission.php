@@ -1,6 +1,11 @@
 <?php
 
 return [
+    /*
+     * Roles de administrador que se utilizarán para verificar permisos y roles.
+     * Esta variable define un array con los nombres de los roles que tienen privilegios de admin.
+     */
+    'admin_roles' => ['Admin', 'SuperAdmin'],
 
     'models' => [
 
