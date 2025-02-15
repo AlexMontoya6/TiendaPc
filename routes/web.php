@@ -27,15 +27,15 @@ Route::middleware([
     Route::redirect('/user/profile', '/panel/mi-perfil');
 
     Route::get('/panel/mis-compras', function () {
-        return view('panel.mis-compras');
-    })->name('panel.mis-compras');
+        return view('pages.panel.mis-compras');
+    })->name('pages.panel.mis-compras');
 
     /**
      * Rutas para Administración (No Customers)
      */
-    Route::middleware(['role:Admin|SuperAdmin'])->group(function () {
-        Route::get('/panel/admin', function () {
-            return view('panel.admin');
-        })->name('panel.admin');
-    });
+    Route::get('/panel/admin', function () {
+        abort_unless(auth()->user()->hasRole(['Admin', 'SuperAdmin']), 403);
+        return view('pages.panel.admin');
+    })->name('pages.panel.admin');
+
 });

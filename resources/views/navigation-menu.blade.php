@@ -17,18 +17,18 @@
                             {{ __('Mi Perfil') }}
                         </x-nav-link>
 
-                        <x-nav-link href="{{ route('panel.mis-compras') }}" :active="request()->routeIs('panel.mis-compras')">
+                        <x-nav-link href="{{ route('pages.panel.mis-compras') }}" :active="request()->routeIs('pages.panel.mis-compras')">
                             {{ __('Mis Compras') }}
                         </x-nav-link>
                     @else
-                    <x-nav-link href="{{ route('pages.panel.mi-perfil') }}" :active="request()->routeIs('pages.panel.mi-perfil')">
-                        {{ __('Mi Perfil') }}
-                    </x-nav-link>
+                        <x-nav-link href="{{ route('pages.panel.mi-perfil') }}" :active="request()->routeIs('pages.panel.mi-perfil')">
+                            {{ __('Mi Perfil') }}
+                        </x-nav-link>
 
-                    <x-nav-link href="{{ route('panel.mis-compras') }}" :active="request()->routeIs('panel.mis-compras')">
-                        {{ __('Mis Compras') }}
-                    </x-nav-link>
-                        <x-nav-link href="{{ route('panel.admin') }}" :active="request()->routeIs('panel.admin')">
+                        <x-nav-link href="{{ route('pages.panel.mis-compras') }}" :active="request()->routeIs('pages.panel.mis-compras')">
+                            {{ __('Mis Compras') }}
+                        </x-nav-link>
+                        <x-nav-link href="{{ route('pages.panel.admin') }}" :active="request()->routeIs('pages.panel.admin')">
                             {{ __('Panel de Administración') }}
                         </x-nav-link>
                     @endif
@@ -120,8 +120,8 @@
 
                         <x-slot name="content">
                             <!-- Account Management -->
-                            <div class="block px-4 py-2 text-xs text-gray-400">
-                                {{ __('Manage Account') }}
+                            <div class="block px-4 py-2 text-xs text-gray-500">
+                                {{ Auth::user()->email }}
                             </div>
 
                             <x-dropdown-link href="{{ route('profile.show') }}">
