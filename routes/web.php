@@ -1,12 +1,15 @@
 <?php
 
+use App\Http\Controllers\{
+    Pages\HomeController,
+    Pages\Panel\MiPerfilController
+};
+
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\Panel\MiPerfilController; // Nuestro nuevo controlador para el perfil
 
-Route::get('/', function () {
-    return view('home');
-})->name('home');
+Route::get('/', HomeController::class)->name('home');
+
 
 Route::middleware([
     'auth:sanctum',
@@ -18,7 +21,7 @@ Route::middleware([
      * Rutas para Clientes (Customer)
      */
     Route::get('/panel/mi-perfil', [MiPerfilController::class, 'show'])
-        ->name('panel.mi-perfil');
+        ->name('pages.panel.mi-perfil');
 
     // Redirigir cualquier acceso a /user/profile hacia /panel/mi-perfil
     Route::redirect('/user/profile', '/panel/mi-perfil');
@@ -35,5 +38,4 @@ Route::middleware([
             return view('panel.admin');
         })->name('panel.admin');
     });
-
 });

@@ -28,7 +28,7 @@ class ProductSeeder extends Seeder
                 for ($i = 0; $i < $imagesCount; $i++) {
                     Image::factory()->create([
                         'product_id' => $product->id,
-                        'order' => $i,
+                        'order' => $i +1,
                     ]);
                 }
             }
