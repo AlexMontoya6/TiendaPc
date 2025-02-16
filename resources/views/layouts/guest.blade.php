@@ -79,8 +79,8 @@
                             @endauth
                         </div>
                     </div>
+                    @livewire('cart')
                 </div>
-
             </div>
         </div>
     </nav>

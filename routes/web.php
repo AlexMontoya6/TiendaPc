@@ -4,11 +4,11 @@ use App\Http\Controllers\{
     Pages\HomeController,
     Pages\Panel\MiPerfilController
 };
-
+use App\Livewire\Home;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
-Route::get('/', HomeController::class)->name('home');
+Route::get('/', Home::class)->name('home');
 
 
 Route::middleware([
