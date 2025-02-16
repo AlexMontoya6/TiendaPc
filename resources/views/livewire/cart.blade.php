@@ -1,8 +1,8 @@
 <div x-data="{ open: false }">
     <!-- Botón para abrir el carrito -->
-    <button @click="open = true" class="relative">
-        🛒 Carrito
-        <span class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full px-2">
+    <button @click="open = true" class="relative ml-4 mr-4" >
+        🛒
+        <span class="absolute -top-3 -right-2 bg-red-500 text-white text-xs rounded-full px-2">
             {{ $cartCount }}
         </span>
     </button>
