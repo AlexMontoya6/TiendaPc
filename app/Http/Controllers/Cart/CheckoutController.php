@@ -32,12 +32,28 @@ class CheckoutController extends Controller
         // Guardamos la opción de entrega en sesión
         session(['delivery_method' => $request->delivery_method]);
 
-        return redirect()->route('cart.checkout.pago');
+        return redirect()->route('cart.checkout.resumen_pago');
     }
 
-    public function payment()
+
+    public function resumenPago()
     {
-        return view('pages.cart.checkout.pago');
+        $cartItems = \Gloudemans\Shoppingcart\Facades\Cart::content()->map(function ($item) {
+            return [
+                'id' => $item->rowId,
+                'name' => $item->name,
+                'qty' => (int) $item->qty,
+                'price' => (float) $item->price,
+                'subtotal' => (float) $item->subtotal,
+            ];
+        });
+
+        $cartTotal = \Gloudemans\Shoppingcart\Facades\Cart::subtotal() * 100;
+
+        return view('pages.cart.checkout.resumen_pago', [
+            'cartItems' => $cartItems,
+            'cartTotal' => $cartTotal,
+        ]);
     }
 
     public function storePayment(Request $request)
@@ -51,27 +67,6 @@ class CheckoutController extends Controller
 
         return redirect()->route('cart.checkout.revision');
     }
-
-
-    public function review()
-{
-    $cartItems = \Gloudemans\Shoppingcart\Facades\Cart::content()->map(function ($item) {
-        return [
-            'id' => $item->rowId,
-            'name' => $item->name,
-            'qty' => (int) $item->qty,
-            'price' => (float) $item->price,
-            'subtotal' => (float) $item->subtotal, // Importante, usar subtotal
-        ];
-    });
-
-    $totalPrice = \Gloudemans\Shoppingcart\Facades\Cart::subtotal() * 100; // Cambiamos total() por subtotal()
-
-    return view('pages.cart.checkout.revision', [
-        'cartItems' => $cartItems,
-        'cartTotal' => $totalPrice,
-    ]);
-}
 
 
 

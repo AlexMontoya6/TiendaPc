@@ -18,9 +18,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/cart/checkout/envio', [CheckoutController::class, 'shipping'])->name('cart.checkout.envio');
     Route::get('/cart/checkout/entrega', [CheckoutController::class, 'delivery'])->name('cart.checkout.entrega');
     Route::post('/cart/checkout/entrega', [CheckoutController::class, 'storeDelivery'])->name('cart.checkout.delivery.store');
-    Route::get('/cart/checkout/pago', [CheckoutController::class, 'payment'])->name('cart.checkout.pago');
+    Route::get('/cart/checkout/resumen-pago', [CheckoutController::class, 'resumenPago'])->name('cart.checkout.resumen_pago');
     Route::post('/cart/checkout/pago', [CheckoutController::class, 'storePayment'])->name('cart.checkout.payment.store');
-    Route::get('/cart/checkout/revision', [CheckoutController::class, 'review'])->name('cart.checkout.revision');
     Route::post('/cart/checkout/procesar', [CheckoutController::class, 'process'])->name('cart.checkout.procesar');
 });
 

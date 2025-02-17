@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -9,6 +10,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
 </head>
+
 <body class="bg-gray-100">
 
     <!-- Barra de progreso del Checkout -->
@@ -19,9 +21,9 @@
                     ['ruta' => 'cart.index', 'titulo' => 'Mi cesta'],
                     ['ruta' => 'cart.checkout.envio', 'titulo' => 'Dirección de envío'],
                     ['ruta' => 'cart.checkout.entrega', 'titulo' => 'Opciones de entrega'],
-                    ['ruta' => 'cart.checkout.pago', 'titulo' => 'Método de pago'],
-                    ['ruta' => 'cart.checkout.revision', 'titulo' => 'Resumen']
+                    ['ruta' => 'cart.checkout.resumen_pago', 'titulo' => 'Resumen y Pago'],
                 ];
+
             @endphp
 
             @foreach ($steps as $index => $step)
@@ -29,7 +31,8 @@
                     $activo = request()->routeIs($step['ruta']);
                 @endphp
                 <div class="flex flex-col items-center">
-                    <div class="w-10 h-10 flex items-center justify-center rounded-full
+                    <div
+                        class="w-10 h-10 flex items-center justify-center rounded-full
                         {{ $activo ? 'bg-black text-white' : 'bg-gray-300 text-gray-600' }}">
                         {{ $index + 1 }}
                     </div>
@@ -52,4 +55,5 @@
 
     @livewireScripts
 </body>
+
 </html>

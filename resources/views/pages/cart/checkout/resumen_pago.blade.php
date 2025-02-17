@@ -2,16 +2,16 @@
 
 @section('content')
     <div class="bg-white p-6 rounded-lg shadow-md">
-        <h1 class="text-2xl font-bold mb-4">Resumen del Pedido</h1>
+        <h1 class="text-2xl font-bold mb-4">Resumen y Pago</h1>
 
-        <!-- Dirección de Envío -->
+        <!-- 🏠 Dirección de Envío -->
         <div class="mb-4">
             <h2 class="text-lg font-semibold">Dirección de Envío</h2>
             <p>{{ session('shipping_name') }}</p>
             <p>{{ session('shipping_street') }}, {{ session('shipping_city') }}, {{ session('shipping_postal_code') }}, {{ session('shipping_country') }}</p>
         </div>
 
-        <!-- Método de Entrega -->
+        <!-- 🚚 Método de Entrega -->
         <div class="mb-4">
             <h2 class="text-lg font-semibold">Método de Entrega</h2>
             <p>
@@ -23,21 +23,7 @@
             </p>
         </div>
 
-        <!-- Método de Pago -->
-        <div class="mb-4">
-            <h2 class="text-lg font-semibold">Método de Pago</h2>
-            <p>
-                @if (session('payment_method') == 'card')
-                    Tarjeta de crédito/débito
-                @elseif (session('payment_method') == 'paypal')
-                    PayPal
-                @elseif (session('payment_method') == 'bank_transfer')
-                    Transferencia bancaria
-                @endif
-            </p>
-        </div>
-
-        <!-- Resumen del Carrito -->
+        <!-- 🛒 Resumen del Pedido -->
         <div class="mb-4">
             <h2 class="text-lg font-semibold">Productos en tu Pedido</h2>
             <table class="w-full border-collapse">
@@ -61,12 +47,32 @@
             <p class="text-xl font-bold mt-4 text-right">Total: {{ number_format($cartTotal / 100, 2) }}€</p>
         </div>
 
-        <!-- Botón para confirmar el pedido -->
-        <form method="POST" action="{{ route('cart.checkout.procesar') }}">
+        <!-- 💳 Método de Pago -->
+        <form method="POST" action="{{ route('cart.checkout.payment.store') }}">
             @csrf
+            <div class="mb-4">
+                <h2 class="text-lg font-semibold">Selecciona un método de pago</h2>
+
+                <label class="flex items-center mt-2">
+                    <input type="radio" name="payment_method" value="card" checked class="mr-2">
+                    <span>Tarjeta de crédito/débito</span>
+                </label>
+
+                <label class="flex items-center mt-2">
+                    <input type="radio" name="payment_method" value="paypal" class="mr-2">
+                    <span>PayPal</span>
+                </label>
+
+                <label class="flex items-center mt-2">
+                    <input type="radio" name="payment_method" value="bank_transfer" class="mr-2">
+                    <span>Transferencia bancaria</span>
+                </label>
+            </div>
+
+            <!-- ✅ Confirmar Pedido -->
             <div class="mt-6">
                 <button type="submit" class="bg-green-500 text-white px-6 py-3 rounded hover:bg-green-700 w-full">
-                    Confirmar Pedido
+                    Confirmar y Pagar
                 </button>
             </div>
         </form>
