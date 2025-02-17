@@ -18,10 +18,11 @@ class CartController extends Controller
                     'id' => $item->rowId,
                     'name' => $item->name,
                     'qty' => (int) $item->qty,
-                    'price' => (float) $item->price * 100, // Convertimos a centavos
+                    'price' => (float) preg_replace('/[^0-9.]/', '', $item->price) * 100,
                 ];
             }),
-            'cartTotal' => ShoppingCart::subtotal() * 100, // Convertimos el total a centavos
+            'cartTotal' => (float) preg_replace('/[^0-9.]/', '', ShoppingCart::subtotal()) * 100,
+
         ]);
     }
 }

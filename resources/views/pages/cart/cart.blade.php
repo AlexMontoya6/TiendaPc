@@ -47,9 +47,12 @@
 
             <div class="mt-6 text-right">
                 <p class="text-xl font-bold">Total: {{ number_format($cartTotal / 100, 2) }}€</p>
-                <a href="{{ route('cart.checkout.envio') }}" class="bg-black text-white px-6 py-3 rounded hover:bg-gray-800">
-                    Continuar con el pedido
-                </a>
+                <div class="mt-4">
+                    <a href="{{ route('cart.checkout.envio') }}"
+                        class=" bg-black text-white px-6 py-3 rounded hover:bg-gray-800">
+                        Continuar con el pedido
+                    </a>
+                </div>
             </div>
         @endif
     </div>
