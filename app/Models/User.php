@@ -26,6 +26,20 @@ class User extends Authenticatable
     use Notifiable;
     use TwoFactorAuthenticatable;
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($user) {
+            if (!$user->hasAnyRole()) {
+                $customerRole = Role::where('name', 'Customer')->first();
+                if ($customerRole) {
+                    $user->assignRole($customerRole);
+                }
+            }
+        });
+    }
+
     /**
      * The attributes that are mass assignable.
      *
