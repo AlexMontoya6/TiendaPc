@@ -21,7 +21,7 @@ class CartController extends Controller
                     'price' => (float) $item->price * 100, // Convertimos a centavos
                 ];
             }),
-            'cartTotal' => ShoppingCart::total() * 100, // Convertimos el total a centavos
+            'cartTotal' => ShoppingCart::subtotal() * 100, // Convertimos el total a centavos
         ]);
     }
 }
