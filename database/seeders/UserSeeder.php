@@ -9,9 +9,6 @@ use Spatie\Permission\Models\Role;
 
 class UserSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
         $superAdminRole = Role::firstOrCreate(['name' => 'SuperAdmin']);
@@ -23,20 +20,20 @@ class UserSeeder extends Seeder
             'email' => 'superadmin@mail.com',
             'password' => bcrypt('superadmin123'),
         ]);
-        $superAdmin->assignRole($superAdminRole);
+        $superAdmin->syncRoles([$superAdminRole]); // ← 🔥 Esto elimina cualquier otro rol
 
         $admin = User::factory()->create([
             'name' => 'Admin User',
             'email' => 'admin@mail.com',
             'password' => bcrypt('admin123'),
         ]);
-        $admin->assignRole($adminRole);
+        $admin->syncRoles([$adminRole]); // ← 🔥 Esto elimina cualquier otro rol
 
         $customer = User::factory()->create([
             'name' => 'Customer User',
             'email' => 'customer@mail.com',
             'password' => bcrypt('customer123'),
         ]);
-        $customer->assignRole($customerRole);
+        $customer->syncRoles([$customerRole]); // ← 🔥 Esto elimina cualquier otro rol
     }
 }
