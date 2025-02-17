@@ -3,14 +3,17 @@
 use App\Http\Controllers\{
     Pages\Panel\MiPerfilController,
     Cart\CheckoutController,
-    Cart\CartController
+    Admin\UserController,
 };
-use App\Http\Controllers\Admin\UserController;
-use App\Livewire\Pages\Cart;
-use App\Livewire\Pages\Checkout\Direcciones;
-use App\Livewire\Pages\Home;
+
+use App\Livewire\Pages\{
+    Cart,
+    Home,
+    Checkout\Direcciones,
+    Checkout\Entrega,
+};
+
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Auth;
 
 Route::get('/', Home::class)->name('home');
 
@@ -26,7 +29,7 @@ Route::middleware([
 ])->group(function () {
 
     Route::get('/cart/checkout/direcciones', Direcciones::class)->name('cart.checkout.direcciones');
-    Route::get('/cart/checkout/entrega', [CheckoutController::class, 'delivery'])->name('cart.checkout.entrega');
+    Route::get('/cart/checkout/entrega', Entrega::class)->name('cart.checkout.entrega');
     Route::post('/cart/checkout/entrega', [CheckoutController::class, 'storeDelivery'])->name('cart.checkout.delivery.store');
     Route::get('/cart/checkout/resumen-pago', [CheckoutController::class, 'resumenPago'])->name('cart.checkout.resumen_pago');
     Route::post('/cart/checkout/pago', [CheckoutController::class, 'storePayment'])->name('cart.checkout.payment.store');
