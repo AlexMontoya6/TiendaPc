@@ -31,6 +31,7 @@ class Entrega extends Component
 
     public function render()
     {
-        return view('livewire.pages.checkout.entrega')->layout('layouts.checkout');
+        return view('livewire.pages.checkout.entrega')
+            ->layout('layouts.checkout');
     }
 }

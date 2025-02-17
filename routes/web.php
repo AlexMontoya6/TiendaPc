@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\{
     Pages\Panel\MiPerfilController,
-    Cart\CheckoutController,
     Admin\UserController,
 };
 
@@ -12,7 +11,7 @@ use App\Livewire\Pages\{
     Checkout\Direcciones,
     Checkout\Entrega,
 };
-
+use App\Livewire\Pages\Checkout\ResumenPago;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', Home::class)->name('home');
@@ -30,10 +29,8 @@ Route::middleware([
 
     Route::get('/cart/checkout/direcciones', Direcciones::class)->name('cart.checkout.direcciones');
     Route::get('/cart/checkout/entrega', Entrega::class)->name('cart.checkout.entrega');
-    Route::post('/cart/checkout/entrega', [CheckoutController::class, 'storeDelivery'])->name('cart.checkout.delivery.store');
-    Route::get('/cart/checkout/resumen-pago', [CheckoutController::class, 'resumenPago'])->name('cart.checkout.resumen_pago');
-    Route::post('/cart/checkout/pago', [CheckoutController::class, 'storePayment'])->name('cart.checkout.payment.store');
-    Route::post('/cart/checkout/procesar', [CheckoutController::class, 'process'])->name('cart.checkout.procesar');
+    Route::get('/cart/checkout/resumen-pago', ResumenPago::class)->name('cart.checkout.resumen_pago');
+
 
     Route::get('/panel/mi-perfil', [MiPerfilController::class, 'show'])->name('pages.panel.mi-perfil');
 
