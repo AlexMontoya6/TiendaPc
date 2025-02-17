@@ -12,12 +12,12 @@ class Home extends Component
     {
         $products = Product::with(['images' => function ($query) {
             $query->where('order', 1)->orderBy('order');
-        }])->get();
+        }])->paginate(8);
 
         return view('livewire.home', compact('products'))
             ->layout('layouts.guest');
     }
-    
+
     public function addToCart($productId)
     {
         $product = \App\Models\Product::findOrFail($productId);

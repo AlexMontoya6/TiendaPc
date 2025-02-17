@@ -35,5 +35,11 @@
                 </div>
             @endforeach
         </div>
+        <div class="mt-6 flex justify-end">
+            <div class="bg-white p-4 rounded-lg shadow border border-gray-200">
+                {{ $products->links('vendor.pagination.tailwind') }}
+            </div>
+        </div>
+
     </div>
 </div>
