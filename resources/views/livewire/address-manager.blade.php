@@ -9,8 +9,10 @@
             @foreach ($addresses as $address)
                 <li class="p-4 border rounded-lg mb-2 {{ $address->is_default ? 'bg-blue-100' : '' }}">
                     <p><strong>{{ $address->name }}</strong></p>
-                    <p>{{ $address->street }}, {{ $address->city }}, {{ $address->postal_code }}, {{ $address->country }}</p>
-                    <button wire:click="setDefaultAddress({{ $address->id }})" class="mt-2 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">
+                    <p>{{ $address->street }}, {{ $address->city }}, {{ $address->postal_code }},
+                        {{ $address->country }}</p>
+                    <button wire:click="setDefaultAddress({{ $address->id }})"
+                        class="mt-2 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">
                         Seleccionar
                     </button>
                 </li>
@@ -30,31 +32,42 @@
                 <div class="mb-2">
                     <label for="name" class="block text-sm font-medium text-gray-700">Nombre</label>
                     <input type="text" wire:model="name" class="mt-1 p-2 w-full border rounded" required>
-                    @error('name') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                    @error('name')
+                        <span class="text-red-500 text-sm">{{ $message }}</span>
+                    @enderror
                 </div>
 
                 <div class="mb-2">
                     <label for="street" class="block text-sm font-medium text-gray-700">Calle y número</label>
                     <input type="text" wire:model="street" class="mt-1 p-2 w-full border rounded" required>
-                    @error('street') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                    @error('street')
+                        <span class="text-red-500 text-sm">{{ $message }}</span>
+                    @enderror
                 </div>
 
                 <div class="mb-2">
                     <label for="city" class="block text-sm font-medium text-gray-700">Ciudad</label>
                     <input type="text" wire:model="city" class="mt-1 p-2 w-full border rounded" required>
-                    @error('city') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                    @error('city')
+                        <span class="text-red-500 text-sm">{{ $message }}</span>
+                    @enderror
                 </div>
 
                 <div class="mb-2">
                     <label for="postal_code" class="block text-sm font-medium text-gray-700">Código Postal</label>
                     <input type="text" wire:model="postal_code" class="mt-1 p-2 w-full border rounded" required>
-                    @error('postal_code') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                    @error('postal_code')
+                        <span class="text-red-500 text-sm">{{ $message }}</span>
+                    @enderror
                 </div>
 
                 <div class="mb-2">
                     <label for="country" class="block text-sm font-medium text-gray-700">País</label>
-                    <input type="text" wire:model="country" value="España" class="mt-1 p-2 w-full border rounded" required>
-                    @error('country') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                    <input type="text" wire:model="country" value="España" class="mt-1 p-2 w-full border rounded"
+                        required>
+                    @error('country')
+                        <span class="text-red-500 text-sm">{{ $message }}</span>
+                    @enderror
                 </div>
 
                 <div class="mb-2 flex items-center">
@@ -68,4 +81,10 @@
             </form>
         </div>
     @endif
+    <!-- Botón para continuar -->
+    <div class="mt-6">
+        <button wire:click="continueToDelivery" class="bg-black text-white px-6 py-3 rounded hover:bg-gray-800">
+            Continuar a Opciones de Entrega
+        </button>
+    </div>
 </div>

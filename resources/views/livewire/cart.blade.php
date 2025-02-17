@@ -27,7 +27,7 @@
                     <span class="font-medium">{{ $item['name'] }}</span>
                     <div class="flex items-center gap-2">
                         <!-- Precio del producto -->
-                        <span class="text-gray-700">${{ number_format($item['subtotal'] / 100, 2) }}</span>
+                        <span class="text-gray-700">${{ $item['subtotal'] }}</span>
                         <!-- Botón para eliminar producto -->
                         <button wire:click="removeFromCart('{{ $item['id'] }}')" class="text-red-500 hover:text-red-700">
                             🗑️

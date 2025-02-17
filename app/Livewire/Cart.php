@@ -26,7 +26,7 @@ class Cart extends Component
             $product->id,
             $product->name,
             1,
-            $product->price / 100
+            $product->price /100
         );
 
         $this->saveCartToDatabase(); // Guardar carrito en la base de datos
@@ -48,14 +48,13 @@ class Cart extends Component
     }
 
     public function saveCartToDatabase()
-{
-    if (Auth::check()) {
-        $userId = Auth::id();
-        ShoppingCart::erase($userId);
-        ShoppingCart::store($userId);
+    {
+        if (Auth::check()) {
+            $userId = Auth::id();
+            ShoppingCart::erase($userId);
+            ShoppingCart::store($userId);
+        }
     }
-}
-
 
     public function render()
     {

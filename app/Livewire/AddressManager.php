@@ -58,11 +58,44 @@ class AddressManager extends Component
         // Desmarcar todas las direcciones actuales
         $user->addresses()->update(['is_default' => false]);
 
-        // Marcar la dirección seleccionada como predeterminada
-        Address::where('id', $addressId)->where('user_id', $user->id)->update(['is_default' => true]);
+        // Buscar la dirección seleccionada
+        $address = Address::where('id', $addressId)->where('user_id', $user->id)->first();
 
-        // Actualizar la lista en tiempo real
+        if (!$address) {
+            session()->flash('error', 'La dirección seleccionada no existe.');
+            return;
+        }
+
+        // Marcar la dirección seleccionada como predeterminada
+        $address->update(['is_default' => true]);
+
+        // Emitir evento para actualizar la interfaz en tiempo real
+        $this->dispatch('addressUpdated');
+
+        // Actualizar la lista de direcciones en tiempo real
         $this->refreshAddresses();
+    }
+
+
+    public function continueToDelivery()
+    {
+        $user = Auth::user();
+        $defaultAddress = $user->addresses()->where('is_default', true)->first();
+
+        if (!$defaultAddress) {
+            session()->flash('error', 'Por favor, selecciona una dirección de envío antes de continuar.');
+            return;
+        }
+
+        // Guardar la dirección en sesión
+        session()->put('shipping_name', $defaultAddress->name);
+        session()->put('shipping_street', $defaultAddress->street);
+        session()->put('shipping_city', $defaultAddress->city);
+        session()->put('shipping_postal_code', $defaultAddress->postal_code);
+        session()->put('shipping_country', $defaultAddress->country);
+
+        // Redireccionar a opciones de entrega
+        return redirect()->route('cart.checkout.entrega');
     }
 
 
