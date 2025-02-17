@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Address;
 use App\Models\Team;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -30,7 +31,7 @@ class UserFactory extends Factory
             'name' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
-            'password'=> bcrypt('12345678'),
+            'password' => bcrypt('12345678'),
             'two_factor_secret' => null,
             'two_factor_recovery_codes' => null,
             'remember_token' => Str::random(10),
@@ -44,7 +45,7 @@ class UserFactory extends Factory
      */
     public function unverified(): static
     {
-        return $this->state(fn (array $attributes) => [
+        return $this->state(fn(array $attributes) => [
             'email_verified_at' => null,
         ]);
     }
@@ -60,13 +61,30 @@ class UserFactory extends Factory
 
         return $this->has(
             Team::factory()
-                ->state(fn (array $attributes, User $user) => [
-                    'name' => $user->name.'\'s Team',
+                ->state(fn(array $attributes, User $user) => [
+                    'name' => $user->name . '\'s Team',
                     'user_id' => $user->id,
                     'personal_team' => true,
                 ])
                 ->when(is_callable($callback), $callback),
             'ownedTeams'
         );
+    }
+
+    public function configure(): static
+    {
+        return $this->afterCreating(function (User $user) {
+            if (rand(0, 1)) { // Al 50% de los usuarios les damos una dirección
+                Address::create([
+                    'user_id' => $user->id,
+                    'name' => fake()->randomElement(['Casa', 'Trabajo', 'Oficina', 'Departamento']),
+                    'street' => fake()->streetAddress(),
+                    'city' => fake()->city(),
+                    'postal_code' => fake()->postcode(),
+                    'country' => 'España',
+                    'is_default' => true,
+                ]);
+            }
+        });
     }
 }

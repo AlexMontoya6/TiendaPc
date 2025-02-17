@@ -1,8 +1,9 @@
 <?php
 
 use App\Http\Controllers\{
-    Pages\HomeController,
-    Pages\Panel\MiPerfilController
+    Pages\Panel\MiPerfilController,
+    Cart\CheckoutController,
+    Cart\CartController
 };
 use App\Livewire\Home;
 use Illuminate\Support\Facades\Route;
@@ -10,6 +11,16 @@ use Illuminate\Support\Facades\Auth;
 
 Route::get('/', Home::class)->name('home');
 
+
+Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/cart/checkout/envio', [CheckoutController::class, 'shipping'])->name('cart.checkout.envio');
+    Route::get('/cart/checkout/entrega', [CheckoutController::class, 'delivery'])->name('cart.checkout.entrega');
+    Route::get('/cart/checkout/pago', [CheckoutController::class, 'payment'])->name('cart.checkout.pago');
+    Route::get('/cart/checkout/revision', [CheckoutController::class, 'review'])->name('cart.checkout.revision');
+    Route::post('/cart/checkout/procesar', [CheckoutController::class, 'process'])->name('cart.checkout.procesar');
+});
 
 Route::middleware([
     'auth:sanctum',

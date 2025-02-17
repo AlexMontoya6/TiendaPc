@@ -2,7 +2,7 @@
     <!-- Botón para abrir el carrito -->
     <button @click="open = true" class="relative ml-4 mr-4" >
         🛒
-        <span class="absolute -top-3 -right-2 bg-red-500 text-white text-xs rounded-full px-2">
+        <span class="absolute -top-3 -right-2 bg-red-700 text-white text-xs rounded-full px-1">
             {{ $cartCount }}
         </span>
     </button>
@@ -22,10 +22,17 @@
 
         <div class="p-4">
             @forelse($cartItems as $item)
-                <div class="flex justify-between mb-2 border-b pb-2">
-                    <span>{{ $item['name'] }}</span>
-                    <span>${{ $item['subtotal'] / 100 }}</span>
-
+                <div class="flex justify-between mb-2 border-b pb-2 items-center">
+                    <!-- Nombre del producto -->
+                    <span class="font-medium">{{ $item['name'] }}</span>
+                    <div class="flex items-center gap-2">
+                        <!-- Precio del producto -->
+                        <span class="text-gray-700">${{ number_format($item['subtotal'] / 100, 2) }}</span>
+                        <!-- Botón para eliminar producto -->
+                        <button wire:click="removeFromCart('{{ $item['id'] }}')" class="text-red-500 hover:text-red-700">
+                            🗑️
+                        </button>
+                    </div>
                 </div>
             @empty
                 <p class="text-center text-gray-500">Tu carrito está vacío.</p>
@@ -33,7 +40,11 @@
         </div>
 
         <div class="p-4 border-t">
-            <button wire:click="checkout" class="w-full bg-blue-500 text-white py-2 rounded">Pagar</button>
+            <a href="{{ route('cart.index') }}" class="w-full block text-center bg-blue-500 text-white py-2 rounded hover:bg-blue-700">
+                Ir al Carrito
+            </a>
         </div>
+
+
     </div>
 </div>
