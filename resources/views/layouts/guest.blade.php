@@ -81,7 +81,7 @@
                             @endauth
                         </div>
                     </div>
-                    @livewire('cart')
+                    @livewire('partials.offcanvas-cart')
                 </div>
             </div>
         </div>

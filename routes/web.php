@@ -6,14 +6,15 @@ use App\Http\Controllers\{
     Cart\CartController
 };
 use App\Http\Controllers\Admin\UserController;
-use App\Livewire\Home;
+use App\Livewire\Pages\Cart;
+use App\Livewire\Pages\Home;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
 Route::get('/', Home::class)->name('home');
 
 
-Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+Route::get('/cart', Cart::class)->name('cart.index');
 
 Route::middleware(['auth'])->group(function () {});
 

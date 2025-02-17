@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Pages;
 
 use App\Models\Product;
 use Livewire\Component;
@@ -8,15 +8,7 @@ use Gloudemans\Shoppingcart\Facades\Cart;
 
 class Home extends Component
 {
-    public function render()
-    {
-        $products = Product::with(['images' => function ($query) {
-            $query->where('order', 1)->orderBy('order');
-        }])->paginate(8);
 
-        return view('livewire.home', compact('products'))
-            ->layout('layouts.guest');
-    }
 
     public function addToCart($productId)
     {
@@ -30,5 +22,15 @@ class Home extends Component
         );
 
         $this->emit('cartUpdated'); // Emitimos un evento para actualizar la vista del carrito
+    }
+
+    public function render()
+    {
+        $products = Product::with(['images' => function ($query) {
+            $query->where('order', 1)->orderBy('order');
+        }])->paginate(8);
+
+        return view('livewire.pages.home', compact('products'))
+            ->layout('layouts.guest');
     }
 }

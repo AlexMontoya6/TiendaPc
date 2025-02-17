@@ -18,7 +18,7 @@
         <div class="flex justify-between items-center">
             @php
                 $steps = [
-                    ['ruta' => 'cart.index', 'titulo' => 'Mi cesta'],
+                    ['ruta' => 'cart.index', 'titulo' => 'Mi carrito'],
                     ['ruta' => 'cart.checkout.envio', 'titulo' => 'Dirección de envío'],
                     ['ruta' => 'cart.checkout.entrega', 'titulo' => 'Opciones de entrega'],
                     ['ruta' => 'cart.checkout.resumen_pago', 'titulo' => 'Resumen y Pago'],
@@ -49,7 +49,7 @@
 
     <!-- Contenido del Checkout -->
     <div class="max-w-4xl mx-auto py-8">
-        @yield('content')
+        {{ $slot }}
     </div>
 
 

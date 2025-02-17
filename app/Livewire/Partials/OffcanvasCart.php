@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Partials;
 
 use App\Models\Product;
 use Livewire\Component;
 use Gloudemans\Shoppingcart\Facades\Cart as ShoppingCart;
 use Illuminate\Support\Facades\Auth;
 
-class Cart extends Component
+class OffcanvasCart extends Component
 {
     protected $listeners = ['cartUpdated', 'addToCart' => 'handleAddToCart'];
 
@@ -58,7 +58,7 @@ class Cart extends Component
 
     public function render()
     {
-        return view('livewire.cart', [
+        return view('livewire.partials.offcanvas-cart', [
             'cartItems' => ShoppingCart::content()->map(function ($item) {
                 return [
                     'id' => $item->rowId,
