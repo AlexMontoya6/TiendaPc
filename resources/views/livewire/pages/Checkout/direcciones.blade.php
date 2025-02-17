@@ -7,16 +7,31 @@
     @else
         <ul>
             @foreach ($addresses as $address)
-                <li class="p-4 border rounded-lg mb-2 {{ $address->is_default ? 'bg-blue-100' : '' }}">
-                    <p><strong>{{ $address->name }}</strong></p>
-                    <p>{{ $address->street }}, {{ $address->city }}, {{ $address->postal_code }},
-                        {{ $address->country }}</p>
-                    <button wire:click="setDefaultAddress({{ $address->id }})"
-                        class="mt-2 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">
-                        Seleccionar
+                <li
+                    class="p-4 border rounded-lg mb-2 flex justify-between items-center {{ $address->is_default ? 'bg-blue-100' : '' }}">
+                    <div>
+                        <p><strong>{{ $address->name }}</strong></p>
+                        <p>{{ $address->street }}, {{ $address->city }}, {{ $address->postal_code }},
+                            {{ $address->country }}</p>
+                        <button wire:click="setDefaultAddress({{ $address->id }})"
+                            class="mt-2 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">
+                            Seleccionar
+                        </button>
+                    </div>
+                    <button
+                        onclick="confirm('¿Estás seguro de eliminar esta dirección?') || event.stopImmediatePropagation()"
+                        wire:click="deleteAddress({{ $address->id }})"
+                        class="bg-red-500 text-white p-2 rounded-full hover:bg-red-700">
+                        <!-- Ícono de papelera (Heroicons o FontAwesome) -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd"
+                                d="M8 4a1 1 0 011-1h2a1 1 0 011 1h5a1 1 0 110 2h-1v10a2 2 0 01-2 2H5a2 2 0 01-2-2V6H2a1 1 0 110-2h5zm3 2H9v10h2V6z"
+                                clip-rule="evenodd" />
+                        </svg>
                     </button>
                 </li>
             @endforeach
+
         </ul>
     @endif
 
@@ -70,14 +85,10 @@
                     @enderror
                 </div>
 
-                <div class="mb-2 flex items-center">
-                    <input type="checkbox" wire:model="is_default" class="mr-2">
-                    <label class="text-sm font-medium text-gray-700">Marcar como dirección principal</label>
-                </div>
-
                 <button type="submit" class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">
                     Guardar Dirección
                 </button>
+
             </form>
         </div>
     @endif

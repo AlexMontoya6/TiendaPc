@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Pages\Checkout;
 
 use Livewire\Component;
 use App\Models\Address;
 use Illuminate\Support\Facades\Auth;
 
-class AddressManager extends Component
+class Direcciones extends Component
 {
     public $addresses;
     public $name, $street, $city, $postal_code, $country = "España", $is_default = false;
@@ -14,8 +14,14 @@ class AddressManager extends Component
 
     public function mount()
     {
-        $this->refreshAddresses();
+        $user = auth()->user();
+        $this->addresses = $user->addresses;
+
+        if ($this->addresses->count() === 1) {
+            $this->setDefaultAddress($this->addresses->first()->id);
+        }
     }
+
 
     public function refreshAddresses()
     {
@@ -23,42 +29,42 @@ class AddressManager extends Component
     }
 
     public function save()
-    {
-        $this->validate([
-            'name' => 'required|string|max:255',
-            'street' => 'required|string|max:255',
-            'city' => 'required|string|max:255',
-            'postal_code' => 'required|string|max:20',
-            'country' => 'required|string|max:100',
-        ]);
+{
+    $this->validate([
+        'name' => 'required|string|max:255',
+        'street' => 'required|string|max:255',
+        'city' => 'required|string|max:255',
+        'postal_code' => 'required|string|max:20',
+        'country' => 'required|string|max:100',
+    ]);
 
-        if ($this->is_default) {
-            Auth::user()->addresses()->update(['is_default' => false]);
-        }
+    $user = Auth::user();
 
-        Address::create([
-            'user_id' => Auth::id(),
-            'name' => $this->name,
-            'street' => $this->street,
-            'city' => $this->city,
-            'postal_code' => $this->postal_code,
-            'country' => $this->country,
-            'is_default' => $this->is_default,
-        ]);
+    $user->addresses()->update(['is_default' => false]);
 
-        $this->reset(['name', 'street', 'city', 'postal_code', 'is_default']);
-        $this->refreshAddresses();
-        $this->showForm = false; // Ocultar el formulario después de guardar
-    }
+    $newAddress = Address::create([
+        'user_id' => $user->id,
+        'name' => $this->name,
+        'street' => $this->street,
+        'city' => $this->city,
+        'postal_code' => $this->postal_code,
+        'country' => $this->country,
+        'is_default' => true,
+    ]);
+
+    $this->refreshAddresses();
+
+    $this->reset(['name', 'street', 'city', 'postal_code', 'is_default']);
+    $this->showForm = false;
+}
+
 
     public function setDefaultAddress($addressId)
     {
         $user = Auth::user();
 
-        // Desmarcar todas las direcciones actuales
         $user->addresses()->update(['is_default' => false]);
 
-        // Buscar la dirección seleccionada
         $address = Address::where('id', $addressId)->where('user_id', $user->id)->first();
 
         if (!$address) {
@@ -66,13 +72,10 @@ class AddressManager extends Component
             return;
         }
 
-        // Marcar la dirección seleccionada como predeterminada
         $address->update(['is_default' => true]);
 
-        // Emitir evento para actualizar la interfaz en tiempo real
         $this->dispatch('addressUpdated');
 
-        // Actualizar la lista de direcciones en tiempo real
         $this->refreshAddresses();
     }
 
@@ -87,20 +90,38 @@ class AddressManager extends Component
             return;
         }
 
-        // Guardar la dirección en sesión
         session()->put('shipping_name', $defaultAddress->name);
         session()->put('shipping_street', $defaultAddress->street);
         session()->put('shipping_city', $defaultAddress->city);
         session()->put('shipping_postal_code', $defaultAddress->postal_code);
         session()->put('shipping_country', $defaultAddress->country);
 
-        // Redireccionar a opciones de entrega
         return redirect()->route('cart.checkout.entrega');
+    }
+
+    public function deleteAddress($addressId)
+    {
+        $user = auth()->user();
+
+        $address = $user->addresses()->find($addressId);
+
+        if ($address) {
+            $address->delete();
+
+            $this->addresses = $user->addresses;
+
+            if ($this->addresses->count() === 1) {
+                $this->setDefaultAddress($this->addresses->first()->id);
+            }
+
+            session()->flash('message', 'Dirección eliminada correctamente.');
+        }
     }
 
 
     public function render()
     {
-        return view('livewire.address-manager');
+        return view('livewire.pages.Checkout.direcciones')
+            ->layout('layouts.checkout');
     }
 }

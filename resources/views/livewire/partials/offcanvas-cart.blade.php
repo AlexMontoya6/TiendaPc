@@ -29,8 +29,14 @@
                             class="text-gray-700">{{ $item['subtotal'] . ' ' . __('messages.currency_symbol') }}</span>
                         <!-- Botón para eliminar producto -->
                         <button wire:click="removeFromCart('{{ $item['id'] }}')"
-                            class="text-red-500 hover:text-red-700">
-                            🗑️
+                            class="bg-red-500 text-white p-2 rounded-full hover:bg-red-700">
+                            <!-- Ícono de papelera (Heroicons o FontAwesome) -->
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
+                                fill="currentColor">
+                                <path fill-rule="evenodd"
+                                    d="M8 4a1 1 0 011-1h2a1 1 0 011 1h5a1 1 0 110 2h-1v10a2 2 0 01-2 2H5a2 2 0 01-2-2V6H2a1 1 0 110-2h5zm3 2H9v10h2V6z"
+                                    clip-rule="evenodd" />
+                            </svg>
                         </button>
                     </div>
                 </div>
