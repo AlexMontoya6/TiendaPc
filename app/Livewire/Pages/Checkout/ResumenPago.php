@@ -12,11 +12,10 @@ class ResumenPago extends Component
     public $delivery_method;
     public $cartItems = [];
     public $cartTotal = 0;
-    public $payment_method = 'card';
+    public $payment_method = 'card'; // Método de pago seleccionado
     public $editingAddress = false;
     public $editingDelivery = false;
     public $editingCart = false;
-
 
     public function mount()
     {
@@ -28,7 +27,7 @@ class ResumenPago extends Component
         $this->shipping_country = Session::get('shipping_country');
         $this->delivery_method = Session::get('delivery_method', 'standard');
 
-        // Obtener los productos del carrito desde la sesión (Gloudemans\Shoppingcart)
+        // Obtener los productos del carrito desde la sesión
         $cart = Cart::instance('default')->content();
 
         // Convertir los objetos CartItem a arrays
@@ -46,17 +45,26 @@ class ResumenPago extends Component
         $this->cartTotal = collect($this->cartItems)->sum(fn($item) => $item['price'] * $item['qty']);
     }
 
-
-
     public function confirmOrder()
     {
-        // Aquí podríamos procesar el pedido y redirigir al pago
-        session()->flash('message', 'Pedido confirmado. Redirigiendo al pago...');
+        if ($this->payment_method === 'paypal') {
+            // No hacemos nada aquí porque el formulario ya manejará PayPal
+            session()->flash('message', 'Redirigiendo a PayPal...');
+        } elseif ($this->payment_method === 'card') {
+            session()->flash('message', 'Pago con tarjeta en proceso...');
+            // Aquí podrías agregar la lógica para procesar pagos con tarjeta
+        } elseif ($this->payment_method === 'bank_transfer') {
+            session()->flash('message', 'Pago por transferencia bancaria seleccionado. Te enviaremos los detalles.');
+            // Aquí podrías agregar lógica para manejar pagos por transferencia
+        } else {
+            session()->flash('error', 'Por favor, selecciona un método de pago.');
+        }
     }
 
     public function render()
     {
-        return view('livewire.pages.checkout.resumen-pago')
-            ->layout('layouts.checkout');
+        return view('livewire.pages.checkout.resumen-pago', [
+            'cartTotal' => $this->cartTotal, // Pasamos el total a la vista
+        ])->layout('layouts.checkout');
     }
 }

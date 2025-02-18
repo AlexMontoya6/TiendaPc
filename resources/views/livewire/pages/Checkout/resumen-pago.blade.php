@@ -11,7 +11,7 @@
         </div>
 
         @if ($editingAddress)
-        <livewire:pages.checkout.direcciones />
+            <livewire:pages.checkout.direcciones />
         @else
             <p>{{ $shipping_name }}</p>
             <p>{{ $shipping_street }}, {{ $shipping_city }}, {{ $shipping_postal_code }}, {{ $shipping_country }}</p>
@@ -77,30 +77,56 @@
     </div>
 
 
-    <!-- Método de Pago -->
-    <div class="mb-4">
-        <h2 class="text-lg font-semibold">Selecciona un método de pago</h2>
+    <div class="bg-white p-6 rounded-lg shadow-md">
+        <h1 class="text-2xl font-bold mb-4">Resumen y Pago</h1>
 
-        <label class="flex items-center mt-2">
-            <input type="radio" wire:model="payment_method" value="card" class="mr-2">
-            <span>Tarjeta de crédito/débito</span>
-        </label>
+        <!-- Método de Pago -->
+        <div class="mb-4">
+            <h2 class="text-lg font-semibold">Selecciona un método de pago</h2>
 
-        <label class="flex items-center mt-2">
-            <input type="radio" wire:model="payment_method" value="paypal" class="mr-2">
-            <span>PayPal</span>
-        </label>
+            <label class="flex items-center mt-2">
+                <input type="radio" wire:model="payment_method" value="card" class="mr-2">
+                <span>Tarjeta de crédito/débito</span>
+            </label>
 
-        <label class="flex items-center mt-2">
-            <input type="radio" wire:model="payment_method" value="bank_transfer" class="mr-2">
-            <span>Transferencia bancaria</span>
-        </label>
+            <label class="flex items-center mt-2">
+                <input type="radio" wire:model="payment_method" value="paypal" class="mr-2">
+                <span>PayPal</span>
+            </label>
+
+            <label class="flex items-center mt-2">
+                <input type="radio" wire:model="payment_method" value="bank_transfer" class="mr-2">
+                <span>Transferencia bancaria</span>
+            </label>
+        </div>
+
+        <!-- Condicional: Si el método de pago es PayPal, mostramos el formulario -->
+        @if ($payment_method === 'paypal')
+        <form id="payment-form" method="POST" action="{{ route('paypal.payment') }}">
+            @csrf
+
+            <!-- Enviar el total como input oculto -->
+            <input type="hidden" name="price" value="{{ $cartTotal }}">
+
+            <!-- Enviar nombre del producto -->
+            <input type="hidden" name="product_name" value="{{ $cartItems[0]['name'] ?? 'Producto' }}">
+
+            <!-- Enviar cantidad -->
+            <input type="hidden" name="quantity" value="{{ $cartItems[0]['qty'] ?? 1 }}">
+
+            <!-- Botón para confirmar y pagar -->
+            <button type="submit"
+                class="bg-yellow-500 text-white px-6 py-3 rounded hover:bg-yellow-600 w-full">
+                Pagar con PayPal
+            </button>
+        </form>
+        @else
+            <!-- Botón genérico para otros métodos de pago -->
+            <button wire:click="confirmOrder"
+                class="bg-green-500 text-white px-6 py-3 rounded hover:bg-green-700 w-full">
+                Confirmar y Pagar
+            </button>
+        @endif
     </div>
 
-    <!-- Confirmar Pedido -->
-    <div class="mt-6">
-        <button wire:click="confirmOrder" class="bg-green-500 text-white px-6 py-3 rounded hover:bg-green-700 w-full">
-            Confirmar y Pagar
-        </button>
-    </div>
 </div>

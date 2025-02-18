@@ -3,6 +3,7 @@
 use App\Http\Controllers\{
     Pages\Panel\MiPerfilController,
     Admin\UserController,
+    PaypalController
 };
 
 use App\Livewire\Pages\{
@@ -16,11 +17,16 @@ use App\Livewire\Pages\Admin\Dashboard;
 use App\Livewire\Pages\Checkout\ResumenPago;
 use Illuminate\Support\Facades\Route;
 
+Route::post('paypal', [PaypalController::class, 'paypal'])->name('paypal.payment');
+Route::get('success', [PaypalController::class, 'success'])->name('success');
+Route::get('cancel', [PaypalController::class, 'cancel'])->name('cancel');
+
 Route::get('/', Home::class)->name('home');
 Route::get('/cart', Cart::class)->name('cart.index');
 Route::get('/{product:slug}', ProductDetail::class)->name('product.detail');
 
-Route::middleware(['auth'])->group(function () {});
+
+
 
 Route::middleware([
     'auth:sanctum',
