@@ -1,8 +1,19 @@
 <div class="container mx-auto px-4 py-6">
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <!-- Imagen del producto -->
-        <div>
-            <img src="{{ $product->image_url }}" alt="{{ $product->name }}" class="w-full rounded-lg shadow-md">
+        <!-- Galería de imágenes del producto -->
+        <div x-data="{ activeImage: '{{ asset('storage/' . $images->first()->path ?? 'placeholder.png') }}' }">
+            <!-- Imagen principal -->
+            <img :src="activeImage" alt="{{ $product->name }}"
+                class="w-full h-[400px] object-contain rounded-lg shadow-md transition-opacity duration-300">
+
+            <!-- Miniaturas -->
+            <div class="flex gap-2 mt-4">
+                @foreach ($images as $image)
+                    <img src="{{ asset('storage/' . $image->path) }}" alt="{{ $product->name }}"
+                        class="w-16 h-16 object-cover rounded-md cursor-pointer border-2 border-transparent hover:border-blue-500 transition-all"
+                        @mouseover="activeImage = '{{ asset('storage/' . $image->path) }}'">
+                @endforeach
+            </div>
         </div>
 
         <!-- Información del producto -->
@@ -20,7 +31,7 @@
 
             <div class="mt-6">
                 <button wire:click="addToCart"
-                        class="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition">
+                    class="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition">
                     🛒 Añadir al carrito
                 </button>
             </div>
