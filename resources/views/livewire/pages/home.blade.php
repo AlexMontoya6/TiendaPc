@@ -13,20 +13,21 @@
                             class="w-full h-48 object-cover">
                     @endif
 
-
-
                     <div class="p-4">
                         <h2 class="text-lg font-semibold text-gray-800">{{ $product->name }}</h2>
                         <p class="text-gray-600 mt-2">{{ Str::limit($product->description, 60) }}</p>
                         <div class="mt-4 flex justify-between items-center">
                             <span
-                                class="text-xl font-bold text-blue-600">{{ $product->getFormattedPriceAttribute() }}</span>
-                            <a href="#" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Ver
-                                más</a>
+                                class="text-xl font-bold text-blue-600">{{ $product->getFormattedPriceAttribute() }} €</span>
+
+                            <!-- ✅ Enlace a la vista de detalles del producto -->
+                            <a href="{{ route('product.detail', $product->slug) }}"
+                                class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                                Ver más
+                            </a>
 
                             <!-- Botón Añadir al Carrito -->
                             <button wire:click="$dispatch('addToCart', { productId: {{ $product->id }} })"
-
                                 class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
                                 🛒 Añadir
                             </button>
@@ -40,6 +41,5 @@
                 {{ $products->links('vendor.pagination.tailwind') }}
             </div>
         </div>
-
     </div>
 </div>

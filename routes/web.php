@@ -10,6 +10,7 @@ use App\Livewire\Pages\{
     Home,
     Checkout\Direcciones,
     Checkout\Entrega,
+    ProductDetail,
 };
 use App\Livewire\Pages\Admin\Dashboard;
 use App\Livewire\Pages\Checkout\ResumenPago;
@@ -17,6 +18,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', Home::class)->name('home');
 
+Route::get('/{product:slug}', ProductDetail::class)->name('product.detail');
 
 Route::get('/cart', Cart::class)->name('cart.index');
 

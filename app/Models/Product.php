@@ -32,7 +32,7 @@ class Product extends Model
         return $this->hasMany(Image::class);
     }
 
-    public function getFormattedPriceAttribute()
+    public function getFormattedPriceAttribute(): float
     {
         // Verificar si el precio es menor que 100 (por ejemplo, datos erróneos)
         if ($this->price < 100) {
@@ -41,13 +41,10 @@ class Product extends Model
                 Log::error("Precio incorrecto para el producto ID: {$this->id}. El precio es menor a 100 céntimos.");
             }
 
-            return "Error: El precio del producto {$this->name} con ID: {$this->id}, es incorrecto, debe ser mayor o igual a 100 céntimos.";
+            return 0.00; // Retornar un float válido en caso de error
         }
 
-        // Obtener el símbolo de la moneda desde el archivo de idioma
-        $currencySymbol = __('messages.currency_symbol');
-
-        // Formatear el precio a euros (dividido entre 100), agregar el número seguido del símbolo de la moneda
-        return number_format($this->price / 100, 2, '.', ',') . ' ' . $currencySymbol;
+        // Convertir el precio a euros y devolverlo como float
+        return round($this->price / 100, 2);
     }
 }
