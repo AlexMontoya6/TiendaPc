@@ -28,7 +28,7 @@
                         <x-nav-link href="{{ route('pages.panel.mis-compras') }}" :active="request()->routeIs('pages.panel.mis-compras')">
                             {{ __('Mis Compras') }}
                         </x-nav-link>
-                        <x-nav-link href="{{ route('pages.panel.admin') }}" :active="request()->routeIs('pages.panel.admin')">
+                        <x-nav-link href="{{ route('admin.dashboard') }}" :active="request()->routeIs('admin.dashboard')">
                             {{ __('Panel de Administración') }}
                         </x-nav-link>
                     @endif

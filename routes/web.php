@@ -11,6 +11,7 @@ use App\Livewire\Pages\{
     Checkout\Direcciones,
     Checkout\Entrega,
 };
+use App\Livewire\Pages\Admin\Dashboard;
 use App\Livewire\Pages\Checkout\ResumenPago;
 use Illuminate\Support\Facades\Route;
 
@@ -43,16 +44,12 @@ Route::middleware([
     /**
      * Rutas para Administración (No Customers)
      */
-    Route::middleware(['admin'])->group(function () {
-        Route::get('/panel/admin', function () {
-            return view('pages.panel.admin');
-        })->name('pages.panel.admin');
+    Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+        Route::get('/dashboard', Dashboard::class)->name('dashboard');
 
-        // ✅ CRUD de Usuarios dentro del panel de administración
-        Route::prefix('/panel/admin')->name('admin.')->group(function () {
-            Route::resource('users', UserController::class)->names('users');
-
-            Route::put('/users/{user}/role', [UserController::class, 'updateRole'])->name('users.update-role');
-        });
+        // ✅ CRUD de Usuarios dentro del panel de administración (ruta corregida)
+        Route::resource('users', UserController::class)->names('users');
+        Route::put('/users/{user}/role', [UserController::class, 'updateRole'])->name('users.update-role');
     });
+
 });

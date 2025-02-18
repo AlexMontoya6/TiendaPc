@@ -1,7 +1,7 @@
 <div class="bg-white p-6 rounded-lg shadow-md">
     <h1 class="text-2xl font-bold mb-4">Resumen y Pago</h1>
 
-    <!-- 🏠 Dirección de Envío -->
+    <!-- Dirección de Envío -->
     <div class="mb-4">
         <div class="flex justify-between items-center">
             <h2 class="text-lg font-semibold">Dirección de Envío</h2>
@@ -19,7 +19,7 @@
     </div>
 
 
-    <!-- 🚚 Método de Entrega -->
+    <!-- Método de Entrega -->
     <div class="mb-4">
         <div class="flex justify-between items-center">
             <h2 class="text-lg font-semibold">Método de Entrega</h2>
@@ -42,7 +42,7 @@
     </div>
 
 
-    <!-- 🛒 Resumen del Pedido -->
+    <!-- Resumen del Pedido -->
     <div class="mb-4">
         <div class="flex justify-between items-center">
             <h2 class="text-lg font-semibold">Productos en tu Pedido</h2>
@@ -77,7 +77,7 @@
     </div>
 
 
-    <!-- 💳 Método de Pago -->
+    <!-- Método de Pago -->
     <div class="mb-4">
         <h2 class="text-lg font-semibold">Selecciona un método de pago</h2>
 
@@ -97,7 +97,7 @@
         </label>
     </div>
 
-    <!-- ✅ Confirmar Pedido -->
+    <!-- Confirmar Pedido -->
     <div class="mt-6">
         <button wire:click="confirmOrder" class="bg-green-500 text-white px-6 py-3 rounded hover:bg-green-700 w-full">
             Confirmar y Pagar

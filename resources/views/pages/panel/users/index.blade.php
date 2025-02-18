@@ -1,11 +1,17 @@
 <x-app-layout>
+    <div class="flex">
+        <!-- Sidebar de Administración -->
+        @livewire('partials.admin-sidebar')
 
-    @section('content')
-        <div class="container mx-auto p-6">
+        <!-- Contenido Principal -->
+        <div class="flex-1 p-6">
             <h1 class="text-2xl font-bold mb-4">Lista de Usuarios</h1>
 
-            <a href="{{ route('admin.users.create') }}" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">➕
-                Crear Usuario</a>
+            <a href="{{ route('admin.users.create') }}"
+               class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                ➕ Crear Usuario
+            </a>
+
             <div class="mt-4">
                 @if (session('success'))
                     <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4">
@@ -19,6 +25,7 @@
                     </div>
                 @endif
             </div>
+
             <table class="min-w-full bg-white border border-gray-300 mt-4">
                 <thead>
                     <tr class="bg-gray-200">
@@ -50,7 +57,6 @@
                                         </select>
                                     </form>
                                 @else
-                                    <!-- 🔹 Si el usuario no tiene permisos, solo mostramos el rol actual -->
                                     <span class="text-gray-600">{{ $user->roles->first()->name ?? 'Sin rol' }}</span>
                                 @endcan
                             </td>
@@ -70,7 +76,6 @@
                                     </form>
                                 </div>
                             </td>
-
                         </tr>
                     @endforeach
                 </tbody>
@@ -80,4 +85,5 @@
                 {{ $users->links() }} <!-- Paginación -->
             </div>
         </div>
-    </x-app-layout>
+    </div>
+</x-app-layout>
