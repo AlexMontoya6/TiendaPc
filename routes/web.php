@@ -17,10 +17,8 @@ use App\Livewire\Pages\Checkout\ResumenPago;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', Home::class)->name('home');
-
-Route::get('/{product:slug}', ProductDetail::class)->name('product.detail');
-
 Route::get('/cart', Cart::class)->name('cart.index');
+Route::get('/{product:slug}', ProductDetail::class)->name('product.detail');
 
 Route::middleware(['auth'])->group(function () {});
 
