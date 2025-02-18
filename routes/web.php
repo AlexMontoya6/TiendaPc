@@ -9,12 +9,14 @@ use App\Http\Controllers\{
 use App\Livewire\Pages\{
     Cart,
     Home,
+    ProductDetail,
     Checkout\Direcciones,
     Checkout\Entrega,
-    ProductDetail,
+    Checkout\ResumenPago,
+    Admin\Dashboard,
+    Admin\Products,
 };
-use App\Livewire\Pages\Admin\Dashboard;
-use App\Livewire\Pages\Checkout\ResumenPago;
+
 use Illuminate\Support\Facades\Route;
 
 Route::post('paypal', [PaypalController::class, 'paypal'])->name('paypal.payment');
@@ -53,9 +55,12 @@ Route::middleware([
     Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
         Route::get('/dashboard', Dashboard::class)->name('dashboard');
 
-        // ✅ CRUD de Usuarios dentro del panel de administración (ruta corregida)
+        // Se usa `Route::get()` en lugar de `Route::resource()` para Livewire
+        Route::get('products', Products::class)->name('products.index');
+        Route::get('products/create', ProductForm::class)->name('products.create');
+        Route::get('products/{product}/edit', ProductForm::class)->name('products.edit');
+
         Route::resource('users', UserController::class)->names('users');
         Route::put('/users/{user}/role', [UserController::class, 'updateRole'])->name('users.update-role');
     });
-
 });
