@@ -30,7 +30,7 @@
             </div>
 
             <div class="mt-6">
-                <button wire:click="addToCart"
+                <button wire:click="$dispatch('addToCart', { productId: {{ $product->id }} })"
                     class="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition">
                     🛒 Añadir al carrito
                 </button>
