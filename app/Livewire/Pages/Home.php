@@ -3,26 +3,13 @@
 namespace App\Livewire\Pages;
 
 use App\Models\Product;
+use App\Traits\HandlesCart;
 use Livewire\Component;
 use Gloudemans\Shoppingcart\Facades\Cart;
 
 class Home extends Component
 {
-
-
-    public function addToCart($productId)
-    {
-        $product = \App\Models\Product::findOrFail($productId);
-
-        Cart::add(
-            $product->id, // ID del producto
-            $product->name, // Nombre del producto
-            1, // Cantidad
-            $product->price // Precio
-        );
-
-        $this->emit('cartUpdated'); // Emitimos un evento para actualizar la vista del carrito
-    }
+    use HandlesCart;
 
     public function render()
     {

@@ -4,10 +4,14 @@ namespace App\Livewire\Pages;
 
 use Livewire\Component;
 use App\Models\Product;
+use App\Traits\HandlesCart;
 use Gloudemans\Shoppingcart\Facades\Cart;
 
 class ProductDetail extends Component
 {
+
+    use HandlesCart;
+
     public $product;
     public $images; // Guardaremos aquí las imágenes
 
@@ -17,21 +21,6 @@ class ProductDetail extends Component
         $this->images = $product->images; // Cargar todas las imágenes relacionadas
     }
 
-    public function addToCart($productId)
-    {
-        $product = \App\Models\Product::findOrFail($productId);
-
-        Cart::add(
-            $product->id, // ID del producto
-            $product->name, // Nombre del producto
-            1, // Cantidad
-            $product->price // Precio
-        );
-
-        session()->flash('success', 'Producto añadido al carrito.');
-
-        $this->emit('cartUpdated'); // Emitimos un evento para actualizar la vista del carrito
-    }
 
     public function render()
     {
