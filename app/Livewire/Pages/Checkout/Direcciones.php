@@ -11,9 +11,12 @@ class Direcciones extends Component
     public $addresses;
     public $name, $street, $city, $postal_code, $country = "España", $is_default = false;
     public $showForm = false;
+    public $isResumenPago = false;
 
-    public function mount()
+    public function mount($isResumenPago = false)
     {
+        $this->isResumenPago = $isResumenPago;
+
         $user = auth()->user();
         $this->addresses = $user->addresses;
 
@@ -29,34 +32,34 @@ class Direcciones extends Component
     }
 
     public function save()
-{
-    $this->validate([
-        'name' => 'required|string|max:255',
-        'street' => 'required|string|max:255',
-        'city' => 'required|string|max:255',
-        'postal_code' => 'required|string|max:20',
-        'country' => 'required|string|max:100',
-    ]);
+    {
+        $this->validate([
+            'name' => 'required|string|max:255',
+            'street' => 'required|string|max:255',
+            'city' => 'required|string|max:255',
+            'postal_code' => 'required|string|max:20',
+            'country' => 'required|string|max:100',
+        ]);
 
-    $user = Auth::user();
+        $user = Auth::user();
 
-    $user->addresses()->update(['is_default' => false]);
+        $user->addresses()->update(['is_default' => false]);
 
-    $newAddress = Address::create([
-        'user_id' => $user->id,
-        'name' => $this->name,
-        'street' => $this->street,
-        'city' => $this->city,
-        'postal_code' => $this->postal_code,
-        'country' => $this->country,
-        'is_default' => true,
-    ]);
+        $newAddress = Address::create([
+            'user_id' => $user->id,
+            'name' => $this->name,
+            'street' => $this->street,
+            'city' => $this->city,
+            'postal_code' => $this->postal_code,
+            'country' => $this->country,
+            'is_default' => true,
+        ]);
 
-    $this->refreshAddresses();
+        $this->refreshAddresses();
 
-    $this->reset(['name', 'street', 'city', 'postal_code', 'is_default']);
-    $this->showForm = false;
-}
+        $this->reset(['name', 'street', 'city', 'postal_code', 'is_default']);
+        $this->showForm = false;
+    }
 
 
     public function setDefaultAddress($addressId)
@@ -121,6 +124,7 @@ class Direcciones extends Component
 
     public function render()
     {
+        $this->isResumenPago = request()->routeIs('cart.checkout.resumen_pago');
         return view('livewire.pages.Checkout.direcciones')
             ->layout('layouts.checkout');
     }

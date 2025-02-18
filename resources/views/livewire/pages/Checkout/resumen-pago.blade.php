@@ -3,46 +3,79 @@
 
     <!-- 🏠 Dirección de Envío -->
     <div class="mb-4">
-        <h2 class="text-lg font-semibold">Dirección de Envío</h2>
-        <p>{{ $shipping_name }}</p>
-        <p>{{ $shipping_street }}, {{ $shipping_city }}, {{ $shipping_postal_code }}, {{ $shipping_country }}</p>
+        <div class="flex justify-between items-center">
+            <h2 class="text-lg font-semibold">Dirección de Envío</h2>
+            <button wire:click="$toggle('editingAddress')" class="text-blue-500 hover:text-blue-700">
+                🖊️
+            </button>
+        </div>
+
+        @if ($editingAddress)
+        <livewire:pages.checkout.direcciones />
+        @else
+            <p>{{ $shipping_name }}</p>
+            <p>{{ $shipping_street }}, {{ $shipping_city }}, {{ $shipping_postal_code }}, {{ $shipping_country }}</p>
+        @endif
     </div>
+
 
     <!-- 🚚 Método de Entrega -->
     <div class="mb-4">
-        <h2 class="text-lg font-semibold">Método de Entrega</h2>
-        <p>
-            @if ($delivery_method == 'standard')
-                Envío estándar (Gratis - 5-7 días)
-            @elseif ($delivery_method == 'express')
-                Envío express (+5€, 24-48h)
-            @endif
-        </p>
+        <div class="flex justify-between items-center">
+            <h2 class="text-lg font-semibold">Método de Entrega</h2>
+            <button wire:click="$toggle('editingDelivery')" class="text-blue-500 hover:text-blue-700">
+                🖊️
+            </button>
+        </div>
+
+        @if ($editingDelivery)
+            <livewire:pages.checkout.entrega />
+        @else
+            <p>
+                @if ($delivery_method == 'standard')
+                    Envío estándar (Gratis - 5-7 días)
+                @elseif ($delivery_method == 'express')
+                    Envío express (+5€, 24-48h)
+                @endif
+            </p>
+        @endif
     </div>
+
 
     <!-- 🛒 Resumen del Pedido -->
     <div class="mb-4">
-        <h2 class="text-lg font-semibold">Productos en tu Pedido</h2>
-        <table class="w-full border-collapse">
-            <thead>
-                <tr class="bg-gray-200">
-                    <th class="p-2 text-left">Producto</th>
-                    <th class="p-2 text-center">Cantidad</th>
-                    <th class="p-2 text-right">Subtotal</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($cartItems as $item)
-                    <tr class="border-t">
-                        <td class="p-2">{{ $item['name'] }}</td>
-                        <td class="p-2 text-center">{{ $item['qty'] }}</td>
-                        <td class="p-2 text-right">{{ number_format($item['price'] * $item['qty'], 2) }}€</td>
+        <div class="flex justify-between items-center">
+            <h2 class="text-lg font-semibold">Productos en tu Pedido</h2>
+            <button wire:click="$toggle('editingCart')" class="text-blue-500 hover:text-blue-700">
+                🖊️
+            </button>
+        </div>
+
+        @if ($editingCart)
+            <livewire:pages.cart />
+        @else
+            <table class="w-full border-collapse">
+                <thead>
+                    <tr class="bg-gray-200">
+                        <th class="p-2 text-left">Producto</th>
+                        <th class="p-2 text-center">Cantidad</th>
+                        <th class="p-2 text-right">Subtotal</th>
                     </tr>
-                @endforeach
-            </tbody>
-        </table>
-        <p class="text-xl font-bold mt-4 text-right">Total: {{ number_format($cartTotal, 2) }}€</p>
+                </thead>
+                <tbody>
+                    @foreach ($cartItems as $item)
+                        <tr class="border-t">
+                            <td class="p-2">{{ $item['name'] }}</td>
+                            <td class="p-2 text-center">{{ $item['qty'] }}</td>
+                            <td class="p-2 text-right">{{ number_format($item['price'] * $item['qty'], 2) }}€</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+            <p class="text-xl font-bold mt-4 text-right">Total: {{ number_format($cartTotal, 2) }}€</p>
+        @endif
     </div>
+
 
     <!-- 💳 Método de Pago -->
     <div class="mb-4">

@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Pages\Checkout;
 
+use Gloudemans\Shoppingcart\Facades\Cart;
 use Livewire\Component;
 use Illuminate\Support\Facades\Session;
 
@@ -12,6 +13,10 @@ class ResumenPago extends Component
     public $cartItems = [];
     public $cartTotal = 0;
     public $payment_method = 'card';
+    public $editingAddress = false;
+    public $editingDelivery = false;
+    public $editingCart = false;
+
 
     public function mount()
     {
@@ -23,21 +28,30 @@ class ResumenPago extends Component
         $this->shipping_country = Session::get('shipping_country');
         $this->delivery_method = Session::get('delivery_method', 'standard');
 
-        // Simular datos del carrito (se debería conectar con un carrito real)
-        $this->cartItems = [
-            ['name' => 'Producto 1', 'qty' => 2, 'price' => 20.00],
-            ['name' => 'Producto 2', 'qty' => 1, 'price' => 50.00],
-        ];
+        // Obtener los productos del carrito desde la sesión (Gloudemans\Shoppingcart)
+        $cart = Cart::instance('default')->content();
+
+        // Convertir los objetos CartItem a arrays
+        $this->cartItems = $cart->map(function ($item) {
+            return [
+                'rowId' => $item->rowId,
+                'id' => $item->id,
+                'name' => $item->name,
+                'qty' => $item->qty,
+                'price' => $item->price,
+            ];
+        })->toArray();
 
         // Calcular total
         $this->cartTotal = collect($this->cartItems)->sum(fn($item) => $item['price'] * $item['qty']);
     }
 
+
+
     public function confirmOrder()
     {
         // Aquí podríamos procesar el pedido y redirigir al pago
         session()->flash('message', 'Pedido confirmado. Redirigiendo al pago...');
-
     }
 
     public function render()
