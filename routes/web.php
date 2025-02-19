@@ -15,8 +15,9 @@ use App\Livewire\Pages\{
     Checkout\ResumenPago,
     Admin\Dashboard,
     Admin\Products,
+    Admin\ProductEdit,
+    Admin\ProductCreate
 };
-
 use Illuminate\Support\Facades\Route;
 
 Route::post('paypal', [PaypalController::class, 'paypal'])->name('paypal.payment');
@@ -57,8 +58,8 @@ Route::middleware([
 
         // Se usa `Route::get()` en lugar de `Route::resource()` para Livewire
         Route::get('products', Products::class)->name('products.index');
-        Route::get('products/create', ProductForm::class)->name('products.create');
-        Route::get('products/{product}/edit', ProductForm::class)->name('products.edit');
+        Route::get('products/create', ProductCreate::class)->name('products.create');
+        Route::get('products/{product}/edit', ProductEdit::class)->name('products.edit');
 
         Route::resource('users', UserController::class)->names('users');
         Route::put('/users/{user}/role', [UserController::class, 'updateRole'])->name('users.update-role');
