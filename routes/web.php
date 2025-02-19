@@ -5,7 +5,7 @@ use App\Http\Controllers\{
     Admin\UserController,
     PaypalController
 };
-
+use App\Http\Controllers\Admin\ProductController;
 use App\Livewire\Pages\{
     Cart,
     Home,
@@ -18,6 +18,7 @@ use App\Livewire\Pages\{
     Admin\ProductEdit,
     Admin\ProductCreate
 };
+use App\Models\Product;
 use Illuminate\Support\Facades\Route;
 
 Route::post('paypal', [PaypalController::class, 'paypal'])->name('paypal.payment');
@@ -56,7 +57,7 @@ Route::middleware([
     Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
         Route::get('/dashboard', Dashboard::class)->name('dashboard');
 
-        Route::resource('products', UserController::class)->names('products');
+        Route::resource('products', ProductController::class)->names('products');
 
         Route::resource('users', UserController::class)->names('users');
         Route::put('/users/{user}/role', [UserController::class, 'updateRole'])->name('users.update-role');
