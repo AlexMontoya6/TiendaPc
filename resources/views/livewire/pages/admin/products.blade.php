@@ -44,7 +44,7 @@
         </div>
 
         <div class="mt-6 flex justify-end">
-            {{ $products->links('vendor.pagination.tailwind') }}
+            {{ $products->links() }}
         </div>
     </div>
 </div>
