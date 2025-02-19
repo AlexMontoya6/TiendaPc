@@ -9,7 +9,7 @@ class Products extends Component
 {
 
     public $search = ''; // Campo de búsqueda
-    public $perPage = 10; // Número de productos por página
+    public $perPage = 8; // Número de productos por página
 
     public function updatingSearch()
     {
@@ -18,9 +18,11 @@ class Products extends Component
 
     public function render()
     {
-        $products = Product::where('name', 'like', '%' . $this->search . '%')
+        $products = Product::with('images')
+            ->where('name', 'like', '%' . $this->search . '%')
             ->orderBy('id', 'desc')
-            ->paginate(15);
+            ->paginate($this->perPage);
+
 
         return view('livewire.pages.admin.products', compact('products'))
             ->layout('layouts.app');
