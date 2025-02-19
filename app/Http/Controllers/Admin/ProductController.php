@@ -4,16 +4,20 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Product;
 
 class ProductController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Muestra la lista de productos con todas sus imágenes.
      */
     public function index()
     {
-        return view('admin.products.index');
+        $products = Product::with('images')->orderBy('id', 'desc')->paginate(8); // 🔹 Agregamos paginación
+
+        return view('admin.products.index', compact('products'));
     }
+
 
     /**
      * Show the form for creating a new resource.
