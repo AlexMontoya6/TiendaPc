@@ -21,12 +21,24 @@
             </div>
 
             <div class="mb-4">
-                <label for="slug" class="block text-gray-700">Slug</label>
-                <input type="text" id="slug" wire:model="slug" class="w-full p-2 border rounded">
-                @error('slug')
-                    <span class="text-red-500 text-sm">{{ $message }}</span>
+                <input type="file" wire:model="images" multiple accept="image/*" class="border p-2 rounded">
+                @error('images.*')
+                    <span class="text-red-500 text-xs">{{ $message }}</span>
                 @enderror
+
+                <!-- Vista previa de imágenes -->
+                @if (!empty($images))
+                    <div class="flex mt-2 space-x-2">
+                        @foreach ($images as $image)
+                            @if (is_object($image)) {{-- Solo muestra imágenes si son archivos --}}
+                                <img src="{{ $image->temporaryUrl() }}" class="w-16 h-16 object-cover rounded">
+                            @endif
+                        @endforeach
+                    </div>
+                @endif
             </div>
+
+
 
             <div class="mb-4">
                 <label for="description" class="block text-gray-700">Descripción</label>
