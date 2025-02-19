@@ -16,23 +16,19 @@ class SubcategorySeeder extends Seeder
      */
     public function run()
     {
-        $productTypes = ['Componentes', 'Ordenadores', 'Periféricos'];
+        // 🔹 Obtener todos los tipos de producto en la base de datos
+        $productTypes = ProductType::all();
 
-        foreach ($productTypes as $productTypeName) {
-            $productType = ProductType::where('name', $productTypeName)->first();
-
-            if (!$productType) {
-                continue;
-            }
-
+        foreach ($productTypes as $productType) {
             $categories = Category::where('product_type_id', $productType->id)->get();
 
             foreach ($categories as $category) {
-                if (rand(0, 1)) {
-                    Subcategory::factory()->create([
-                        'category_id' => $category->id,
-                    ]);
-                }
+                // 🔹 Generar entre 1 y 5 subcategorías por categoría
+                $numSubcategories = rand(1, 5);
+
+                Subcategory::factory($numSubcategories)->create([
+                    'category_id' => $category->id,
+                ]);
             }
         }
     }

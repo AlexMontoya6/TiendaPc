@@ -8,6 +8,7 @@ use App\Models\Category;
 use App\Models\ProductType;
 use App\Models\Subcategory;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 
 class ProductFactory extends Factory
 {
@@ -26,8 +27,10 @@ class ProductFactory extends Factory
         $subcategory = Subcategory::inRandomOrder()->first();
 
         return [
-            'name' => $this->faker->word(),
-            'slug' => $this->faker->unique()->slug(),
+            'name' => $this->faker->unique()->word(),
+            'slug' => function (array $attributes) {
+                return Str::slug($attributes['name']) . '-' . Str::random(5); // 🔹 Agrega sufijo aleatorio
+            },
             'description' => $this->faker->sentence(),
             'price' => $this->faker->numberBetween(100, 100000),
             'product_type_id' => $productType->id,

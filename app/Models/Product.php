@@ -9,10 +9,23 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 
 class Product extends Model
 {
     use HasFactory;
+
+    protected $fillable = ['name', 'description', 'price', 'product_type_id', 'category_id', 'subcategory_id'];
+
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($product) {
+            $product->slug = Str::slug($product->name);
+        });
+    }
 
     public function productType(): BelongsTo
     {

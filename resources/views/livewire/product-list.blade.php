@@ -1,6 +1,6 @@
 <div>
     <div class="mb-4 flex justify-between items-center">
-        <input type="text" wire:model.debounce.300ms="search" placeholder="Buscar productos..."
+        <input type="text" wire:keyup="updateSearch($event.target.value)" placeholder="Buscar productos..."
             class="border p-2 rounded w-1/3 text-sm">
 
         <a href="{{ route('admin.products.create') }}" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded text-sm">
@@ -47,5 +47,9 @@
                 @endforeach
             </tbody>
         </table>
+    </div>
+
+    <div class="mt-4">
+        {{ $products->links() }}
     </div>
 </div>
