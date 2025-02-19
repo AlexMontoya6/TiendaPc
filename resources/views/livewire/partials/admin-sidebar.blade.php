@@ -29,7 +29,7 @@
                     :class="{ 'hidden': @js($collapsed), 'inline-block ml-2': !@js($collapsed) }">Usuarios</span>
             </x-nav-link>
 
-            <x-nav-link href=""
+            <x-nav-link href="{{ route('admin.products.index') }}" :active="request()->routeIs('admin.products.index')"
                 class="px-4 py-3 hover:bg-gray-100 flex items-center transition-all duration-300">
                 🛒 <span
                     :class="{ 'hidden': @js($collapsed), 'inline-block ml-2': !@js($collapsed) }">Productos</span>
