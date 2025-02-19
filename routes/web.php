@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\{
-    Pages\Panel\MiPerfilController,
+    Panel\MiPerfilController,
     Admin\UserController,
     PaypalController
 };
@@ -42,13 +42,13 @@ Route::middleware([
     Route::get('/cart/checkout/resumen-pago', ResumenPago::class)->name('cart.checkout.resumen_pago');
 
 
-    Route::get('/panel/mi-perfil', [MiPerfilController::class, 'show'])->name('pages.panel.mi-perfil');
+    Route::get('/panel/mi-perfil', [MiPerfilController::class, 'show'])->name('panel.mi-perfil');
 
     Route::redirect('/user/profile', '/panel/mi-perfil');
 
     Route::get('/panel/mis-compras', function () {
-        return view('pages.panel.mis-compras');
-    })->name('pages.panel.mis-compras');
+        return view('panel.mis-compras');
+    })->name('panel.mis-compras');
 
     /**
      * Rutas para Administración (No Customers)
@@ -56,10 +56,7 @@ Route::middleware([
     Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
         Route::get('/dashboard', Dashboard::class)->name('dashboard');
 
-        // Se usa `Route::get()` en lugar de `Route::resource()` para Livewire
-        Route::get('products', Products::class)->name('products.index');
-        Route::get('products/create', ProductCreate::class)->name('products.create');
-        Route::get('products/{product}/edit', ProductEdit::class)->name('products.edit');
+        Route::resource('products', UserController::class)->names('products');
 
         Route::resource('users', UserController::class)->names('users');
         Route::put('/users/{user}/role', [UserController::class, 'updateRole'])->name('users.update-role');

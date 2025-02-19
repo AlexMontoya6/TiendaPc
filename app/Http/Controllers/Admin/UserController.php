@@ -22,7 +22,7 @@ class UserController extends Controller
         $users = User::paginate(10);
         $roles = Role::all(); // Obtener todos los roles desde la base de datos
 
-        return view('pages.panel.users.index', compact('users', 'roles'));
+        return view('admin.users.index', compact('users', 'roles'));
     }
 
     public function updateRole(Request $request, User $user)
@@ -162,7 +162,7 @@ class UserController extends Controller
         } catch (AuthorizationException $e) {
             return redirect()->route('admin.users.index')->with('error', 'No tienes permisos para eliminar usuarios.');
         }
-        
+
         // Prevenir que un usuario se elimine a sí mismo
         if (auth()->id() === $user->id) {
             return redirect()->route('admin.users.index')->with('error', 'No puedes eliminar tu propia cuenta.');

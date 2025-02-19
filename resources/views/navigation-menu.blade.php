@@ -13,19 +13,19 @@
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     @if (Auth::user()->hasRole('Customer'))
-                        <x-nav-link href="{{ route('pages.panel.mi-perfil') }}" :active="request()->routeIs('pages.panel.mi-perfil')">
+                        <x-nav-link href="{{ route('panel.mi-perfil') }}" :active="request()->routeIs('panel.mi-perfil')">
                             {{ __('Mi Perfil') }}
                         </x-nav-link>
 
-                        <x-nav-link href="{{ route('pages.panel.mis-compras') }}" :active="request()->routeIs('pages.panel.mis-compras')">
+                        <x-nav-link href="{{ route('panel.mis-compras') }}" :active="request()->routeIs('panel.mis-compras')">
                             {{ __('Mis Compras') }}
                         </x-nav-link>
                     @else
-                        <x-nav-link href="{{ route('pages.panel.mi-perfil') }}" :active="request()->routeIs('pages.panel.mi-perfil')">
+                        <x-nav-link href="{{ route('panel.mi-perfil') }}" :active="request()->routeIs('panel.mi-perfil')">
                             {{ __('Mi Perfil') }}
                         </x-nav-link>
 
-                        <x-nav-link href="{{ route('pages.panel.mis-compras') }}" :active="request()->routeIs('pages.panel.mis-compras')">
+                        <x-nav-link href="{{ route('panel.mis-compras') }}" :active="request()->routeIs('mis-compras')">
                             {{ __('Mis Compras') }}
                         </x-nav-link>
                         <x-nav-link href="{{ route('admin.dashboard') }}" :active="request()->routeIs('admin.dashboard')">
@@ -168,7 +168,7 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{ 'block': open, 'hidden': !open }" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link href="{{ route('pages.panel.mi-perfil') }}" :active="request()->routeIs('pages.panel.mi-perfil')">
+            <x-responsive-nav-link href="{{ route('panel.mi-perfil') }}" :active="request()->routeIs('panel.mi-perfil')">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
         </div>

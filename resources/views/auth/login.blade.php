@@ -16,12 +16,12 @@
             <x-login-link
                 email="superadmin@mail.com"
                 label="SuperAdmin User"
-                redirect-url="{{ route('pages.panel.mi-perfil') }}"
+                redirect-url="{{ route('panel.mi-perfil') }}"
             />
             <x-login-link
                 email="admin@mail.com"
                 label="Admin User"
-                redirect-url="{{ route('pages.panel.mi-perfil') }}"
+                redirect-url="{{ route('panel.mi-perfil') }}"
             />
             <x-login-link
                 email="customer@mail.com"
