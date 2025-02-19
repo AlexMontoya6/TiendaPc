@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('name')->unique();
             $table->string('description')->nullable();
+            $table->string('color', 7)->nullable(); // Color de la etiqueta
+            $table->string('icon')->nullable(); // Icono de la etiqueta
             $table->timestamps();
         });
 
@@ -23,8 +25,8 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(Product::class)->nullable()->constrained()->onDelete('restrict');
             $table->foreignIdFor(Tag::class)->constrained()->onDelete('restrict');
-            $table->timestamp('expires_at')->nullable(); // Fecha de expiración
-            $table->boolean('is_active')->default(true); // Estado de la etiqueta
+            $table->dateTime('ttl')->nullable();
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
     }
