@@ -4,7 +4,7 @@
 
     <div class="flex-1 max-w-6xl mx-auto p-4">
         <div class="flex justify-between items-center mb-4">
-            <input type="text" wire:model.debounce.300ms="search" placeholder="Buscar productos..."
+            <input type="text" wire:keyup="updateSearch($event.target.value)" placeholder="Buscar productos..."
                 class="border p-2 rounded w-1/3 text-sm">
             <a href="{{ route('admin.products.create') }}"
                 class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded text-sm">Nuevo Producto</a>
@@ -27,8 +27,7 @@
                             <td class="p-2 text-center">{{ $product->id }}</td>
                             <td class="p-2 text-center">
                                 <img src="{{ asset('storage/' . $product->images->first()->path) }}"
-                                     alt="{{ $product->name }}"
-                                     class="w-16 h-16 object-cover rounded mx-auto">
+                                    alt="{{ $product->name }}" class="w-16 h-16 object-cover rounded mx-auto">
                             </td>
                             <td class="p-2">{{ $product->name }}</td>
                             <td class="p-2 text-center">{{ number_format($product->price / 100, 2) }} €</td>
@@ -45,7 +44,7 @@
         </div>
 
         <div class="mt-6 flex justify-end">
-            {{ $products->links() }}
+            {{ $products->links('vendor.pagination.tailwind') }}
         </div>
     </div>
 </div>

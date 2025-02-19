@@ -4,27 +4,36 @@ namespace App\Livewire\Pages\Admin;
 
 use Livewire\Component;
 use App\Models\Product;
+use Livewire\WithPagination;
 
 class Products extends Component
 {
 
+    use WithPagination;
+
     public $search = ''; // Campo de búsqueda
     public $perPage = 8; // Número de productos por página
 
-    public function updatingSearch()
+
+    public function updateSearch($value)
     {
-        $this->resetPage(); // Reiniciar la paginación al buscar
+        $this->search = $value;
+        $this->resetPage(); // Reiniciar paginación al buscar
     }
+
 
     public function render()
-    {
-        $products = Product::with('images')
-            ->where('name', 'like', '%' . $this->search . '%')
-            ->orderBy('id', 'desc')
-            ->paginate($this->perPage);
+{
+    $query = Product::with('images');
 
-
-        return view('livewire.pages.admin.products', compact('products'))
-            ->layout('layouts.app');
+    if (!empty($this->search)) {
+        $query->where('name', 'like', '%' . $this->search . '%');
     }
+
+    $products = $query->orderBy('id', 'desc')->paginate($this->perPage);
+
+    return view('livewire.pages.admin.products', compact('products'))
+        ->layout('layouts.app');
+}
+
 }
