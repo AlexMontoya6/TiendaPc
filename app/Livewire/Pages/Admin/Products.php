@@ -3,12 +3,10 @@
 namespace App\Livewire\Pages\Admin;
 
 use Livewire\Component;
-use Livewire\WithPagination;
 use App\Models\Product;
 
 class Products extends Component
 {
-    use WithPagination; // Habilitar paginación Livewire
 
     public $search = ''; // Campo de búsqueda
     public $perPage = 10; // Número de productos por página
@@ -22,7 +20,7 @@ class Products extends Component
     {
         $products = Product::where('name', 'like', '%' . $this->search . '%')
             ->orderBy('id', 'desc')
-            ->paginate($this->perPage);
+            ->paginate(15);
 
         return view('livewire.pages.admin.products', compact('products'))
             ->layout('layouts.app');

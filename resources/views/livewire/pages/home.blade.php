@@ -17,8 +17,8 @@
                         <h2 class="text-lg font-semibold text-gray-800">{{ $product->name }}</h2>
                         <p class="text-gray-600 mt-2">{{ Str::limit($product->description, 60) }}</p>
                         <div class="mt-4 flex justify-between items-center">
-                            <span
-                                class="text-xl font-bold text-blue-600">{{ $product->getFormattedPriceAttribute() }} €</span>
+                            <span class="text-xl font-bold text-blue-600">{{ $product->getFormattedPriceAttribute() }}
+                                €</span>
 
                             <!-- ✅ Enlace a la vista de detalles del producto -->
                             <a href="{{ route('product.detail', $product->slug) }}"
@@ -37,9 +37,7 @@
             @endforeach
         </div>
         <div class="mt-6 flex justify-end">
-            <div class="bg-white p-4 rounded-lg shadow border border-gray-200">
-                {{ $products->links('vendor.pagination.tailwind') }}
-            </div>
+            {{ $products->links() }}
         </div>
     </div>
 </div>
