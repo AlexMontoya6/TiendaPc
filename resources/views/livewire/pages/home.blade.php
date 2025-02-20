@@ -3,7 +3,23 @@
         <h1 class="text-3xl font-bold mb-6 text-gray-900">Productos Destacados</h1>
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             @foreach ($products as $product)
-                <div class="bg-white shadow-lg rounded-lg overflow-hidden">
+                <div class="bg-white shadow-lg rounded-lg overflow-hidden relative">
+
+                    <!-- 🔹 Muestra las etiquetas del producto -->
+                    @if ($product->tags->isNotEmpty())
+                        <div class="absolute top-2 left-2 flex gap-2">
+                            @foreach ($product->tags->where('pivot.is_active', true) as $tag)
+                                <span
+                                    class="px-2 py-1 text-sm font-semibold rounded border flex items-center justify-between gap-1"
+                                    style="background-color: {{ $tag->background_color }};
+                                   color: {{ $tag->text_color }};
+                                   border-color: {{ $tag->border_color }};">
+                                    {{ $tag->name }}
+                                    <span class="ml-1 flex-shrink-0">{!! $tag->icon_svg !!}</span>
+                                </span>
+                            @endforeach
+                        </div>
+                    @endif
 
                     @if ($product->images->isNotEmpty())
                         <img src="{{ asset('storage/' . $product->images->first()->path) }}" alt="{{ $product->name }}"
@@ -20,13 +36,11 @@
                             <span class="text-xl font-bold text-blue-600">{{ $product->getFormattedPriceAttribute() }}
                                 €</span>
 
-                            <!-- ✅ Enlace a la vista de detalles del producto -->
                             <a href="{{ route('product.detail', $product->slug) }}"
                                 class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
                                 Ver más
                             </a>
 
-                            <!-- Botón Añadir al Carrito -->
                             <button wire:click="$dispatch('addToCart', { productId: {{ $product->id }} })"
                                 class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
                                 🛒 Añadir

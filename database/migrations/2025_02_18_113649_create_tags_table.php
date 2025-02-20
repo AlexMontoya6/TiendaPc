@@ -10,15 +10,17 @@ return new class extends Migration
 {
     public function up(): void
     {
-        // Crear la tabla de etiquetas (tags)
         Schema::create('tags', function (Blueprint $table) {
             $table->id();
             $table->string('name')->unique();
             $table->string('description')->nullable();
-            $table->string('color', 7)->nullable(); // Color de la etiqueta
-            $table->string('icon')->nullable(); // Icono de la etiqueta
+            $table->string('background_color', 7)->nullable(); // Color de fondo
+            $table->string('text_color', 7)->nullable(); // Color del texto
+            $table->string('border_color', 7)->nullable(); // Color del borde
+            $table->text('icon_svg')->nullable(); // Código SVG opcional
             $table->timestamps();
         });
+
 
         // Crear la tabla pivote productos-etiquetas
         Schema::create('product_tag', function (Blueprint $table) {

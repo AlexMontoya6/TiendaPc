@@ -50,7 +50,7 @@ class Product extends Model
     public function tags(): BelongsToMany
     {
         return $this->belongsToMany(Tag::class)
-            ->withPivot('expires_at', 'is_active')
+            ->withPivot('ttl', 'is_active')
             ->withTimestamps();
     }
 
