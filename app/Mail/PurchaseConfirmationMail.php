@@ -3,8 +3,10 @@
 namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class PurchaseConfirmationMail extends Mailable
 {
@@ -12,21 +14,30 @@ class PurchaseConfirmationMail extends Mailable
 
     public $pdf_path;
 
-    /**
-     * Crear una nueva instancia del Mailable.
-     */
     public function __construct($pdf_path)
     {
-        $this->pdf_path = $pdf_path;
+        $fullPath = storage_path("app/public/tickets/" . basename($pdf_path));
+
+        if (!file_exists($fullPath)) {
+            Log::error("El archivo PDF no existe: " . $fullPath);
+            $this->pdf_path = null;
+        } else {
+            $this->pdf_path = $fullPath;
+        }
     }
 
-    /**
-     * Construir el mensaje.
-     */
     public function build()
     {
-        return $this->subject('Confirmación de compra - TiendaPc')
-            ->markdown('emails.purchase_confirmation') // ✅ Usa la vista Markdown
-            ->attach(storage_path('app/public/tickets/ticket_test.pdf')); // ✅ Ruta absoluta
+        $email = $this->subject('Confirmación de Compra')
+                      ->markdown('emails.purchase_confirmation');
+
+        // Solo adjuntar si el PDF existe
+        if ($this->pdf_path) {
+            $email->attach($this->pdf_path);
+        } else {
+            Log::error("Intento de enviar email sin archivo adjunto.");
+        }
+
+        return $email;
     }
 }

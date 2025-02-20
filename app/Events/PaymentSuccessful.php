@@ -19,6 +19,7 @@ class PaymentSuccessful
      */
     public function __construct($payment_id, $user_email, $pdf_path)
     {
+        
         $this->payment_id = $payment_id;
         $this->user_email = $user_email;
         $this->pdf_path = $pdf_path;

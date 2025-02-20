@@ -10,6 +10,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use App\Mail\PurchaseConfirmationMail;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
 
 class SendPurchaseEmailJob implements ShouldQueue
 {
@@ -32,7 +33,14 @@ class SendPurchaseEmailJob implements ShouldQueue
      */
     public function handle()
     {
-        // Enviar el correo con el PDF adjunto
-        Mail::to($this->user_email)->send(new PurchaseConfirmationMail($this->pdf_path));
+        try {
+            Log::info("Intentando enviar correo a: " . $this->user_email);
+
+            Mail::to($this->user_email)->send(new PurchaseConfirmationMail($this->pdf_path));
+
+            Log::info("Correo enviado correctamente a: " . $this->user_email);
+        } catch (\Exception $e) {
+            Log::error("Error enviando email: " . $e->getMessage());
+        }
     }
 }
