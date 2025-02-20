@@ -22,8 +22,9 @@ use App\Models\Product;
 use Illuminate\Support\Facades\Route;
 
 Route::post('paypal', [PaypalController::class, 'paypal'])->name('paypal.payment');
-Route::get('success', [PaypalController::class, 'success'])->name('success');
-Route::get('cancel', [PaypalController::class, 'cancel'])->name('cancel');
+Route::get('/payment/success', [PaypalController::class, 'success'])->name('success');
+Route::get('/payment/cancel', [PaypalController::class, 'cancel'])->name('cancel');
+
 
 Route::get('/', Home::class)->name('home');
 Route::get('/cart', Cart::class)->name('cart.index');

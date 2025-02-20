@@ -68,7 +68,7 @@ class PaypalController extends Controller
             $payment->payment_status = $response['status'];
             $payment->payment_method = 'PayPal';
             $payment->save();
-            return "Pago completado correctamente.";
+            return view('payments.success');
 
             unset($_SESSION['product_name']);
             unset($_SESSION['quantity']);
@@ -79,6 +79,6 @@ class PaypalController extends Controller
 
     public function cancel()
     {
-        return "Pago cancelado.";
+        return view('payments.cancel');
     }
 }
