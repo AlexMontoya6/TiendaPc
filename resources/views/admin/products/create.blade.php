@@ -28,7 +28,7 @@
                 </div>
 
                 {{-- Componente Livewire para manejar los selects dinámicos --}}
-                <livewire:product-form />
+                <livewire:components.admin.products.product-form />
 
                 {{-- Imágenes --}}
                 <div>

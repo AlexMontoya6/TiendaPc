@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Components\admin\Products;
 
 use Livewire\Component;
 use App\Models\ProductType;
