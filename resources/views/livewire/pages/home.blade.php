@@ -5,22 +5,6 @@
             @foreach ($products as $product)
                 <div class="bg-white shadow-lg rounded-lg overflow-hidden relative">
 
-                    <!-- 🔹 Muestra las etiquetas del producto -->
-                    @if ($product->tags->isNotEmpty())
-                        <div class="absolute top-2 left-2 flex gap-2">
-                            @foreach ($product->tags->where('pivot.is_active', true) as $tag)
-                                <span
-                                    class="px-2 py-1 text-sm font-semibold rounded border flex items-center justify-between gap-1"
-                                    style="background-color: {{ $tag->background_color }};
-                                   color: {{ $tag->text_color }};
-                                   border-color: {{ $tag->border_color }};">
-                                    {{ $tag->name }}
-                                    <span class="ml-1 flex-shrink-0">{!! $tag->icon_svg !!}</span>
-                                </span>
-                            @endforeach
-                        </div>
-                    @endif
-
                     @if ($product->images->isNotEmpty())
                         <img src="{{ asset('storage/' . $product->images->first()->path) }}" alt="{{ $product->name }}"
                             class="w-full h-48 object-cover">
@@ -29,6 +13,8 @@
                             class="w-full h-48 object-cover">
                     @endif
 
+                    
+                    <x-product-tags :product="$product" />
                     <div class="p-4">
                         <h2 class="text-lg font-semibold text-gray-800">{{ $product->name }}</h2>
                         <p class="text-gray-600 mt-2">{{ Str::limit($product->description, 60) }}</p>
