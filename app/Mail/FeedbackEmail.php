@@ -2,13 +2,13 @@
 
 namespace App\Mail;
 
+namespace App\Mail;
+
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Log;
 
-class PurchaseConfirmationMail extends Mailable
+class FeedbackEmail extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -18,8 +18,8 @@ class PurchaseConfirmationMail extends Mailable
 
     public function build()
     {
-        return $this->subject('Confirmación de Compra')
-                      ->markdown('emails.purchase_confirmation');
+        return  $this->subject('Valora tu experiencia con nosotros')
+            ->markdown('emails.feedback');
 
 
     }

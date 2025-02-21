@@ -8,6 +8,7 @@ use App\Jobs\SendPurchaseEmailJob;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Log;
+use App\Jobs\SendFeedbackEmailJob;
 
 class HandleSuccessfulPayment implements ShouldQueue
 {
@@ -19,13 +20,8 @@ class HandleSuccessfulPayment implements ShouldQueue
     public function handle(PaymentSuccessful $event)
     {
 
-        try {
-            // Primero, limpiar el carrito
-            dispatch(new ClearCartJob())->onQueue('default');
-            Log::info("ClearCartJob encolado correctamente.");
-        } catch (\Exception $e) {
-            Log::error("Error al encolar ClearCartJob: " . $e->getMessage());
-        }
+
+
 
 
         try {
@@ -41,5 +37,9 @@ class HandleSuccessfulPayment implements ShouldQueue
         } catch (\Exception $e) {
             Log::error("Error en HandleSuccessfulPayment: " . $e->getMessage());
         }
+
+        dispatch(new SendFeedbackEmailJob($event->user_email))
+            ->onQueue('default')
+            ->delay(now()->addMinute());
     }
 }
