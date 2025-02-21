@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ProductStoreRequest;
 use App\Models\Category;
 use App\Models\Image;
 use Illuminate\Http\Request;
@@ -34,57 +35,31 @@ class ProductController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-        // 🔹 1. Validación de los datos del formulario
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'price' => 'required|integer|min:100', // Precio en céntimos
-            'product_type_id' => 'required|exists:product_types,id',
-            'category_id' => 'nullable|exists:categories,id',
-            'subcategory_id' => 'nullable|exists:subcategories,id',
-            'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048', // Cada imagen debe ser válida
-        ]);
+    public function store(ProductStoreRequest $request)
+{
+    try {
+        // Crear el producto con los datos validados
+        $product = Product::create($request->validated());
 
-       // dd($validated);
-
-
-
-        // 🔹 2. Crear el producto en la base de datos
-        $product = Product::create([
-            'name' => $validated['name'],
-            'description' => $validated['description'] ?? null,
-            'price' => $validated['price'], // Precio en céntimos
-            'product_type_id' => $validated['product_type_id'],
-            'category_id' => $validated['category_id'] ?? null,
-            'subcategory_id' => $validated['subcategory_id'] ?? null,
-        ]);
-
-        //dd($product);
-
-        // if ($request->hasFile('images')) {
-        //     dd($request->file('images')); // 🔍 Verificar si los archivos están presentes
-        // }
-
-        // 🔹 3. Subir y asociar imágenes (si existen)
+        // Subir y asociar imágenes si existen
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $index => $image) {
-                $path = $image->store('products', 'public'); // Guarda en storage/app/public/products
-
-                //dd($path);
+                $path = $image->store('products', 'public');
 
                 Image::create([
                     'product_id' => $product->id,
                     'path' => $path,
-                    'order' => $index + 1, // Orden secuencial de imágenes
+                    'order' => $index + 1, // Orden secuencial
                 ]);
             }
         }
 
-        // 🔹 4. Redireccionar con mensaje de éxito
         return redirect()->route('admin.products.index')->with('success', 'Producto creado correctamente.');
+    } catch (\Exception $e) {
+        return redirect()->route('admin.products.index')->with('error', 'Error al crear el producto.');
     }
+}
+
 
     /**
      * Display the specified resource.

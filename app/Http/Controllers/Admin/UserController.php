@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UserStoreRequest;
+use App\Http\Requests\UserUpdateRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -57,36 +59,36 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(UserStoreRequest $request)
     {
-
         try {
             $this->authorize('create', User::class);
         } catch (AuthorizationException $e) {
             return redirect()->route('admin.users.index')->with('error', 'No tienes permisos para crear usuarios.');
         }
 
-        // Validar los datos del formulario
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|max:255|unique:users,email',
-            'password' => 'required|string|min:6|confirmed',
-            'role' => ['required', Rule::exists('roles', 'name')], // Verifica que el rol existe
-        ]);
+        // Verificar que el rol realmente existe en la base de datos antes de asignarlo
+        if (!Role::where('name', $request->role)->exists()) {
+            return redirect()->route('admin.users.index')->with('error', 'El rol seleccionado no es válido.');
+        }
 
-        // Crear el usuario en la base de datos
+        // Crear el usuario
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
 
-        // Asignar el rol seleccionado al usuario
-        $user->assignRole($request->role);
+        // Asignar el rol
+        try {
+            $user->assignRole($request->role);
+        } catch (\Exception $e) {
+            return redirect()->route('admin.users.index')->with('error', 'No se pudo asignar el rol al usuario.');
+        }
 
-        // Redirigir con un mensaje de éxito
         return redirect()->route('admin.users.index')->with('success', 'Usuario creado correctamente.');
     }
+
 
     /**
      * Display the specified resource.
@@ -117,40 +119,32 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, User $user)
+    public function update(UserUpdateRequest $request, User $user)
     {
+        $this->authorize('update', $user); // ✅ Pasamos el usuario real para la autorización
 
         try {
-            $this->authorize('update', User::class); // 🔹 Pasar el usuario real
-        } catch (AuthorizationException $e) {
-            return redirect()->route('admin.users.index')->with('error', 'No tienes permisos para editar usuarios.');
+            // Obtener los datos validados del request
+            $data = $request->validated();
+
+            // Si el usuario ingresó una nueva contraseña, encriptarla, si no, eliminarla del array
+            if ($request->filled('password')) {
+                $data['password'] = Hash::make($request->password);
+            } else {
+                unset($data['password']); // No actualizar la contraseña si está vacía
+            }
+
+            $user->update($data); // ✅ Actualiza solo los datos validados
+
+            // Sincronizar roles
+            $user->syncRoles([$request->role]);
+
+            return redirect()->route('admin.users.index')->with('success', 'Usuario actualizado correctamente.');
+        } catch (\Exception $e) {
+            return redirect()->route('admin.users.index')->with('error', 'Hubo un error al actualizar el usuario.');
         }
-
-        // Validar los datos del formulario
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => ['required', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
-            'password' => 'nullable|string|min:6|confirmed',
-            'role' => ['required', Rule::exists('roles', 'name')], // Asegura que el rol exista en la base de datos
-        ]);
-
-        // Actualizar los datos del usuario
-        $user->name = $request->name;
-        $user->email = $request->email;
-
-        // Solo actualizar la contraseña si el usuario ingresó una nueva
-        if ($request->filled('password')) {
-            $user->password = Hash::make($request->password);
-        }
-
-        $user->save();
-
-        // Asignar el nuevo rol al usuario
-        $user->syncRoles([$request->role]);
-
-        // Redirigir con mensaje de éxito
-        return redirect()->route('admin.users.index')->with('success', 'Usuario actualizado correctamente.');
     }
+
 
     /**
      * Remove the specified resource from storage.
