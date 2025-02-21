@@ -72,6 +72,7 @@ class PaypalController extends Controller
             $payment->payer_email = $response['payer']['email_address'];
             $payment->payment_status = $response['status'];
             $payment->payment_method = 'PayPal';
+            $payment->user_id = auth()->id();
             $payment->save();
             return view('payments.success');
 

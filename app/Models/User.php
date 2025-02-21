@@ -103,4 +103,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(Address::class);
     }
+
+
+    public function payments(): HasMany
+    {
+        return $this->hasMany(Payment::class);
+    }
 }

@@ -6,6 +6,7 @@ use App\Http\Controllers\{
     PaypalController
 };
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Panel\MisComptrasController;
 use App\Livewire\Pages\{
     Cart,
     Home,
@@ -48,9 +49,12 @@ Route::middleware([
 
     Route::redirect('/user/profile', '/panel/mi-perfil');
 
-    Route::get('/panel/mis-compras', function () {
-        return view('panel.mis-compras');
-    })->name('panel.mis-compras');
+
+
+
+
+    Route::get('/panel/mis-compras', [MisComptrasController::class, 'index'])->name('panel.mis-compras');
+
 
     /**
      * Rutas para Administración (No Customers)
