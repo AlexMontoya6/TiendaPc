@@ -77,25 +77,6 @@ class Cart extends Component
         $this->dispatch('cartUpdated');
     }
 
-    public function clearCartHandler()
-    {
-        Log::info("✅ Evento clearCart recibido en Cart.php");
-
-        // Obtener todos los productos del carrito
-        $cartItems = Shoppingcart::content();
-        Log::info("Carrito antes de vaciarse:", ['items' => $cartItems]);
-
-        // Eliminar cada ítem manualmente
-        foreach ($cartItems as $item) {
-            Shoppingcart::remove($item->rowId);
-        }
-
-        Log::info("✅ Carrito vaciado correctamente.");
-
-        // Recargar el carrito
-        $this->loadCart();
-        $this->dispatch('cartUpdated'); // Notificar que el carrito ha sido vaciado
-    }
 
 
     public function render()
