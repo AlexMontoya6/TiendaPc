@@ -99,7 +99,6 @@
                 <span>Transferencia bancaria</span>
             </label>
         </div>
-        @dump($cartItems)
         <!-- Condicional: Si el método de pago es PayPal, mostramos el formulario -->
         @if ($payment_method === 'paypal')
             <form id="payment-form" method="POST" action="{{ route('paypal.payment') }}">

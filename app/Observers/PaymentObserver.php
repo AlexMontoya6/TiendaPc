@@ -15,7 +15,6 @@ class PaymentObserver
         event(new PaymentSuccessful(
             $payment->payment_id,
             $payment->payer_email,
-            $payment->product_id
         ));
     }
 

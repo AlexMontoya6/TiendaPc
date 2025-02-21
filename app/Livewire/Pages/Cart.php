@@ -5,6 +5,7 @@ namespace App\Livewire\Pages;
 use Livewire\Component;
 use Gloudemans\Shoppingcart\Facades\Cart as Shoppingcart;
 use App\Models\Product;
+use Illuminate\Support\Facades\Log;
 
 
 class Cart extends Component
@@ -13,7 +14,10 @@ class Cart extends Component
     public $cartTotal = 0;
     public $quantities = [];
 
-    protected $listeners = ['addToCart' => 'addProductToCart']; // 🔹 Escuchar el evento
+    protected $listeners = [
+        'addToCart' => 'addProductToCart', // 🔹 Escuchar evento para agregar productos
+        'clearCart' => 'clearCartHandler', // 🔹 Escuchar evento para vaciar el carrito
+    ];
 
     public function mount()
     {
@@ -24,7 +28,7 @@ class Cart extends Component
     {
         $this->cartItems = collect(Shoppingcart::content()->map(function ($item) {
             return (object) [
-                'rowId' => $item->rowId, // 👈 Aseguramos que rowId se guarde correctamente
+                'rowId' => $item->rowId,
                 'id' => $item->id,
                 'name' => $item->name,
                 'qty' => (int) $item->qty,
@@ -32,7 +36,6 @@ class Cart extends Component
             ];
         })->toArray());
 
-        // Inicializar cantidades correctamente
         foreach ($this->cartItems as $item) {
             $this->quantities[$item->rowId] = $item->qty > 0 ? $item->qty : 1;
         }
@@ -40,12 +43,9 @@ class Cart extends Component
         $this->cartTotal = (float) preg_replace('/[^0-9.]/', '', Shoppingcart::subtotal());
     }
 
-
-
-
     public function addProductToCart($data)
     {
-        $product = Product::find($data['productId']); // 🔹 Buscar producto en la base de datos
+        $product = Product::find($data['productId']);
 
         if (!$product) {
             return;
@@ -53,15 +53,15 @@ class Cart extends Component
 
         Shoppingcart::add($product->id, $product->name, 1, $product->price);
         $this->loadCart();
-        $this->dispatch('cartUpdated'); // 🔹 Emitir evento para actualizar el Offcanvas
+        $this->dispatch('cartUpdated');
     }
 
     public function updateQuantity($rowId, $newQty = 1)
     {
-        $newQty = (int) $newQty; // Convertir a entero para evitar problemas
+        $newQty = (int) $newQty;
 
         if ($newQty < 1) {
-            $newQty = 1; // Evitar cantidades negativas o cero
+            $newQty = 1;
         }
 
         if (Shoppingcart::get($rowId)) {
@@ -70,8 +70,6 @@ class Cart extends Component
         }
     }
 
-
-
     public function removeFromCart($rowId)
     {
         Shoppingcart::remove($rowId);
@@ -79,9 +77,29 @@ class Cart extends Component
         $this->dispatch('cartUpdated');
     }
 
+    public function clearCartHandler()
+    {
+        Log::info("✅ Evento clearCart recibido en Cart.php");
+
+        // Obtener todos los productos del carrito
+        $cartItems = Shoppingcart::content();
+        Log::info("Carrito antes de vaciarse:", ['items' => $cartItems]);
+
+        // Eliminar cada ítem manualmente
+        foreach ($cartItems as $item) {
+            Shoppingcart::remove($item->rowId);
+        }
+
+        Log::info("✅ Carrito vaciado correctamente.");
+
+        // Recargar el carrito
+        $this->loadCart();
+        $this->dispatch('cartUpdated'); // Notificar que el carrito ha sido vaciado
+    }
+
+
     public function render()
     {
-        return view('livewire.pages.cart')
-            ->layout('layouts.checkout'); // 🔹 Usar el layout correcto
+        return view('livewire.pages.cart')->layout('layouts.checkout');
     }
 }
