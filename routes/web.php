@@ -54,6 +54,7 @@ Route::middleware([
 
 
     Route::get('/panel/mis-compras', [MisComptrasController::class, 'index'])->name('panel.mis-compras');
+    Route::get('/payments/{payment}/ticket', [MisComptrasController::class, 'generatePDF'])->name('payments.ticket');
 
 
     /**

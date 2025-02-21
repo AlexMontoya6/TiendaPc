@@ -11,25 +11,30 @@
 
                 <h1 class="text-2xl font-semibold mb-4">Historial de Compras</h1>
 
-                @if($payments->isEmpty())
+                @if ($payments->isEmpty())
                     <p class="text-gray-600">No tienes compras registradas.</p>
                 @else
                     <table class="table-auto w-full border-collapse border border-gray-300">
                         <thead>
                             <tr class="bg-gray-200">
                                 <th class="border border-gray-300 px-4 py-2">Fecha</th>
+                                <th class="border border-gray-300 px-4 py-2">Nombre del Producto</th>
                                 <th class="border border-gray-300 px-4 py-2">Total</th>
+                                <th class="border border-gray-300 px-4 py-2">Descargar Ticket</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($payments as $payment)
                                 <tr class="text-center">
-                                    <td class="border border-gray-300 px-4 py-2">{{ $payment->created_at->format('d/m/Y') }}</td>
+                                    <td class="border border-gray-300 px-4 py-2">
+                                        {{ $payment->created_at->format('d/m/Y') }}</td>
+                                    <td class="border border-gray-300 px-4 py-2">{{ $payment->product_name }}</td>
                                     <td class="border border-gray-300 px-4 py-2">{{ $payment->amount }} €</td>
 
                                     <td class="border border-gray-300 px-4 py-2">
-                                        <a href="#" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                                            Generar PDF
+                                        <a href="{{ route('payments.ticket', $payment->id) }}"
+                                            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                                            Ticket
                                         </a>
                                     </td>
                                 </tr>
