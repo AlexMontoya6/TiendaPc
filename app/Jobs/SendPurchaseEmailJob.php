@@ -17,15 +17,13 @@ class SendPurchaseEmailJob implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     protected $user_email;
-    protected $pdf_path;
 
     /**
      * Crear una nueva instancia del job.
      */
-    public function __construct($user_email, $pdf_path)
+    public function __construct($user_email)
     {
         $this->user_email = $user_email;
-        $this->pdf_path = $pdf_path;
     }
 
     /**
@@ -36,7 +34,7 @@ class SendPurchaseEmailJob implements ShouldQueue
         try {
             Log::info("Intentando enviar correo a: " . $this->user_email);
 
-            Mail::to($this->user_email)->send(new PurchaseConfirmationMail($this->pdf_path));
+            Mail::to($this->user_email)->send(new PurchaseConfirmationMail());
 
             Log::info("Correo enviado correctamente a: " . $this->user_email);
         } catch (\Exception $e) {

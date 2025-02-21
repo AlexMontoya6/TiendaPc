@@ -99,27 +99,30 @@
                 <span>Transferencia bancaria</span>
             </label>
         </div>
-
+        @dump($cartItems)
         <!-- Condicional: Si el método de pago es PayPal, mostramos el formulario -->
         @if ($payment_method === 'paypal')
-        <form id="payment-form" method="POST" action="{{ route('paypal.payment') }}">
-            @csrf
+            <form id="payment-form" method="POST" action="{{ route('paypal.payment') }}">
+                @csrf
 
-            <!-- Enviar el total como input oculto -->
-            <input type="hidden" name="price" value="{{ $cartTotal }}">
+                <!-- Enviar el total como input oculto -->
+                <input type="hidden" name="price" value="{{ $cartTotal }}">
 
-            <!-- Enviar nombre del producto -->
-            <input type="hidden" name="product_name" value="{{ $cartItems[0]['name'] ?? 'Producto' }}">
+                <!-- Enviar el nombre del producto -->
+                <input type="hidden" name="product_name" value="{{ $cartItems[0]['name'] ?? 1 }}">
 
-            <!-- Enviar cantidad -->
-            <input type="hidden" name="quantity" value="{{ $cartItems[0]['qty'] ?? 1 }}">
+                <!-- Enviar el id del producto -->
+                <input type="hidden" name="product_id" value="{{ $cartItems[0]['id'] ?? 1 }}">
 
-            <!-- Botón para confirmar y pagar -->
-            <button type="submit"
-                class="bg-yellow-500 text-white px-6 py-3 rounded hover:bg-yellow-600 w-full">
-                Pagar con PayPal
-            </button>
-        </form>
+
+                <!-- Enviar cantidad -->
+                <input type="hidden" name="quantity" value="{{ $cartItems[0]['qty'] ?? 1 }}">
+
+                <!-- Botón para confirmar y pagar -->
+                <button type="submit" class="bg-yellow-500 text-white px-6 py-3 rounded hover:bg-yellow-600 w-full">
+                    Pagar con PayPal
+                </button>
+            </form>
         @else
             <!-- Botón genérico para otros métodos de pago -->
             <button wire:click="confirmOrder"

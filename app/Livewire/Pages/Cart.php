@@ -20,9 +20,6 @@ class Cart extends Component
         $this->loadCart(); // 🔹 Carga inicial del carrito
     }
 
-
-
-
     public function loadCart()
     {
         $this->cartItems = collect(Shoppingcart::content()->map(function ($item) {

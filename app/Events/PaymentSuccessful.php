@@ -12,16 +12,15 @@ class PaymentSuccessful
 
     public $payment_id;
     public $user_email;
-    public $pdf_path;
+    public $purchased_products;
 
     /**
      * Crear una nueva instancia del evento.
      */
-    public function __construct($payment_id, $user_email, $pdf_path)
+    public function __construct($payment_id, $user_email, $purchased_products)
     {
-        
         $this->payment_id = $payment_id;
         $this->user_email = $user_email;
-        $this->pdf_path = $pdf_path;
+        $this->purchased_products = $purchased_products;
     }
 }

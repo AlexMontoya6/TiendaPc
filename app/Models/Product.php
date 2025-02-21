@@ -47,6 +47,11 @@ class Product extends Model
         return $this->hasMany(Image::class)->orderBy('order', 'asc');
     }
 
+    public function paymets(): HasMany
+    {
+        return $this->hasMany(Payment::class);
+    }
+
     public function tags(): BelongsToMany
     {
         return $this->belongsToMany(Tag::class)

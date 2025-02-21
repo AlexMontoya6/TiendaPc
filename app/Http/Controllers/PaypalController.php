@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Payment;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Srmklive\PayPal\Services\PayPal as PayPalClient;
 
@@ -30,9 +31,12 @@ class PaypalController extends Controller
             ]
         ]);
 
-        // 🔹 Guardamos los datos en sesión para usarlos después
-        session()->put('product_name', $request->product_name);
-        session()->put('quantity', $request->quantity); // ✅ Corregido error tipográfico
+
+        $product = Product::findOrFail($request->product_id);
+
+        session()->put('product_name', $product->name);
+        session()->put('product_id', $product->id);
+        session()->put('quantity', $request->quantity);
 
         // 🔹 Verificamos la respuesta de PayPal
         if (isset($response['id']) && $response['id'] != null) {
@@ -54,11 +58,12 @@ class PaypalController extends Controller
         $provider->setApiCredentials(config('paypal'));
         $provider->getAccessToken();
         $response = $provider->capturePaymentOrder($request->token);
-        //dd($response);
+        dd($provider, $response);
 
         if (isset($response['status']) && $response['status'] == 'COMPLETED') {
             $payment = new Payment();
             $payment->payment_id = $response['id'];
+            $payment->product_id = session('product_id');
             $payment->product_name = session('product_name');
             $payment->quantity = session('quantity');
             $payment->amount = $response['purchase_units'][0]['payments']['captures'][0]['amount']['value'];
@@ -69,6 +74,8 @@ class PaypalController extends Controller
             $payment->payment_method = 'PayPal';
             $payment->save();
             return view('payments.success');
+
+
 
             unset($_SESSION['product_name']);
             unset($_SESSION['quantity']);

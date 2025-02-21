@@ -15,7 +15,7 @@ class PaymentObserver
         event(new PaymentSuccessful(
             $payment->payment_id,
             $payment->payer_email,
-            null // Aquí podemos generar la factura después si es necesario
+            $payment->product_id
         ));
     }
 
