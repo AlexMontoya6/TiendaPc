@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 
 class ClearGeneratedImages extends Command
 {
@@ -12,38 +12,38 @@ class ClearGeneratedImages extends Command
      *
      * @var string
      */
-    protected $signature = 'images:clear';
+    protected $signature = 'images:clear {folder?}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Elimina todas las imágenes generadas en el directorio public/products';
+    protected $description = 'Elimina todas las imágenes generadas en una carpeta específica.';
 
     /**
      * Execute the console command.
-     *
-     * @return void
      */
     public function handle()
     {
-        // Ruta del directorio donde se almacenan las imágenes generadas
-        $directory = storage_path('app/public/products');
+        // Obtener el argumento opcional
+        $folder = $this->argument('folder') ?? 'products';
+
+        // Definir ruta del directorio a borrar
+        $directory = $folder;
 
         // Verificar si el directorio existe
-        if (File::exists($directory)) {
+        if (Storage::disk('public')->exists($directory)) {
             // Obtener todos los archivos en el directorio
-            $files = File::allFiles($directory);
+            $files = Storage::disk('public')->allFiles($directory);
 
             // Borrar todos los archivos
-            foreach ($files as $file) {
-                File::delete($file);
-            }
+            Storage::disk('public')->delete($files);
 
-            $this->info('Las imágenes generadas han sido eliminadas.');
+            $this->info("Las imágenes en /storage/app/public/$directory han sido eliminadas.");
         } else {
-            $this->info('El directorio de imágenes no existe.');
+            $this->info("El directorio /storage/app/public/$directory no existe.");
         }
     }
 }
+
