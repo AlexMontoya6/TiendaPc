@@ -11,7 +11,7 @@ class ProductStoreRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true; // Puedes cambiar esto si necesitas validación de permisos
+        return true;
     }
 
     /**
