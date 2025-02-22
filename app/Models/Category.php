@@ -26,4 +26,9 @@ class Category extends Model
     {
         return $this->hasMany(Product::class);
     }
+
+    public static function portatilProducts()
+    {
+        return self::where('name', 'Portátiles')->first()?->products()->take(10)->get() ?? collect();
+    }
 }

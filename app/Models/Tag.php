@@ -27,4 +27,15 @@ class Tag extends Model
                 $query->whereNull('ttl')->orWhere('ttl', '>', now());
             });
     }
+
+    public static function ofertaProducts()
+    {
+        return self::where('name', 'Oferta')->first()?->activeProducts()->take(10)->get() ?? collect();
+    }
+
+    // Scope para obtener productos trending (máximo 10)
+    public static function trendingProducts()
+    {
+        return self::where('name', 'Trending')->first()?->activeProducts()->take(10)->get() ?? collect();
+    }
 }

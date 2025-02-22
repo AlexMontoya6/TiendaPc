@@ -2,10 +2,11 @@
 
 namespace App\Livewire\Pages;
 
+use App\Models\Category;
 use App\Models\Product;
+use App\Models\Tag;
 use App\Traits\HandlesCart;
 use Livewire\Component;
-use Gloudemans\Shoppingcart\Facades\Cart;
 
 class Home extends Component
 {
@@ -13,11 +14,12 @@ class Home extends Component
 
     public function render()
     {
-        $products = Product::with(['images' => function ($query) {
-            $query->where('order', 1)->orderBy('order');
-        }])->paginate(8);
+        $ofertaProducts = Tag::ofertaProducts();
+        $trendingProducts = Tag::trendingProducts();
+        $portatilProducts = Category::portatilProducts();
 
-        return view('livewire.pages.home', compact('products'))
+
+        return view('livewire.pages.home', compact('ofertaProducts', 'trendingProducts', 'portatilProducts'))
             ->layout('layouts.guest');
     }
 }

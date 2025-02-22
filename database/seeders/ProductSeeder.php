@@ -12,7 +12,7 @@ class ProductSeeder extends Seeder
 {
     public function run()
     {
-        $productTypes = ProductType::limit(5)->get();
+        $productTypes = ProductType::limit(8)->get();
 
         foreach ($productTypes as $productType) {
             $categories = Category::where('product_type_id', $productType->id)->get();
