@@ -3,7 +3,6 @@
 use App\Models\Subcategory;
 use App\Models\Category;
 use App\Models\ProductType;
-use App\Models\Product;
 
 use Tests\Traits\CreatesProducts;
 

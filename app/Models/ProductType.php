@@ -10,8 +10,13 @@ class ProductType extends Model
 {
     use HasFactory;
 
-    public function Categories(): HasMany
+    public function categories(): HasMany
     {
         return $this->hasMany(Category::class);
+    }
+
+    public function products(): HasMany
+    {
+        return $this->hasMany(Product::class);
     }
 }
