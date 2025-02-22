@@ -6,16 +6,15 @@ use Laravel\Jetstream\Http\Livewire\DeleteUserForm;
 use Livewire\Livewire;
 
 test('user accounts can be deleted', function () {
-    $this->actingAs($user = User::factory()->create());
+    $user = loginAsUser();
 
     Livewire::test(DeleteUserForm::class)
-        ->set('password', 'password')
+        ->set('password', '12345678')
         ->call('deleteUser');
 
-    expect($user->fresh())->toBeNull();
-})->skip(function () {
-    return ! Features::hasAccountDeletionFeatures();
-}, 'Account deletion is not enabled.');
+    $this->assertDatabaseMissing('users', ['id' => $user->id]);
+});
+
 
 test('correct password must be provided before account can be deleted', function () {
     $this->actingAs($user = User::factory()->create());
