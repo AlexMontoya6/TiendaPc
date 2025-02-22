@@ -36,29 +36,29 @@ class ProductController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(ProductStoreRequest $request)
-{
-    try {
-        // Crear el producto con los datos validados
-        $product = Product::create($request->validated());
+    {
+        try {
+            // Crear el producto con los datos validados
+            $product = Product::create($request->validated());
 
-        // Subir y asociar imágenes si existen
-        if ($request->hasFile('images')) {
-            foreach ($request->file('images') as $index => $image) {
-                $path = $image->store('products', 'public');
+            // Subir y asociar imágenes si existen
+            if ($request->hasFile('images')) {
+                foreach ($request->file('images') as $index => $image) {
+                    $path = $image->store('products', 'public');
 
-                Image::create([
-                    'product_id' => $product->id,
-                    'path' => $path,
-                    'order' => $index + 1, // Orden secuencial
-                ]);
+                    Image::create([
+                        'product_id' => $product->id,
+                        'path' => $path,
+                        'order' => $index + 1, // Orden secuencial
+                    ]);
+                }
             }
-        }
 
-        return redirect()->route('admin.products.index')->with('success', 'Producto creado correctamente.');
-    } catch (\Exception $e) {
-        return redirect()->route('admin.products.index')->with('error', 'Error al crear el producto.');
+            return redirect()->route('admin.products.index')->with('success', 'Producto creado correctamente.');
+        } catch (\Exception $e) {
+            return redirect()->route('admin.products.index')->with('error', 'Error al crear el producto.');
+        }
     }
-}
 
 
     /**

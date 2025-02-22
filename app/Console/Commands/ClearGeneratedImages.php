@@ -26,18 +26,14 @@ class ClearGeneratedImages extends Command
      */
     public function handle()
     {
-        // Obtener el argumento opcional
         $folder = $this->argument('folder') ?? 'products';
 
-        // Definir ruta del directorio a borrar
         $directory = $folder;
 
-        // Verificar si el directorio existe
         if (Storage::disk('public')->exists($directory)) {
-            // Obtener todos los archivos en el directorio
+
             $files = Storage::disk('public')->allFiles($directory);
 
-            // Borrar todos los archivos
             Storage::disk('public')->delete($files);
 
             $this->info("Las imágenes en /storage/app/public/$directory han sido eliminadas.");
