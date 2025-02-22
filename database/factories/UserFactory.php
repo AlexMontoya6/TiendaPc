@@ -9,21 +9,17 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Laravel\Jetstream\Features;
+use Spatie\Permission\Models\Role;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
  */
 class UserFactory extends Factory
 {
-    /**
-     * The current password being used by the factory.
-     */
-    protected static ?string $password;
+    protected static ?string $password = null;
 
     /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
+     * Define el estado por defecto del modelo.
      */
     public function definition(): array
     {
@@ -41,7 +37,7 @@ class UserFactory extends Factory
     }
 
     /**
-     * Indicate that the model's email address should be unverified.
+     * Indicar que el usuario no ha verificado su email.
      */
     public function unverified(): static
     {
@@ -51,11 +47,11 @@ class UserFactory extends Factory
     }
 
     /**
-     * Indicate that the user should have a personal team.
+     * Indicar que el usuario tiene un equipo personal.
      */
     public function withPersonalTeam(?callable $callback = null): static
     {
-        if (! Features::hasTeamFeatures()) {
+        if (!Features::hasTeamFeatures()) {
             return $this->state([]);
         }
 
@@ -71,10 +67,20 @@ class UserFactory extends Factory
         );
     }
 
+    /**
+     * Configuración adicional después de crear el usuario.
+     */
     public function configure(): static
     {
         return $this->afterCreating(function (User $user) {
-            if (rand(0, 1)) { // Al 50% de los usuarios les damos una dirección
+            // 🔹 Asegurar que el rol "Customer" existe y asignarlo
+            $role = Role::firstOrCreate(['name' => 'Customer']);
+            if (!$user->hasRole($role)) {
+                $user->assignRole($role);
+            }
+
+            // 🔹 Asignar dirección al 50% de los usuarios
+            if (rand(0, 1)) {
                 Address::create([
                     'user_id' => $user->id,
                     'name' => fake()->randomElement(['Casa', 'Trabajo', 'Oficina', 'Departamento']),

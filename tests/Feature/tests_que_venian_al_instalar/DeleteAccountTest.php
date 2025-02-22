@@ -4,9 +4,12 @@ use App\Models\User;
 use Laravel\Jetstream\Features;
 use Laravel\Jetstream\Http\Livewire\DeleteUserForm;
 use Livewire\Livewire;
+use Tests\Traits\CreatesUsers;
+
+uses(CreatesUsers::class);
 
 test('user accounts can be deleted', function () {
-    $user = loginAsUser();
+    $user = self::loginAsUser();
 
     Livewire::test(DeleteUserForm::class)
         ->set('password', '12345678')

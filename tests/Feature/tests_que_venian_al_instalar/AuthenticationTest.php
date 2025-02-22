@@ -1,6 +1,10 @@
 <?php
 
 use App\Models\User;
+use Tests\Traits\CreatesUsers;
+
+
+uses(CreatesUsers::class);
 
 test('login screen can be rendered', function () {
     $response = $this->get('/login');
@@ -9,7 +13,7 @@ test('login screen can be rendered', function () {
 });
 
 test('users can authenticate using the login screen', function () {
-    $user = loginAsUser();
+    $user = self::loginAsUser();
 
     $response = $this->get(route('panel.mi-perfil'));
 

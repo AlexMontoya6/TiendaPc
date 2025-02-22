@@ -1,0 +1,21 @@
+https://developer.paypal.com/home/
+
+bussines
+
+sb-qrofo37830393@business.example.com
+
+depestes10
+
+
+personal
+
+sb-v47mx36777123@personal.example.com
+
+depestes10
+
+
+https://mailtrap.io/inboxes
+
+
+php artisan queue:work --tries=3
+(para las colas)
