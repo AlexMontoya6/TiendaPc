@@ -12,8 +12,11 @@ use App\Models\ProductType;
 use App\Models\Subcategory;
 use Illuminate\Support\Str;
 
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+
 class ProductController extends Controller
 {
+    use AuthorizesRequests;
     /**
      * Muestra la lista de productos con todas sus imágenes.
      */
@@ -37,6 +40,9 @@ class ProductController extends Controller
      */
     public function store(ProductStoreRequest $request)
     {
+
+        $this->authorize('create', Product::class);
+
         try {
             // Crear el producto con los datos validados
             $product = Product::create($request->validated());

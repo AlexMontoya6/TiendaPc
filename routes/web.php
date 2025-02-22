@@ -26,13 +26,9 @@ Route::post('paypal', [PaypalController::class, 'paypal'])->name('paypal.payment
 Route::get('/payment/success', [PaypalController::class, 'success'])->name('success');
 Route::get('/payment/cancel', [PaypalController::class, 'cancel'])->name('cancel');
 
-
 Route::get('/', Home::class)->name('home');
 Route::get('/cart', Cart::class)->name('cart.index');
 Route::get('/{product:slug}', ProductDetail::class)->name('product.detail');
-
-
-
 
 Route::middleware([
     'auth:sanctum',
@@ -44,18 +40,12 @@ Route::middleware([
     Route::get('/cart/checkout/entrega', Entrega::class)->name('cart.checkout.entrega');
     Route::get('/cart/checkout/resumen-pago', ResumenPago::class)->name('cart.checkout.resumen_pago');
 
-
     Route::get('/panel/mi-perfil', [MiPerfilController::class, 'show'])->name('panel.mi-perfil');
 
     Route::redirect('/user/profile', '/panel/mi-perfil');
 
-
-
-
-
     Route::get('/panel/mis-compras', [MisComptrasController::class, 'index'])->name('panel.mis-compras');
     Route::get('/payments/{payment}/ticket', [MisComptrasController::class, 'generatePDF'])->name('payments.ticket');
-
 
     /**
      * Rutas para Administración (No Customers)
