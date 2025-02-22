@@ -21,7 +21,6 @@ return new class extends Migration
             $table->timestamps();
         });
 
-
         // Crear la tabla pivote productos-etiquetas
         Schema::create('product_tag', function (Blueprint $table) {
             $table->id();
@@ -30,6 +29,8 @@ return new class extends Migration
             $table->dateTime('ttl')->nullable();
             $table->boolean('is_active')->default(true);
             $table->timestamps();
+
+            $table->unique(['product_id', 'tag_id']);
         });
     }
 

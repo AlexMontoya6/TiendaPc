@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ProductTag extends Model
 {
@@ -13,16 +12,22 @@ class ProductTag extends Model
     protected $table = 'product_tag';
     public $timestamps = false;
 
+    // Definir clave única para evitar duplicados
+    protected $primaryKey = ['product_id', 'tag_id'];
+    public $incrementing = false;
     protected $fillable = ['product_id', 'tag_id', 'ttl', 'is_active'];
 
-    public function product(): BelongsTo
+    // Validación en Laravel para evitar duplicados antes de guardar
+    public static function boot()
     {
-        return $this->belongsTo(Product::class);
-    }
+        parent::boot();
 
-    public function tag(): BelongsTo
-    {
-        return $this->belongsTo(Tag::class);
+        static::creating(function ($productTag) {
+            if (self::where('product_id', $productTag->product_id)
+                ->where('tag_id', $productTag->tag_id)
+                ->exists()) {
+                return false; // Cancelar la creación si ya existe
+            }
+        });
     }
 }
-
