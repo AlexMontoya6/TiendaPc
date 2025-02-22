@@ -17,7 +17,6 @@ class Product extends Model
 
     protected $fillable = ['name', 'description', 'price', 'product_type_id', 'category_id', 'subcategory_id'];
 
-
     protected static function boot()
     {
         parent::boot();
@@ -47,36 +46,36 @@ class Product extends Model
         return $this->hasMany(Image::class)->orderBy('order', 'asc');
     }
 
-    public function paymets(): HasMany
+    public function payments(): HasMany
     {
         return $this->hasMany(Payment::class);
     }
 
     public function tags(): BelongsToMany
-    {
-        return $this->belongsToMany(Tag::class)
-            ->withPivot('ttl', 'is_active')
-            ->withTimestamps();
-    }
+{
+    return $this->belongsToMany(Tag::class, 'product_tag')
+        ->withPivot('ttl', 'is_active')
+        ->withTimestamps();
+}
+
 
     public function activeTags(): Collection
     {
-        return $this->tags()->wherePivot('is_active', true)
+        return $this->tags()
+            ->wherePivot('is_active', true)
             ->where(function ($query) {
-                $query->whereNull('expires_at')
-                    ->orWhere('expires_at', '>', now());
-            })->get();
+                $query->whereNull('ttl')
+                    ->orWhere('ttl', '>', now());
+            })
+            ->get();
     }
 
-    public function getFormattedPriceAttribute(): float
+
+    public function getFormattedPriceAttribute(): ?float
     {
         if ($this->price < 100) {
-            if (app()->environment('local')) {
-                throw new \Exception("Precio incorrecto para el producto ID: {$this->id}. Es menor a 100 céntimos.");
-            } else {
-                Log::error("Precio incorrecto para el producto ID: {$this->id}. Es menor a 100 céntimos.");
-                return 0.00;
-            }
+            Log::error("Precio incorrecto para el producto ID: {$this->id}. Es menor a 100 céntimos.");
+            return null; // 🔹 Mejor que lanzar una excepción en producción
         }
 
         return (float) bcdiv($this->price, '100', 2);

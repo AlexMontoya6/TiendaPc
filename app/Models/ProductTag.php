@@ -11,6 +11,7 @@ class ProductTag extends Model
     use HasFactory;
 
     protected $table = 'product_tag';
+    public $timestamps = false;
 
     protected $fillable = ['product_id', 'tag_id', 'ttl', 'is_active'];
 
@@ -24,3 +25,4 @@ class ProductTag extends Model
         return $this->belongsTo(Tag::class);
     }
 }
+

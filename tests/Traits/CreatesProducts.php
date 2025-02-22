@@ -2,9 +2,11 @@
 
 namespace Tests\Traits;
 
+use App\Models\Category;
 use App\Models\ProductType;
 use App\Models\Product;
 use App\Models\Image;
+use App\Models\Subcategory;
 use Illuminate\Support\Facades\Storage;
 
 trait CreatesProducts
@@ -17,12 +19,16 @@ trait CreatesProducts
         // Simulamos el sistema de almacenamiento
         Storage::fake('public');
 
-        // Asegurar que existe un ProductType
+        // Asegurar que existen un ProductType, Category y Subcategory
         $productType = ProductType::first() ?? ProductType::factory()->create();
+        $category = Category::first() ?? Category::factory()->create();
+        $subcategory = Subcategory::first() ?? Subcategory::factory()->create(['category_id' => $category->id]);
 
-        // Crear el producto
+        // Crear el producto asegurando que tiene categoría y subcategoría
         $product = Product::factory()->create([
             'product_type_id' => $productType->id,
+            'category_id' => $category->id,
+            'subcategory_id' => $subcategory->id,
         ]);
 
         // Crear la imagen asociada

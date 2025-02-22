@@ -12,11 +12,19 @@ class Tag extends Model
 
     protected $fillable = ['name', 'description', 'background_color', 'text_color', 'border_color', 'icon_svg'];
 
-    // 🔹 Relación Muchos a Muchos con Productos
     public function products(): BelongsToMany
     {
         return $this->belongsToMany(Product::class, 'product_tag')
             ->withPivot('ttl', 'is_active')
             ->withTimestamps();
+    }
+
+    public function activeProducts(): BelongsToMany
+    {
+        return $this->products()
+            ->wherePivot('is_active', true)
+            ->where(function ($query) {
+                $query->whereNull('ttl')->orWhere('ttl', '>', now());
+            });
     }
 }
