@@ -52,7 +52,7 @@ class UserController extends Controller
 
         $roles = Role::all(); // Obtener todos los roles desde la base de datos
 
-        return view('pages.panel.users.create', compact('roles'));
+        return view('admin.users.create', compact('roles'));
     }
 
 
@@ -112,7 +112,7 @@ class UserController extends Controller
 
         $roles = Role::all(); // Obtener todos los roles disponibles
 
-        return view('pages.panel.users.edit', compact('user', 'roles'));
+        return view('admin.users.edit', compact('user', 'roles'));
     }
 
 

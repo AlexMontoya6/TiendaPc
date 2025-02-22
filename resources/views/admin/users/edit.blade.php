@@ -1,4 +1,7 @@
 <x-app-layout>
+    <div class="flex">
+        <!-- Sidebar de Administración -->
+        @livewire('partials.admin-sidebar')
     <div class="container mx-auto p-6">
         <h1 class="text-2xl font-bold mb-4">{{ __('Editar Usuario') }}</h1>
 
@@ -56,4 +59,5 @@
             </button>
         </form>
     </div>
+</div>
 </x-app-layout>
