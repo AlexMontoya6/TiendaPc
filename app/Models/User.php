@@ -85,11 +85,6 @@ class User extends Authenticatable
         ];
     }
 
-    public function role(): BelongsTo
-    {
-        return $this->belongsTo(Role::class, 'role_id');
-    }
-
     public function assignSingleRole($roleName)
     {
         $role = Role::where('name', $roleName)->first();
