@@ -1,6 +1,5 @@
 <?php
 
-use App\Models\Product;
 use App\Models\Tag;
 use Tests\Traits\CreatesProducts;
 
