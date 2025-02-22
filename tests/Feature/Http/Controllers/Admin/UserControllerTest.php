@@ -84,4 +84,101 @@ it('impide a un usuario sin permisos crear un usuario', function () {
         ->assertForbidden();
 });
 
+//PARA EL EDIT
+it('permite a un admin acceder a la página de edición de usuarios', function () {
+    $admin = $this->actingAsSuperAdmin();
+    $user = User::factory()->create();
 
+    $this->get(route('admin.users.edit', $user))
+        ->assertOk()
+        ->assertSee($user->name)
+        ->assertSee('Editar Usuario');
+});
+
+it('impide a un usuario sin permisos acceder a la edición de usuarios', function () {
+    self::loginAsUser();
+
+    $user = User::factory()->create();
+
+    $this->get(route('admin.users.edit', $user))
+        ->assertForbidden();
+});
+
+//PARA EL UPDATE
+it('permite a un admin actualizar un usuario', function () {
+    $this->actingAsSuperAdmin();
+
+    $user = User::factory()->create();
+
+    $data = [
+        'name' => 'Usuario Actualizado',
+        'email' => 'nuevo-email@example.com',
+        'password' => 'nuevaPassword123',
+        'password_confirmation' => 'nuevaPassword123',
+        'role' => 'SuperAdmin', // Asegurar que el rol existe
+    ];
+
+    $this->put(route('admin.users.update', $user), $data)
+        ->assertRedirect(route('admin.users.index'))
+        ->assertSessionHas('success', 'Usuario actualizado correctamente.');
+
+    // Verificar en la BD
+    $this->assertDatabaseHas('users', [
+        'id' => $user->id,
+        'name' => 'Usuario Actualizado',
+        'email' => 'nuevo-email@example.com',
+    ]);
+});
+
+it('impide a un usuario sin permisos actualizar otro usuario', function () {
+    self::loginAsUser(); // Usuario normal sin permisos
+
+    $user = User::factory()->create();
+
+    $data = [
+        'name' => 'Intento de Cambio',
+        'email' => 'hack@example.com',
+        'password' => 'password123',
+        'password_confirmation' => 'password123',
+        'role' => 'SuperAdmin',
+    ];
+
+    $this->put(route('admin.users.update', $user), $data)
+        ->assertForbidden(); // O `assertRedirect()` si hay middleware
+
+    // Verificar que NO se actualizó
+    $this->assertDatabaseMissing('users', [
+        'id' => $user->id,
+        'name' => 'Intento de Cambio',
+    ]);
+});
+
+//PARA EL DESTROY
+it('permite a un admin eliminar un usuario', function () {
+    $this->actingAsSuperAdmin();
+
+    $user = User::factory()->create();
+
+    $this->delete(route('admin.users.destroy', $user))
+        ->assertRedirect(route('admin.users.index'))
+        ->assertSessionHas('success', 'Usuario eliminado correctamente.');
+
+    // Verificar en la BD que el usuario ya no existe
+    $this->assertDatabaseMissing('users', [
+        'id' => $user->id,
+    ]);
+});
+
+it('impide a un usuario sin permisos eliminar otro usuario', function () {
+    self::loginAsUser(); // Usuario sin permisos
+
+    $user = User::factory()->create();
+
+    $this->delete(route('admin.users.destroy', $user))
+        ->assertForbidden(); // O `assertRedirect()` si hay middleware
+
+    // Verificar que el usuario sigue existiendo
+    $this->assertDatabaseHas('users', [
+        'id' => $user->id,
+    ]);
+});
