@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('throttle:2,1')->group(function () {
-    Route::get('/products', [PublicController::class, 'allProducts']); // 🔥 Público
+    Route::get('/public/products', [PublicController::class, 'allProducts']);
 });
 
 Route::post('/login', [AuthController::class, 'login']);

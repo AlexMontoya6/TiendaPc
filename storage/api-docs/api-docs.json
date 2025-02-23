@@ -6,56 +6,13 @@
         "version": "1.0.0"
     },
     "paths": {
-        "/api/categories": {
-            "get": {
-                "tags": [
-                    "Categorías"
-                ],
-                "summary": "Obtener todas las categorías",
-                "operationId": "eabcff1bfb671e6a725645ac6c3dc828",
-                "responses": {
-                    "200": {
-                        "description": "Lista de categorías",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "array",
-                                    "items": {
-                                        "properties": {
-                                            "name": {
-                                                "description": "Nombre de la categoría",
-                                                "type": "string"
-                                            },
-                                            "slug": {
-                                                "description": "Slug de la categoría",
-                                                "type": "string"
-                                            },
-                                            "description": {
-                                                "description": "Descripción de la categoría",
-                                                "type": "string"
-                                            }
-                                        },
-                                        "type": "object"
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "No autorizado"
-                    },
-                    "500": {
-                        "description": "Error interno del servidor"
-                    }
-                }
-            }
-        },
         "/api/products": {
             "get": {
                 "tags": [
                     "Productos"
                 ],
-                "summary": "Listar todos los productos",
+                "summary": "Listar productos eliminados y activos",
+                "description": "Este endpoint devuelve todos los productos, incluyendo los eliminados lógicamente (SoftDeletes).",
                 "operationId": "3e4894c6b444cc2de5e23737d1e4d6c2",
                 "responses": {
                     "200": {
@@ -67,54 +24,30 @@
                         "bearerAuth": []
                     }
                 ]
-            },
-            "post": {
+            }
+        },
+        "/api/products/{id}": {
+            "delete": {
                 "tags": [
                     "Productos"
                 ],
-                "summary": "Crear un nuevo producto",
-                "operationId": "433d1eb377353a163ba249878346670e",
-                "requestBody": {
-                    "description": "Datos para crear un producto",
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "required": [
-                                    "name",
-                                    "price",
-                                    "category_id"
-                                ],
-                                "properties": {
-                                    "name": {
-                                        "type": "string",
-                                        "example": "Producto X"
-                                    },
-                                    "price": {
-                                        "type": "number",
-                                        "format": "float",
-                                        "example": "99.99"
-                                    },
-                                    "description": {
-                                        "type": "string",
-                                        "example": "Una descripción opcional"
-                                    },
-                                    "category_id": {
-                                        "type": "integer",
-                                        "example": 1
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
+                "summary": "Eliminar un producto (SoftDelete)",
+                "description": "Este endpoint marca un producto como eliminado sin borrarlo permanentemente.",
+                "operationId": "258b3511b4c86092cdcccd63375b5b38",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID del producto a eliminar",
+                        "required": true
                     }
-                },
+                ],
                 "responses": {
-                    "201": {
-                        "description": "Producto creado con éxito"
+                    "200": {
+                        "description": "Producto eliminado correctamente"
                     },
-                    "422": {
-                        "description": "Error de validación"
+                    "404": {
+                        "description": "Producto no encontrado"
                     }
                 },
                 "security": [
@@ -124,27 +57,173 @@
                 ]
             }
         },
-        "/api/products/{id}": {
-            "get": {
+        "/api/products/{id}/restore": {
+            "post": {
                 "tags": [
                     "Productos"
                 ],
-                "summary": "Obtener un producto por su ID",
-                "operationId": "32d799058b8d35f8deeb4cec51905f2c",
+                "summary": "Restaurar un producto eliminado",
+                "description": "Este endpoint permite restaurar un producto que ha sido eliminado mediante SoftDelete.",
+                "operationId": "9c0d0630c663232d8f8f2af5ee1ca24e",
                 "parameters": [
                     {
                         "name": "id",
                         "in": "path",
-                        "description": "ID del producto",
+                        "description": "ID del producto a restaurar",
                         "required": true
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "Producto obtenido"
+                        "description": "Producto restaurado correctamente"
                     },
                     "404": {
                         "description": "Producto no encontrado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/products/{id}/force-delete": {
+            "delete": {
+                "tags": [
+                    "Productos"
+                ],
+                "summary": "Eliminar permanentemente un producto",
+                "description": "Este endpoint elimina un producto de la base de datos de manera irreversible.",
+                "operationId": "bb3c9add85a5d28e95a23d660d27135a",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID del producto a eliminar definitivamente",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Producto eliminado permanentemente"
+                    },
+                    "404": {
+                        "description": "Producto no encontrado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/admin/users": {
+            "get": {
+                "tags": [
+                    "Usuarios"
+                ],
+                "summary": "Listar todos los usuarios",
+                "description": "Devuelve una lista de usuarios. Solo accesible por SuperAdmin.",
+                "operationId": "9ded17315e13756cd593b5840cd39a26",
+                "responses": {
+                    "200": {
+                        "description": "Lista de usuarios obtenida correctamente"
+                    },
+                    "403": {
+                        "description": "No autorizado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Usuarios"
+                ],
+                "summary": "Crear un nuevo usuario",
+                "description": "Permite a un SuperAdmin crear un nuevo usuario.",
+                "operationId": "f6f90d5fbbe24f66eb2b43901e0d3f38",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Nuevo Usuario"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "example": "user@mail.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "password123"
+                                    },
+                                    "role": {
+                                        "type": "string",
+                                        "example": "Customer"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Usuario creado correctamente"
+                    },
+                    "403": {
+                        "description": "No autorizado"
+                    },
+                    "422": {
+                        "description": "Datos inválidos"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/admin/users/{id}": {
+            "get": {
+                "tags": [
+                    "Usuarios"
+                ],
+                "summary": "Obtener detalles de un usuario",
+                "description": "Devuelve los detalles de un usuario. Solo accesible por SuperAdmin.",
+                "operationId": "c6ac2250cb22823f621026268b66f471",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID del usuario",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Detalles del usuario obtenidos correctamente"
+                    },
+                    "403": {
+                        "description": "No autorizado"
+                    },
+                    "404": {
+                        "description": "Usuario no encontrado"
                     }
                 },
                 "security": [
@@ -155,23 +234,20 @@
             },
             "put": {
                 "tags": [
-                    "Productos"
+                    "Usuarios"
                 ],
-                "summary": "Actualizar un producto existente",
-                "operationId": "8161b245f9294b1179db922deeea15d7",
+                "summary": "Actualizar un usuario",
+                "description": "Permite a un SuperAdmin actualizar un usuario.",
+                "operationId": "22692373e5a35c609175c1e6441b58ca",
                 "parameters": [
                     {
                         "name": "id",
                         "in": "path",
-                        "description": "ID del producto",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
+                        "description": "ID del usuario",
+                        "required": true
                     }
                 ],
                 "requestBody": {
-                    "description": "Datos para actualizar el producto",
                     "required": true,
                     "content": {
                         "application/json": {
@@ -179,20 +255,19 @@
                                 "properties": {
                                     "name": {
                                         "type": "string",
-                                        "example": "Producto Modificado"
+                                        "example": "Usuario Modificado"
                                     },
-                                    "price": {
-                                        "type": "number",
-                                        "format": "float",
-                                        "example": "149.99"
-                                    },
-                                    "description": {
+                                    "email": {
                                         "type": "string",
-                                        "example": "Nueva descripción"
+                                        "example": "nuevo@mail.com"
                                     },
-                                    "category_id": {
-                                        "type": "integer",
-                                        "example": 2
+                                    "password": {
+                                        "type": "string",
+                                        "example": "newpassword123"
+                                    },
+                                    "role": {
+                                        "type": "string",
+                                        "example": "Admin"
                                     }
                                 },
                                 "type": "object"
@@ -202,13 +277,13 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Producto actualizado"
+                        "description": "Usuario actualizado correctamente"
+                    },
+                    "403": {
+                        "description": "No autorizado"
                     },
                     "404": {
-                        "description": "Producto no encontrado"
-                    },
-                    "422": {
-                        "description": "Error de validación"
+                        "description": "Usuario no encontrado"
                     }
                 },
                 "security": [
@@ -219,24 +294,28 @@
             },
             "delete": {
                 "tags": [
-                    "Productos"
+                    "Usuarios"
                 ],
-                "summary": "Eliminar un producto",
-                "operationId": "258b3511b4c86092cdcccd63375b5b38",
+                "summary": "Eliminar un usuario",
+                "description": "Permite a un SuperAdmin eliminar un usuario.",
+                "operationId": "fdbad6312957544572f3b379b96abad0",
                 "parameters": [
                     {
                         "name": "id",
                         "in": "path",
-                        "description": "ID del producto",
+                        "description": "ID del usuario",
                         "required": true
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "Producto eliminado correctamente"
+                        "description": "Usuario eliminado correctamente"
+                    },
+                    "403": {
+                        "description": "No autorizado"
                     },
                     "404": {
-                        "description": "Producto no encontrado"
+                        "description": "Usuario no encontrado"
                     }
                 },
                 "security": [
@@ -342,6 +421,64 @@
                     }
                 }
             }
+        },
+        "/api/public/products": {
+            "get": {
+                "tags": [
+                    "Productos Públicos"
+                ],
+                "summary": "Obtener todos los productos disponibles",
+                "description": "Este endpoint devuelve una lista de todos los productos disponibles en la tienda, ordenados por ID descendente para mostrar los más recientes primero.",
+                "operationId": "b5488a616a9bda17030aaa020cb577af",
+                "responses": {
+                    "200": {
+                        "description": "Lista de productos obtenida correctamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "name": {
+                                                        "type": "string",
+                                                        "example": "Laptop Gamer"
+                                                    },
+                                                    "price": {
+                                                        "type": "number",
+                                                        "format": "float",
+                                                        "example": "1499.99"
+                                                    },
+                                                    "description": {
+                                                        "type": "string",
+                                                        "example": "Laptop con RTX 3070 y 32GB RAM"
+                                                    },
+                                                    "created_at": {
+                                                        "type": "string",
+                                                        "format": "date-time",
+                                                        "example": "2025-02-23T12:34:56Z"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "components": {
@@ -355,16 +492,20 @@
     },
     "tags": [
         {
-            "name": "Categorías",
-            "description": "Categorías"
-        },
-        {
             "name": "Productos",
             "description": "Productos"
         },
         {
+            "name": "Usuarios",
+            "description": "Usuarios"
+        },
+        {
             "name": "Autenticación",
             "description": "Autenticación"
+        },
+        {
+            "name": "Productos Públicos",
+            "description": "Productos Públicos"
         }
     ]
 }

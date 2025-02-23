@@ -10,7 +10,7 @@ class PublicController extends Controller
 {
     /**
      * @OA\Get(
-     *     path="/api/products",
+     *     path="/api/public/products",
      *     summary="Obtener todos los productos disponibles",
      *     description="Este endpoint devuelve una lista de todos los productos disponibles en la tienda, ordenados por ID descendente para mostrar los más recientes primero.",
      *     tags={"Productos Públicos"},
