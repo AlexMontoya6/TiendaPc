@@ -90,20 +90,20 @@ class ProductController extends Controller
      * Show the form for editing the specified resource.
      */
     public function edit(Product $product)
-{
-    // 🔥 Cargamos las relaciones necesarias
-    $product->load([
-        'productType',
-        'category',
-        'subcategory',
-        'tags' => function ($query) {
-            $query->withPivot('is_active', 'ttl'); // Cargar datos del pivot (activas y TTL)
-        }
-    ]);
+    {
+        // 🔥 Cargamos las relaciones necesarias
+        $product->load([
+            'productType',
+            'category',
+            'subcategory',
+            'tags' => function ($query) {
+                $query->withPivot('is_active', 'ttl'); // Cargar datos del pivot (activas y TTL)
+            }
+        ]);
 
-    // 🔥 Devuelve la vista con el producto
-    return view('admin.products.edit', compact('product'));
-}
+        // 🔥 Devuelve la vista con el producto
+        return view('admin.products.edit', compact('product'));
+    }
 
 
 
@@ -153,8 +153,36 @@ class ProductController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Product $product)
     {
-        //
+        $this->authorize('delete', $product);
+
+        try {
+            $product->delete();
+
+            return redirect()->route('admin.products.index')->with('success', 'Producto eliminado correctamente.');
+        } catch (\Exception $e) {
+            return redirect()->route('admin.products.index')->with('error', 'Error al eliminar el producto: ' . $e->getMessage());
+        }
+    }
+
+    public function restore($id)
+    {
+        $product = Product::withTrashed()->findOrFail($id);
+        $this->authorize('restore', $product);
+
+        $product->restore();
+
+        return redirect()->route('admin.products.index')->with('success', 'Producto restaurado correctamente.');
+    }
+
+    public function forceDelete($id)
+    {
+        $product = Product::withTrashed()->findOrFail($id);
+        $this->authorize('forceDelete', $product);
+
+        $product->forceDelete();
+
+        return redirect()->route('admin.products.index')->with('success', 'Producto eliminado permanentemente.');
     }
 }

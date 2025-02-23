@@ -28,7 +28,7 @@ it('filtra productos cuando se busca por nombre', function () {
     $productoEspecial->update(['name' => 'Producto Especial']);
 
     Livewire::test(ProductList::class)
-        ->call('updateSearch', 'Producto Especial')
+        ->set('search', 'Producto Especial')
         ->assertSee('Producto Especial')
         ->assertDontSee($this->product1->name)
         ->assertDontSee($this->product2->name);
