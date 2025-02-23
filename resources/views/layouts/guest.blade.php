@@ -12,11 +12,10 @@
 </head>
 
 <body class="bg-gray-100">
-    <!-- Barra de navegación -->
     <nav x-data="{ open: false }" class="bg-white border-b border-gray-100">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16">
-                <div class="flex">
+            <div class="flex justify-between items-center h-16"> <!-- ⬅️ Aquí agregamos items-center -->
+                <div class="flex items-center">
                     <!-- Logo -->
                     <div class="shrink-0 flex items-center">
                         <a href="{{ route('home') }}">
@@ -24,22 +23,13 @@
                         </a>
                     </div>
 
-                    <!-- Navigation Links -->
-                    <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                        <x-nav-link href="{{ route('home') }}" :active="request()->routeIs('home')">
-                            {{ __('Inicio') }}
-                        </x-nav-link>
-                        <x-nav-link href="">
-                            {{ __('Productos') }}
-                        </x-nav-link>
-                        <x-nav-link href="" :active="request()->routeIs('contact')">
-                            {{ __('Contacto') }}
-                        </x-nav-link>
-                    </div>
+                    <!-- Menú dinámico Livewire -->
+                    @livewire('components.navigation-menu-guest')
                 </div>
 
-                <!-- Authentication Dropdown -->
-                <div class="hidden sm:flex sm:items-center sm:ms-6">
+                <!-- Carrito de compras y opciones de usuario -->
+                <div class="flex items-center space-x-4">
+                    <!-- Authentication Dropdown -->
                     <div class="relative" x-data="{ open: false }">
                         <button @click="open = !open"
                             class="flex items-center text-sm font-medium text-gray-700 hover:text-gray-900 focus:outline-none mr-2">
@@ -74,13 +64,16 @@
                                 <!-- Logout -->
                                 <form method="POST" action="{{ route('logout') }}" x-data>
                                     @csrf
-                                    <x-responsive-nav-link href="{{ route('logout') }}" @click.prevent="$root.submit();">
+                                    <x-responsive-nav-link href="{{ route('logout') }}"
+                                        @click.prevent="$root.submit();">
                                         {{ __('Log Out') }}
                                     </x-responsive-nav-link>
                                 </form>
                             @endauth
                         </div>
                     </div>
+
+                    <!-- Carrito -->
                     @livewire('partials.offcanvas-cart')
                 </div>
             </div>
