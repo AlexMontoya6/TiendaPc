@@ -31,7 +31,7 @@ Route::get('/cart', Cart::class)->name('cart.index');
 Route::get('/{product:slug}', ProductDetail::class)->name('product.detail');
 
 
-Route::get('/category/{id}', [CategoryController::class, 'show'])->name('category.products');
+//Route::get('/category/{id}', [CategoryController::class, 'show'])->name('category.products');
 
 Route::middleware([
     'auth:sanctum',

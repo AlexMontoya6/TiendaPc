@@ -10,10 +10,22 @@ class TagSelector extends Component
     public $tags = [];
     public $selectedTags = []; // 🔥 Contendrá las etiquetas seleccionadas en formato array
 
-    public function mount()
+    public function mount($product = null)
     {
         $this->tags = Tag::all();
+
+        // Si se está editando un producto, cargamos sus etiquetas
+        if ($product) {
+            foreach ($product->tags as $tag) {
+                $this->selectedTags[$tag->id] = [
+                    'id' => $tag->id,
+                    'is_active' => $tag->pivot->is_active,
+                    'ttl' => $tag->pivot->ttl,
+                ];
+            }
+        }
     }
+
 
     public function toggleTag($tagId)
     {

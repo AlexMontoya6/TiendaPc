@@ -5,12 +5,14 @@
         <select wire:model.lazy="selectedProductType" name="product_type_id" id="product_type_id" class="mt-1 p-2 w-full border rounded">
             <option value="">Seleccione un tipo</option>
             @foreach ($productTypes as $type)
-                <option value="{{ $type->id }}">{{ $type->name }}</option>
+                <option value="{{ $type->id }}" {{ old('product_type_id', $selectedProductType) == $type->id ? 'selected' : '' }}>
+                    {{ $type->name }}
+                </option>
             @endforeach
         </select>
 
         {{-- 🔥 Campo hidden para asegurarnos de que se envía correctamente --}}
-        <input type="hidden" name="product_type_id" value="{{ $selectedProductType }}">
+        <input type="hidden" name="product_type_id" value="{{ old('product_type_id', $selectedProductType) }}">
     </div>
 
     {{-- Categoría --}}
@@ -20,12 +22,14 @@
             @if (empty($categories)) disabled @endif>
             <option value="">Seleccione una categoría</option>
             @foreach ($categories as $category)
-                <option value="{{ $category->id }}">{{ $category->name }}</option>
+                <option value="{{ $category->id }}" {{ old('category_id', $selectedCategory) == $category->id ? 'selected' : '' }}>
+                    {{ $category->name }}
+                </option>
             @endforeach
         </select>
 
         {{-- Campo hidden para asegurarnos de que se envía correctamente --}}
-        <input type="hidden" name="category_id" value="{{ $selectedCategory }}">
+        <input type="hidden" name="category_id" value="{{ old('category_id', $selectedCategory) }}">
     </div>
 
     {{-- Subcategoría --}}
@@ -35,11 +39,13 @@
             @if (empty($subcategories)) disabled @endif>
             <option value="">Seleccione una subcategoría</option>
             @foreach ($subcategories as $subcategory)
-                <option value="{{ $subcategory->id }}">{{ $subcategory->name }}</option>
+                <option value="{{ $subcategory->id }}" {{ old('subcategory_id', $selectedSubcategory) == $subcategory->id ? 'selected' : '' }}>
+                    {{ $subcategory->name }}
+                </option>
             @endforeach
         </select>
 
         {{-- Campo hidden para asegurarnos de que se envía correctamente --}}
-        <input type="hidden" name="subcategory_id" value="{{ $selectedSubcategory }}">
+        <input type="hidden" name="subcategory_id" value="{{ old('subcategory_id', $selectedSubcategory) }}">
     </div>
 </div>

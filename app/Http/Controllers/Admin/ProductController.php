@@ -89,18 +89,66 @@ class ProductController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
-    {
-        //
-    }
+    public function edit(Product $product)
+{
+    // 🔥 Cargamos las relaciones necesarias
+    $product->load([
+        'productType',
+        'category',
+        'subcategory',
+        'tags' => function ($query) {
+            $query->withPivot('is_active', 'ttl'); // Cargar datos del pivot (activas y TTL)
+        }
+    ]);
+
+    // 🔥 Devuelve la vista con el producto
+    return view('admin.products.edit', compact('product'));
+}
+
+
+
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(ProductStoreRequest $request, Product $product)
     {
-        //
+        $this->authorize('update', $product);
+
+        try {
+            // Actualizar datos del producto
+            $product->update($request->validated());
+
+            // Subir imágenes si existen
+            if ($request->hasFile('images')) {
+                foreach ($request->file('images') as $index => $image) {
+                    $path = $image->store('products', 'public');
+
+                    Image::create([
+                        'product_id' => $product->id,
+                        'path' => $path,
+                        'order' => $index + 1,
+                    ]);
+                }
+            }
+
+            // **Actualizar etiquetas**
+            if (!empty($request->tags)) {
+                $tags = collect($request->tags)->mapWithKeys(function ($tag) {
+                    return [$tag['id'] => ['is_active' => $tag['is_active'], 'ttl' => $tag['ttl']]];
+                });
+
+                $product->tags()->sync($tags);
+            } else {
+                $product->tags()->detach(); // 🔥 Si no hay etiquetas, eliminamos todas
+            }
+
+            return redirect()->route('admin.products.index')->with('success', 'Producto actualizado correctamente.');
+        } catch (\Exception $e) {
+            return redirect()->route('admin.products.index')->with('error', 'Error al actualizar el producto: ' . $e->getMessage());
+        }
     }
+
 
     /**
      * Remove the specified resource from storage.
