@@ -37,7 +37,7 @@ trait CreatesUsers
             'eliminar usuarios',
             'ver pedidos',
             'gestionar pedidos',
-            'eliminar pedidos'
+            'eliminar pedidos',
         ];
 
         // Crear permisos si no existen (en web)

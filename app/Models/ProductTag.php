@@ -11,6 +11,7 @@ class ProductTag extends Model
     use HasFactory;
 
     protected $table = 'product_tag';
+
     public $timestamps = false;
 
     protected $fillable = ['product_id', 'tag_id', 'ttl', 'is_active'];
@@ -36,7 +37,7 @@ class ProductTag extends Model
                 ->exists();
 
             if ($exists) {
-                throw new \Exception("El producto ya tiene esta etiqueta asignada.");
+                throw new \Exception('El producto ya tiene esta etiqueta asignada.');
             }
         });
     }

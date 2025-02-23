@@ -12,15 +12,12 @@ class FeedbackEmail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
     public function build()
     {
-        return  $this->subject('Valora tu experiencia con nosotros')
+        return $this->subject('Valora tu experiencia con nosotros')
             ->markdown('emails.feedback');
-
 
     }
 }

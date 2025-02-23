@@ -1,24 +1,24 @@
 <?php
 
 use App\Http\Requests\UserUpdateRequest;
-use Illuminate\Support\Facades\Validator;
 use App\Models\User;
-use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Validator;
 use Mockery;
+use Spatie\Permission\Models\Role;
 
 beforeEach(function () {
     Role::firstOrCreate(['name' => 'Customer']);
 });
 
-
 function getMockedRequest(User $user): UserUpdateRequest
 {
-    $request = new UserUpdateRequest();
+    $request = new UserUpdateRequest;
     $request->setRouteResolver(function () use ($user) {
         $mockRoute = Mockery::mock(\Illuminate\Routing\Route::class);
         $mockRoute->shouldReceive('parameter')
             ->with('user', Mockery::any()) // Permite un valor por defecto
             ->andReturn($user);
+
         return $mockRoute;
     });
 

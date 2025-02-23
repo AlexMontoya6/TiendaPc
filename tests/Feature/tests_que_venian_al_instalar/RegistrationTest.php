@@ -11,7 +11,6 @@ test('registration screen can be rendered', function () {
     return ! Features::enabled(Features::registration());
 }, 'Registration support is not enabled.');
 
-
 test('new users can register', function () {
     $response = $this->post('/register', [
         'name' => 'Test User',

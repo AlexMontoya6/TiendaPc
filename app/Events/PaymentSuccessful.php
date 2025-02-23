@@ -11,6 +11,7 @@ class PaymentSuccessful
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $payment_id;
+
     public $user_email;
 
     /**

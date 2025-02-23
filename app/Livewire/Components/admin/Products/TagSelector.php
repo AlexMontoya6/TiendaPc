@@ -2,12 +2,13 @@
 
 namespace App\Livewire\Components\Admin\Products;
 
-use Livewire\Component;
 use App\Models\Tag;
+use Livewire\Component;
 
 class TagSelector extends Component
 {
     public $tags = [];
+
     public $selectedTags = []; // 🔥 Contendrá las etiquetas seleccionadas en formato array
 
     public function mount($product = null)
@@ -26,12 +27,13 @@ class TagSelector extends Component
         }
     }
 
-
     public function toggleTag($tagId)
     {
         // 🔥 Verificamos que la etiqueta exista antes de modificarla
         $tag = Tag::find($tagId);
-        if (!$tag) return;
+        if (! $tag) {
+            return;
+        }
 
         // ✅ Si la etiqueta ya está en el array, la eliminamos
         if (array_key_exists($tagId, $this->selectedTags)) {
@@ -49,11 +51,10 @@ class TagSelector extends Component
         $this->selectedTags = array_filter($this->selectedTags);
     }
 
-
     public function toggleActive($tagId)
     {
         if (isset($this->selectedTags[$tagId])) {
-            $this->selectedTags[$tagId]['is_active'] = !$this->selectedTags[$tagId]['is_active'];
+            $this->selectedTags[$tagId]['is_active'] = ! $this->selectedTags[$tagId]['is_active'];
         }
         $this->updateSelectedTags();
     }
@@ -75,7 +76,7 @@ class TagSelector extends Component
     {
         return view('livewire.admin.products.tag-selector', [
             'tags' => $this->tags,
-            'selectedTags' => $this->selectedTags
+            'selectedTags' => $this->selectedTags,
         ]);
     }
 }

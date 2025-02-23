@@ -1,14 +1,12 @@
 <?php
 
-use App\Models\User;
 use Laravel\Sanctum\Sanctum;
-use Spatie\Permission\Models\Role;
 use Tests\Traits\CreatesUsers; // 🔥 Importamos el trait
 
+use function Pest\Laravel\deleteJson;
 use function Pest\Laravel\getJson;
 use function Pest\Laravel\postJson;
 use function Pest\Laravel\putJson;
-use function Pest\Laravel\deleteJson;
 
 uses(CreatesUsers::class); // 🔥 Usamos el trait en el test
 
@@ -27,8 +25,8 @@ it('permite a un SuperAdmin listar usuarios', function () {
         ->assertJsonStructure([
             'success',
             'data' => [
-                '*' => ['id', 'name', 'email']
-            ]
+                '*' => ['id', 'name', 'email'],
+            ],
         ]);
 });
 
@@ -43,7 +41,7 @@ it('impide a un usuario normal listar usuarios', function () {
 it('permite a un SuperAdmin ver un usuario específico', function () {
     Sanctum::actingAs($this->superAdmin);
 
-    $response = getJson('/api/admin/users/' . $this->customer->id);
+    $response = getJson('/api/admin/users/'.$this->customer->id);
 
     $response->assertOk()
         ->assertJsonPath('data.id', $this->customer->id);
@@ -52,7 +50,7 @@ it('permite a un SuperAdmin ver un usuario específico', function () {
 it('impide a un usuario normal ver otro usuario', function () {
     Sanctum::actingAs($this->customer);
 
-    $response = getJson('/api/admin/users/' . $this->superAdmin->id);
+    $response = getJson('/api/admin/users/'.$this->superAdmin->id);
 
     $response->assertForbidden();
 });
@@ -87,7 +85,7 @@ it('impide a un usuario normal crear un usuario', function () {
 it('permite a un SuperAdmin actualizar un usuario', function () {
     Sanctum::actingAs($this->superAdmin);
 
-    $response = putJson('/api/admin/users/' . $this->customer->id, [
+    $response = putJson('/api/admin/users/'.$this->customer->id, [
         'name' => 'Usuario Modificado',
     ]);
 
@@ -98,7 +96,7 @@ it('permite a un SuperAdmin actualizar un usuario', function () {
 it('impide a un usuario normal actualizar otro usuario', function () {
     Sanctum::actingAs($this->customer);
 
-    $response = putJson('/api/admin/users/' . $this->superAdmin->id, [
+    $response = putJson('/api/admin/users/'.$this->superAdmin->id, [
         'name' => 'Intento de Cambio',
     ]);
 
@@ -108,7 +106,7 @@ it('impide a un usuario normal actualizar otro usuario', function () {
 it('permite a un SuperAdmin eliminar un usuario', function () {
     Sanctum::actingAs($this->superAdmin);
 
-    $response = deleteJson('/api/admin/users/' . $this->customer->id);
+    $response = deleteJson('/api/admin/users/'.$this->customer->id);
 
     $response->assertOk();
 });
@@ -116,7 +114,7 @@ it('permite a un SuperAdmin eliminar un usuario', function () {
 it('impide a un usuario normal eliminar otro usuario', function () {
     Sanctum::actingAs($this->customer);
 
-    $response = deleteJson('/api/admin/users/' . $this->superAdmin->id);
+    $response = deleteJson('/api/admin/users/'.$this->superAdmin->id);
 
     $response->assertForbidden();
 });

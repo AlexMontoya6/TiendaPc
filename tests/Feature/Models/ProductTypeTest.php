@@ -37,5 +37,3 @@ it('puede tener productos asociados', function () {
     expect($this->productType->products)->toHaveCount(1)
         ->and($this->productType->products->first()->id)->toBe($product->id);
 });
-
-

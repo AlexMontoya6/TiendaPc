@@ -6,7 +6,6 @@ use Tests\Traits\CreatesProducts;
 
 uses(CreatesProducts::class);
 
-
 beforeEach(function () {
     $this->product1 = $this->newProduct();
     $this->product2 = $this->newProduct();

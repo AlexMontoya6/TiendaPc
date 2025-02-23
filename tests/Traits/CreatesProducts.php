@@ -3,9 +3,9 @@
 namespace Tests\Traits;
 
 use App\Models\Category;
-use App\Models\ProductType;
-use App\Models\Product;
 use App\Models\Image;
+use App\Models\Product;
+use App\Models\ProductType;
 use App\Models\Subcategory;
 use Illuminate\Support\Facades\Storage;
 
@@ -32,8 +32,8 @@ trait CreatesProducts
         ]);
 
         // Crear la imagen asociada
-        $imageName = uniqid() . '.jpg';
-        $imagePath = 'products/' . $imageName;
+        $imageName = uniqid().'.jpg';
+        $imagePath = 'products/'.$imageName;
 
         Storage::disk('public')->put($imagePath, file_get_contents('https://picsum.photos/640/480'));
 

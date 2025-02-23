@@ -6,7 +6,6 @@ use App\Models\Address;
 use App\Models\Team;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Laravel\Jetstream\Features;
 use Spatie\Permission\Models\Role;
@@ -41,7 +40,7 @@ class UserFactory extends Factory
      */
     public function unverified(): static
     {
-        return $this->state(fn(array $attributes) => [
+        return $this->state(fn (array $attributes) => [
             'email_verified_at' => null,
         ]);
     }
@@ -51,14 +50,14 @@ class UserFactory extends Factory
      */
     public function withPersonalTeam(?callable $callback = null): static
     {
-        if (!Features::hasTeamFeatures()) {
+        if (! Features::hasTeamFeatures()) {
             return $this->state([]);
         }
 
         return $this->has(
             Team::factory()
-                ->state(fn(array $attributes, User $user) => [
-                    'name' => $user->name . '\'s Team',
+                ->state(fn (array $attributes, User $user) => [
+                    'name' => $user->name.'\'s Team',
                     'user_id' => $user->id,
                     'personal_team' => true,
                 ])
@@ -75,7 +74,7 @@ class UserFactory extends Factory
         return $this->afterCreating(function (User $user) {
             // 🔹 Asegurar que el rol "Customer" existe y asignarlo
             $role = Role::firstOrCreate(['name' => 'Customer']);
-            if (!$user->hasRole($role)) {
+            if (! $user->hasRole($role)) {
                 $user->assignRole($role);
             }
 

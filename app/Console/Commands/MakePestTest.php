@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\File;
 class MakePestTest extends Command
 {
     protected $signature = 'make:test-pest {name}';
+
     protected $description = 'Create a Pest test with custom stub';
 
     public function handle()
@@ -17,6 +18,7 @@ class MakePestTest extends Command
 
         if (File::exists($path)) {
             $this->error('Test already exists!');
+
             return 1;
         }
 
@@ -24,6 +26,7 @@ class MakePestTest extends Command
         File::put($path, str_replace('{{ class }}', $name, $stub));
 
         $this->info('Pest test created successfully.');
+
         return 0;
     }
 }

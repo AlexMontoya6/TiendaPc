@@ -3,9 +3,9 @@
 namespace App\Livewire\Partials;
 
 use App\Models\Product;
-use Livewire\Component;
 use Gloudemans\Shoppingcart\Facades\Cart as ShoppingCart;
 use Illuminate\Support\Facades\Auth;
+use Livewire\Component;
 
 class OffcanvasCart extends Component
 {
@@ -26,7 +26,7 @@ class OffcanvasCart extends Component
             $product->id,
             $product->name,
             1,
-            $product->price /100
+            $product->price / 100
         );
 
         $this->saveCartToDatabase(); // Guardar carrito en la base de datos

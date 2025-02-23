@@ -1,8 +1,8 @@
 <?php
 
 use App\Livewire\Components\Admin\Products\ProductForm;
-use App\Models\ProductType;
 use App\Models\Category;
+use App\Models\ProductType;
 use App\Models\Subcategory;
 use Livewire\Livewire;
 
@@ -47,4 +47,3 @@ it('resetea la selección de categoría y subcategoría cuando se cambia el tipo
         ->assertSet('selectedCategory', null)
         ->assertSet('selectedSubcategory', null);
 });
-

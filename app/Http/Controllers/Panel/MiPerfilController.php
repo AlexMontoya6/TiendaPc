@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Panel;
 
-use Laravel\Jetstream\Http\Controllers\Livewire\UserProfileController; // Heredamos el controlador de Jetstream
-use Illuminate\Http\Request;
+use Illuminate\Http\Request; // Heredamos el controlador de Jetstream
+use Laravel\Jetstream\Http\Controllers\Livewire\UserProfileController;
 
 class MiPerfilController extends UserProfileController
 {

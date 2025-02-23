@@ -2,16 +2,16 @@
 
 namespace App\Livewire\Pages;
 
-use Livewire\Component;
-use Gloudemans\Shoppingcart\Facades\Cart as Shoppingcart;
 use App\Models\Product;
-use Illuminate\Support\Facades\Log;
-
+use Gloudemans\Shoppingcart\Facades\Cart as Shoppingcart;
+use Livewire\Component;
 
 class Cart extends Component
 {
     public $cartItems = [];
+
     public $cartTotal = 0;
+
     public $quantities = [];
 
     protected $listeners = [
@@ -47,7 +47,7 @@ class Cart extends Component
     {
         $product = Product::find($data['productId']);
 
-        if (!$product) {
+        if (! $product) {
             return;
         }
 
@@ -76,8 +76,6 @@ class Cart extends Component
         $this->loadCart();
         $this->dispatch('cartUpdated');
     }
-
-
 
     public function render()
     {

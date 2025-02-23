@@ -5,7 +5,6 @@ use Tests\Traits\CreatesProducts;
 
 uses(CreatesProducts::class);
 
-
 it('puede crear un tag correctamente', function () {
     $tag = Tag::factory()->create();
 
@@ -20,7 +19,7 @@ it('puede asignarse a productos', function () {
 
     $product->tags()->attach($tag->id, [
         'ttl' => now()->addDays(30),
-        'is_active' => true
+        'is_active' => true,
     ]);
 
     expect($product->tags)->toHaveCount(1)

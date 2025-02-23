@@ -1,12 +1,11 @@
 <?php
 
-use App\Models\Product;
-use App\Models\Tag;
-use App\Models\Image;
 use App\Models\Payment;
+use App\Models\Product;
 use App\Models\ProductTag;
-use Tests\Traits\CreatesProducts;
+use App\Models\Tag;
 use Illuminate\Support\Str;
+use Tests\Traits\CreatesProducts;
 
 uses(CreatesProducts::class);
 
@@ -46,7 +45,7 @@ it('puede tener pagos asociados', function () {
     $payment = Payment::factory()->create(['product_id' => $product->id]);
 
     expect($product->payments)->toHaveCount(1)
-    ->and($product->payments->first()->id)->toBe($payment->id);
+        ->and($product->payments->first()->id)->toBe($payment->id);
 
 });
 
@@ -63,8 +62,6 @@ it('puede tener tags asociados', function () {
     expect($product->tags)->toHaveCount(1)
         ->and($product->tags->first()->id)->toBe($tag->id);
 });
-
-
 
 it('formatea correctamente el precio', function () {
     $product = $this->newProduct();

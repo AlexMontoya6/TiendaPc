@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Panel;
 use App\Http\Controllers\Controller;
 use App\Models\Payment;
 use Barryvdh\DomPDF\Facade\Pdf;
-use Illuminate\Http\Request;
 
 class MisComptrasController extends Controller
 {
@@ -24,5 +23,4 @@ class MisComptrasController extends Controller
         // Descargar el PDF con el nombre adecuado
         return $pdf->download("ticket_{$payment->id}.pdf");
     }
-
 }

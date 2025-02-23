@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\AdminMiddleware;
+use Illuminate\Support\Facades\Route;
 use Tests\Traits\CreatesUsers;
 
 uses(CreatesUsers::class);

@@ -16,7 +16,7 @@ class AdminMiddleware
     public function handle(Request $request, Closure $next): Response
     {
 
-        if (!$request->user() || !$request->user()->hasRole(["Admin", "SuperAdmin"])) {
+        if (! $request->user() || ! $request->user()->hasRole(['Admin', 'SuperAdmin'])) {
             abort(403, 'Acceso no autorizado.');
         }
 

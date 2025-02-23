@@ -3,8 +3,8 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 class PermissionSeeder extends Seeder
 {
@@ -39,13 +39,13 @@ class PermissionSeeder extends Seeder
             // Permiso para la web
             Permission::firstOrCreate([
                 'name' => $permission,
-                'guard_name' => 'web'
+                'guard_name' => 'web',
             ]);
 
             // Permiso para la API
             Permission::firstOrCreate([
                 'name' => "api.$permission", // Prefijo para diferenciar los de la API
-                'guard_name' => 'api'
+                'guard_name' => 'api',
             ]);
         }
 

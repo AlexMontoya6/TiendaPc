@@ -3,7 +3,6 @@
 use App\Models\User;
 use Tests\Traits\CreatesUsers;
 
-
 uses(CreatesUsers::class);
 
 test('login screen can be rendered', function () {
@@ -20,7 +19,6 @@ test('users can authenticate using the login screen', function () {
     $this->assertAuthenticatedAs($user);
     $response->assertStatus(200);
 });
-
 
 test('users cannot authenticate with invalid password', function () {
     $user = User::factory()->create();

@@ -2,8 +2,8 @@
 
 namespace App\Livewire\Pages\Checkout;
 
-use Livewire\Component;
 use Illuminate\Support\Facades\Session;
+use Livewire\Component;
 
 class Entrega extends Component
 {

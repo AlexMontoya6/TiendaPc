@@ -4,7 +4,6 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -17,12 +16,12 @@ use Spatie\Permission\Traits\HasRoles;
 class User extends Authenticatable
 {
     use HasApiTokens;
-
-    use HasRoles;
-
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory;
+
     use HasProfilePhoto;
+
+    use HasRoles;
     use Notifiable;
     use TwoFactorAuthenticatable;
 
@@ -31,7 +30,7 @@ class User extends Authenticatable
         parent::boot();
 
         static::creating(function ($user) {
-            if (!$user->hasAnyRole()) {
+            if (! $user->hasAnyRole()) {
                 $customerRole = Role::where('name', 'Customer')->first();
                 if ($customerRole) {
                     $user->assignRole($customerRole);
@@ -98,7 +97,6 @@ class User extends Authenticatable
     {
         return $this->hasMany(Address::class);
     }
-
 
     public function payments(): HasMany
     {

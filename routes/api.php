@@ -1,10 +1,9 @@
 <?php
 
-use App\Http\Controllers\Api\PublicController;
 use App\Http\Controllers\Api\Admin\ProductController;
 use App\Http\Controllers\Api\Admin\UserController;
 use App\Http\Controllers\Api\AuthController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\Api\PublicController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('throttle:2,1')->group(function () {

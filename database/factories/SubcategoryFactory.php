@@ -20,14 +20,13 @@ class SubcategoryFactory extends Factory
 
         $category = Category::first();
 
-
-        if (!$category) {
-            throw new \Exception("Debe existir al menos una Category en la base de datos.");
+        if (! $category) {
+            throw new \Exception('Debe existir al menos una Category en la base de datos.');
         }
 
         return [
-            'name' => 'Subcategoría ' . $this->faker->unique()->word(),
-            'slug' => 'subcategoria-' . $this->faker->unique()->slug(),
+            'name' => 'Subcategoría '.$this->faker->unique()->word(),
+            'slug' => 'subcategoria-'.$this->faker->unique()->slug(),
             'category_id' => $category ? $category->id : null,
         ];
     }

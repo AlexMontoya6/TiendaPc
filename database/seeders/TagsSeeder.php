@@ -2,10 +2,10 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
-use App\Models\Tag;
 use App\Models\Product;
 use App\Models\ProductTag;
+use App\Models\Tag;
+use Illuminate\Database\Seeder;
 
 class TagsSeeder extends Seeder
 {
@@ -30,7 +30,7 @@ class TagsSeeder extends Seeder
         if ($ofertaTag) {
             $ofertaProducts = Product::inRandomOrder()->take(12)->get();
             foreach ($ofertaProducts as $product) {
-                if (!ProductTag::where('product_id', $product->id)->where('tag_id', $ofertaTag->id)->exists()) {
+                if (! ProductTag::where('product_id', $product->id)->where('tag_id', $ofertaTag->id)->exists()) {
                     ProductTag::create([
                         'product_id' => $product->id,
                         'tag_id' => $ofertaTag->id,
@@ -43,7 +43,7 @@ class TagsSeeder extends Seeder
         if ($trendingTag) {
             $trendingProducts = Product::inRandomOrder()->take(12)->get();
             foreach ($trendingProducts as $product) {
-                if (!ProductTag::where('product_id', $product->id)->where('tag_id', $trendingTag->id)->exists()) {
+                if (! ProductTag::where('product_id', $product->id)->where('tag_id', $trendingTag->id)->exists()) {
                     ProductTag::create([
                         'product_id' => $product->id,
                         'tag_id' => $trendingTag->id,
@@ -59,7 +59,7 @@ class TagsSeeder extends Seeder
             $randomTag = Tag::inRandomOrder()->first();
 
             if ($randomProduct && $randomTag) {
-                if (!ProductTag::where('product_id', $randomProduct->id)->where('tag_id', $randomTag->id)->exists()) {
+                if (! ProductTag::where('product_id', $randomProduct->id)->where('tag_id', $randomTag->id)->exists()) {
                     ProductTag::create([
                         'product_id' => $randomProduct->id,
                         'tag_id' => $randomTag->id,

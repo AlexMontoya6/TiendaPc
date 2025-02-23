@@ -5,15 +5,15 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductType;
 use App\Models\Subcategory;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Livewire\Livewire;
 use Tests\Traits\CreatesProducts;
 use Tests\Traits\CreatesUsers;
 
 uses(CreatesProducts::class, CreatesUsers::class);
 
-//PARA EL INDEX
+// PARA EL INDEX
 
 it('muestra un producto correctamente', function () {
 
@@ -40,7 +40,7 @@ it('permite filtrar productos por nombre', function () {
         ->assertDontSee('Mouse Logitech');
 });
 
-//PARA EL CREATE
+// PARA EL CREATE
 it('permite a un admin acceder a la página de creación de productos', function () {
     $this->actingAsSuperAdmin();
 
@@ -49,7 +49,6 @@ it('permite a un admin acceder a la página de creación de productos', function
         ->assertSee('Crear Producto');
 });
 
-
 it('impide a un usuario no autorizado acceder a la creación de productos', function () {
     self::loginAsUser();
 
@@ -57,8 +56,7 @@ it('impide a un usuario no autorizado acceder a la creación de productos', func
         ->assertForbidden();
 });
 
-
-//PARA EL STORE
+// PARA EL STORE
 it('permite a un admin crear un producto con imágenes', function () {
     $this->actingAsSuperAdmin();
 
@@ -87,8 +85,8 @@ it('permite a un admin crear un producto con imágenes', function () {
     $this->assertDatabaseHas('products', ['name' => 'Producto Test']);
 
     foreach ($images as $image) {
-        Storage::disk('public')->assertExists('products/' . $image->hashName());
-        $this->assertDatabaseHas('images', ['path' => 'products/' . $image->hashName()]);
+        Storage::disk('public')->assertExists('products/'.$image->hashName());
+        $this->assertDatabaseHas('images', ['path' => 'products/'.$image->hashName()]);
     }
 
     $response->assertRedirect(route('admin.products.index'));

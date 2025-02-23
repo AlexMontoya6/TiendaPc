@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Product;
-use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
@@ -15,6 +14,7 @@ class ProductController extends Controller
      *     description="Este endpoint devuelve todos los productos, incluyendo los eliminados lógicamente (SoftDeletes).",
      *     tags={"Productos"},
      *     security={{"bearerAuth":{}}},
+     *
      *     @OA\Response(response=200, description="Lista de productos obtenida correctamente"),
      * )
      */
@@ -22,7 +22,7 @@ class ProductController extends Controller
     {
         return response()->json([
             'success' => true,
-            'data' => Product::withTrashed()->orderBy('id', 'desc')->get() // 🔥 Incluye los eliminados
+            'data' => Product::withTrashed()->orderBy('id', 'desc')->get(), // 🔥 Incluye los eliminados
         ]);
     }
 
@@ -33,7 +33,9 @@ class ProductController extends Controller
      *     description="Este endpoint marca un producto como eliminado sin borrarlo permanentemente.",
      *     tags={"Productos"},
      *     security={{"bearerAuth":{}}},
+     *
      *     @OA\Parameter(name="id", in="path", required=true, description="ID del producto a eliminar"),
+     *
      *     @OA\Response(response=200, description="Producto eliminado correctamente"),
      *     @OA\Response(response=404, description="Producto no encontrado"),
      * )
@@ -41,6 +43,7 @@ class ProductController extends Controller
     public function destroy(Product $product)
     {
         $product->delete();
+
         return response()->json(['message' => 'Producto eliminado correctamente.'], 200);
     }
 
@@ -51,7 +54,9 @@ class ProductController extends Controller
      *     description="Este endpoint permite restaurar un producto que ha sido eliminado mediante SoftDelete.",
      *     tags={"Productos"},
      *     security={{"bearerAuth":{}}},
+     *
      *     @OA\Parameter(name="id", in="path", required=true, description="ID del producto a restaurar"),
+     *
      *     @OA\Response(response=200, description="Producto restaurado correctamente"),
      *     @OA\Response(response=404, description="Producto no encontrado"),
      * )
@@ -71,7 +76,9 @@ class ProductController extends Controller
      *     description="Este endpoint elimina un producto de la base de datos de manera irreversible.",
      *     tags={"Productos"},
      *     security={{"bearerAuth":{}}},
+     *
      *     @OA\Parameter(name="id", in="path", required=true, description="ID del producto a eliminar definitivamente"),
+     *
      *     @OA\Response(response=200, description="Producto eliminado permanentemente"),
      *     @OA\Response(response=404, description="Producto no encontrado"),
      * )

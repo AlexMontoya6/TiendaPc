@@ -1,12 +1,7 @@
 <?php
 
-
-use App\Models\User;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Tests\TestCase;
-
-use function Pest\Laravel\actingAs;
-
 
 /*
 |--------------------------------------------------------------------------

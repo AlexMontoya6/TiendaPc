@@ -1,8 +1,8 @@
 <?php
 
 use App\Http\Requests\UserStoreRequest;
-use Illuminate\Support\Facades\Validator;
 use App\Models\User;
+use Illuminate\Support\Facades\Validator;
 use Spatie\Permission\Models\Role;
 
 it('valida correctamente un usuario válido', function () {
@@ -17,7 +17,7 @@ it('valida correctamente un usuario válido', function () {
         'role' => $role->name,
     ];
 
-    $validator = Validator::make($data, (new UserStoreRequest())->rules());
+    $validator = Validator::make($data, (new UserStoreRequest)->rules());
 
     expect($validator->fails())->toBeFalse();
 });
@@ -32,7 +32,7 @@ it('falla si falta el campo email', function () {
         'role' => $role->name,
     ];
 
-    $validator = Validator::make($data, (new UserStoreRequest())->rules());
+    $validator = Validator::make($data, (new UserStoreRequest)->rules());
 
     expect($validator->fails())->toBeTrue();
     expect($validator->errors()->has('email'))->toBeTrue();
@@ -51,7 +51,7 @@ it('falla si el email ya existe', function () {
         'role' => $role->name,
     ];
 
-    $validator = Validator::make($data, (new UserStoreRequest())->rules());
+    $validator = Validator::make($data, (new UserStoreRequest)->rules());
 
     expect($validator->fails())->toBeTrue();
     expect($validator->errors()->has('email'))->toBeTrue();
@@ -68,7 +68,7 @@ it('falla si la contraseña es demasiado corta', function () {
         'role' => $role->name,
     ];
 
-    $validator = Validator::make($data, (new UserStoreRequest())->rules());
+    $validator = Validator::make($data, (new UserStoreRequest)->rules());
 
     expect($validator->fails())->toBeTrue();
     expect($validator->errors()->has('password'))->toBeTrue();
@@ -85,7 +85,7 @@ it('falla si la confirmación de contraseña no coincide', function () {
         'role' => $role->name,
     ];
 
-    $validator = Validator::make($data, (new UserStoreRequest())->rules());
+    $validator = Validator::make($data, (new UserStoreRequest)->rules());
 
     expect($validator->fails())->toBeTrue();
     expect($validator->errors()->has('password'))->toBeTrue();
@@ -100,9 +100,8 @@ it('falla si el rol no existe en la base de datos', function () {
         'role' => 'RolInvalido',
     ];
 
-    $validator = Validator::make($data, (new UserStoreRequest())->rules());
+    $validator = Validator::make($data, (new UserStoreRequest)->rules());
 
     expect($validator->fails())->toBeTrue();
     expect($validator->errors()->has('role'))->toBeTrue();
 });
-

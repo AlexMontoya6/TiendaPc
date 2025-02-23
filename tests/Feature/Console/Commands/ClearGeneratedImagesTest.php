@@ -1,12 +1,12 @@
 <?php
 
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Storage;
 
 it('elimina imágenes en test/', function () {
 
-    $imageName = uniqid() . '.jpg';
-    $imagePath = 'test/' . $imageName;
+    $imageName = uniqid().'.jpg';
+    $imagePath = 'test/'.$imageName;
 
     Storage::disk('public')->put($imagePath, file_get_contents('https://picsum.photos/640/480'));
 
@@ -29,4 +29,3 @@ it('muestra mensaje si el directorio no existe', function () {
 
     expect(Artisan::output())->toContain('El directorio /storage/app/public/test no existe.');
 });
-

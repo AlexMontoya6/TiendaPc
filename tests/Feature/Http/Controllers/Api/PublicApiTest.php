@@ -1,8 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\RateLimiter;
-use function Pest\Laravel\getJson;
 use Tests\Traits\CreatesProducts;
+
+use function Pest\Laravel\getJson;
 
 uses(CreatesProducts::class);
 
@@ -17,16 +18,16 @@ it('devuelve productos destacados en JSON', function () {
         ->assertJsonStructure([
             'success',
             'data' => [
-                '*' => ['id', 'name', 'price']
-            ]
+                '*' => ['id', 'name', 'price'],
+            ],
         ])
         ->assertJsonCount(5, 'data');
 });
 
 it('devuelve solo productos activos y excluye los eliminados', function () {
-    $producto1 =  $this->newProduct();
-    $producto2 =  $this->newProduct();
-    $productoEliminado =  $this->newProduct();
+    $producto1 = $this->newProduct();
+    $producto2 = $this->newProduct();
+    $productoEliminado = $this->newProduct();
 
     $productoEliminado->delete(); // 🔥 Simulamos un SoftDelete
 
@@ -36,12 +37,11 @@ it('devuelve solo productos activos y excluye los eliminados', function () {
         ->assertJsonStructure([
             'success',
             'data' => [
-                '*' => ['id', 'name', 'price']
-            ]
+                '*' => ['id', 'name', 'price'],
+            ],
         ])
         ->assertJsonMissing(['id' => $productoEliminado->id]); // ✅ No debe aparecer el eliminado
 });
-
 
 it('respeta el límite de peticiones', function () {
     RateLimiter::clear('api'); // 🔥 Aseguramos que no haya límites previos

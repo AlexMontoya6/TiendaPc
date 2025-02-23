@@ -27,12 +27,10 @@ use L5Swagger\L5SwaggerServiceProvider;
  */
 class AppServiceProvider extends ServiceProvider
 {
-
     protected $policies = [
         User::class => UserPolicy::class,
         Product::class => ProductPolicy::class,
     ];
-
 
     /**
      * Register any application services.

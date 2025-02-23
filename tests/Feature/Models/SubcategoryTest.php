@@ -1,9 +1,8 @@
 <?php
 
-use App\Models\Subcategory;
 use App\Models\Category;
 use App\Models\ProductType;
-
+use App\Models\Subcategory;
 use Tests\Traits\CreatesProducts;
 
 uses(CreatesProducts::class);
@@ -20,7 +19,6 @@ beforeEach(function () {
     ]);
 });
 
-
 it('puede crear una subcategoría', function () {
     $subcategory = Subcategory::factory()->create([
         'category_id' => $this->category->id,
@@ -30,7 +28,6 @@ it('puede crear una subcategoría', function () {
         ->and($subcategory->category_id)->toBe($this->category->id);
 });
 
-
 it('puede pertenecer a una categoría', function () {
     $subcategory = Subcategory::factory()->create([
         'category_id' => $this->category->id,
@@ -39,7 +36,6 @@ it('puede pertenecer a una categoría', function () {
     expect($subcategory->category)->toBeInstanceOf(Category::class)
         ->and($subcategory->category->id)->toBe($this->category->id);
 });
-
 
 it('puede tener productos asociados', function () {
     $product = $this->newProduct();

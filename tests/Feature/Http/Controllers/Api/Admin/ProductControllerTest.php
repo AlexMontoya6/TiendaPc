@@ -2,12 +2,12 @@
 
 use Tests\Traits\CreatesProducts;
 use Tests\Traits\CreatesUsers;
-use function Pest\Laravel\{getJson, deleteJson, postJson};
 
+use function Pest\Laravel\deleteJson;
+use function Pest\Laravel\getJson;
+use function Pest\Laravel\postJson;
 
 uses(CreatesProducts::class, CreatesUsers::class);
-
-
 
 beforeEach(function () {
     $this->actingAsSuperAdmin();
@@ -24,8 +24,8 @@ it('devuelve todos los productos, incluyendo eliminados', function () {
         ->assertJsonStructure([
             'success',
             'data' => [
-                '*' => ['id', 'name', 'price', 'deleted_at']
-            ]
+                '*' => ['id', 'name', 'price', 'deleted_at'],
+            ],
         ])
         ->assertJsonFragment(['id' => $productoEliminado->id]);
 });

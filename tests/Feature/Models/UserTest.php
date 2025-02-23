@@ -1,12 +1,7 @@
 <?php
 
-use App\Models\Address;
-use App\Models\Order;
-use App\Models\Payment;
 use App\Models\User;
 use Spatie\Permission\Models\Role;
-
-
 
 it('puede crear un usuario correctamente', function () {
     $user = User::factory()->create();
@@ -31,7 +26,6 @@ it('permite asignar y cambiar un rol correctamente', function () {
     expect($user->hasRole('Admin'))->toBeTrue();
 });
 
-
 it('oculta datos sensibles en la serialización', function () {
     $user = User::factory()->create();
     $array = $user->toArray();
@@ -48,5 +42,3 @@ it('genera correctamente el profile_photo_url', function () {
 
     expect($user->profile_photo_url)->not->toBeNull();
 });
-
-

@@ -3,9 +3,9 @@
 namespace Database\Seeders;
 
 use App\Models\Category;
+use App\Models\Image;
 use App\Models\Product;
 use App\Models\ProductType;
-use App\Models\Image;
 use Illuminate\Database\Seeder;
 
 class ProductSeeder extends Seeder
@@ -32,7 +32,7 @@ class ProductSeeder extends Seeder
                     for ($i = 0; $i < $imagesCount; $i++) {
                         Image::factory()->create([
                             'product_id' => $product->id,
-                            'order' => $i +1,
+                            'order' => $i + 1,
                         ]);
                     }
                 }

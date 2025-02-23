@@ -3,18 +3,33 @@
 namespace App\Livewire\Pages\Checkout;
 
 use Gloudemans\Shoppingcart\Facades\Cart;
-use Livewire\Component;
 use Illuminate\Support\Facades\Session;
+use Livewire\Component;
 
 class ResumenPago extends Component
 {
-    public $shipping_name, $shipping_street, $shipping_city, $shipping_postal_code, $shipping_country;
+    public $shipping_name;
+
+    public $shipping_street;
+
+    public $shipping_city;
+
+    public $shipping_postal_code;
+
+    public $shipping_country;
+
     public $delivery_method;
+
     public $cartItems = [];
+
     public $cartTotal = 0;
+
     public $payment_method = 'card'; // Método de pago seleccionado
+
     public $editingAddress = false;
+
     public $editingDelivery = false;
+
     public $editingCart = false;
 
     public function mount()
@@ -42,7 +57,7 @@ class ResumenPago extends Component
         })->toArray();
 
         // Calcular total
-        $this->cartTotal = collect($this->cartItems)->sum(fn($item) => $item['price'] * $item['qty']);
+        $this->cartTotal = collect($this->cartItems)->sum(fn ($item) => $item['price'] * $item['qty']);
     }
 
     public function confirmOrder()

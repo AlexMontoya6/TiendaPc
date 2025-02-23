@@ -10,10 +10,9 @@ it('devuelve la estructura correcta de CategoryResource', function () {
 
     $category = Category::factory()->create();
 
-    $resource = (new CategoryResource($category))->toArray(new Request());
+    $resource = (new CategoryResource($category))->toArray(new Request);
 
     expect($resource)->toHaveKeys(['name', 'slug', 'description'])
         ->and($resource['name'])->toBe($category->name)
         ->and($resource['description'])->toBe($category->description);
 });
-

@@ -1,25 +1,18 @@
 <?php
 
-use App\Http\Controllers\{
-    Panel\MiPerfilController,
-    Admin\UserController,
-    PaypalController
-};
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Panel\MiPerfilController;
 use App\Http\Controllers\Panel\MisComptrasController;
-use App\Livewire\Pages\{
-    Cart,
-    Home,
-    ProductDetail,
-    Checkout\Direcciones,
-    Checkout\Entrega,
-    Checkout\ResumenPago,
-    Admin\Dashboard,
-    Admin\Products,
-    Admin\ProductEdit,
-    Admin\ProductCreate
-};
-use App\Models\Product;
+use App\Http\Controllers\PaypalController;
+use App\Livewire\Pages\Admin\Dashboard;
+use App\Livewire\Pages\Admin\Products;
+use App\Livewire\Pages\Cart;
+use App\Livewire\Pages\Checkout\Direcciones;
+use App\Livewire\Pages\Checkout\Entrega;
+use App\Livewire\Pages\Checkout\ResumenPago;
+use App\Livewire\Pages\Home;
+use App\Livewire\Pages\ProductDetail;
 use Illuminate\Support\Facades\Route;
 
 Route::post('paypal', [PaypalController::class, 'paypal'])->name('paypal.payment');
@@ -30,8 +23,7 @@ Route::get('/', Home::class)->name('home');
 Route::get('/cart', Cart::class)->name('cart.index');
 Route::get('/{product:slug}', ProductDetail::class)->name('product.detail');
 
-
-//Route::get('/category/{id}', [CategoryController::class, 'show'])->name('category.products');
+// Route::get('/category/{id}', [CategoryController::class, 'show'])->name('category.products');
 
 Route::middleware([
     'auth:sanctum',

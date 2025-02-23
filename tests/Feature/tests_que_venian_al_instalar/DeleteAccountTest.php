@@ -18,7 +18,6 @@ test('user accounts can be deleted', function () {
     $this->assertDatabaseMissing('users', ['id' => $user->id]);
 });
 
-
 test('correct password must be provided before account can be deleted', function () {
     $this->actingAs($user = User::factory()->create());
 

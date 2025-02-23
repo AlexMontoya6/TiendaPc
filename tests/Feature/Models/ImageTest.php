@@ -38,7 +38,7 @@ it('puede recuperar la imagen correctamente', function () {
 
 it('puede acceder a su producto relacionado', function () {
     $product = $this->newProduct();
-    $image = Image::factory()->create(['product_id' => $product->id, 'order' => 2,]);
+    $image = Image::factory()->create(['product_id' => $product->id, 'order' => 2]);
 
     expect($image->product)->toBeInstanceOf(Product::class);
 });

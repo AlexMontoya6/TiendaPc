@@ -16,6 +16,7 @@ class UserController extends Controller
      *     description="Devuelve una lista de usuarios. Solo accesible por SuperAdmin.",
      *     tags={"Usuarios"},
      *     security={{"bearerAuth":{}}},
+     *
      *     @OA\Response(response=200, description="Lista de usuarios obtenida correctamente"),
      *     @OA\Response(response=403, description="No autorizado"),
      * )
@@ -26,7 +27,7 @@ class UserController extends Controller
 
         return response()->json([
             'success' => true,
-            'data' => User::orderBy('id', 'desc')->get()
+            'data' => User::orderBy('id', 'desc')->get(),
         ]);
     }
 
@@ -37,7 +38,9 @@ class UserController extends Controller
      *     description="Devuelve los detalles de un usuario. Solo accesible por SuperAdmin.",
      *     tags={"Usuarios"},
      *     security={{"bearerAuth":{}}},
+     *
      *     @OA\Parameter(name="id", in="path", required=true, description="ID del usuario"),
+     *
      *     @OA\Response(response=200, description="Detalles del usuario obtenidos correctamente"),
      *     @OA\Response(response=403, description="No autorizado"),
      *     @OA\Response(response=404, description="Usuario no encontrado"),
@@ -49,7 +52,7 @@ class UserController extends Controller
 
         return response()->json([
             'success' => true,
-            'data' => $user
+            'data' => $user,
         ]);
     }
 
@@ -60,16 +63,20 @@ class UserController extends Controller
      *     description="Permite a un SuperAdmin crear un nuevo usuario.",
      *     tags={"Usuarios"},
      *     security={{"bearerAuth":{}}},
+     *
      *     @OA\RequestBody(
      *         required=true,
+     *
      *         @OA\JsonContent(
      *             required={"name","email","password"},
+     *
      *             @OA\Property(property="name", type="string", example="Nuevo Usuario"),
      *             @OA\Property(property="email", type="string", example="user@mail.com"),
      *             @OA\Property(property="password", type="string", example="password123"),
      *             @OA\Property(property="role", type="string", example="Customer")
      *         )
      *     ),
+     *
      *     @OA\Response(response=201, description="Usuario creado correctamente"),
      *     @OA\Response(response=403, description="No autorizado"),
      *     @OA\Response(response=422, description="Datos inválidos"),
@@ -104,16 +111,21 @@ class UserController extends Controller
      *     description="Permite a un SuperAdmin actualizar un usuario.",
      *     tags={"Usuarios"},
      *     security={{"bearerAuth":{}}},
+     *
      *     @OA\Parameter(name="id", in="path", required=true, description="ID del usuario"),
+     *
      *     @OA\RequestBody(
      *         required=true,
+     *
      *         @OA\JsonContent(
+     *
      *             @OA\Property(property="name", type="string", example="Usuario Modificado"),
      *             @OA\Property(property="email", type="string", example="nuevo@mail.com"),
      *             @OA\Property(property="password", type="string", example="newpassword123"),
      *             @OA\Property(property="role", type="string", example="Admin")
      *         )
      *     ),
+     *
      *     @OA\Response(response=200, description="Usuario actualizado correctamente"),
      *     @OA\Response(response=403, description="No autorizado"),
      *     @OA\Response(response=404, description="Usuario no encontrado"),
@@ -125,7 +137,7 @@ class UserController extends Controller
 
         $request->validate([
             'name' => 'sometimes|string|max:255',
-            'email' => 'sometimes|email|unique:users,email,' . $user->id,
+            'email' => 'sometimes|email|unique:users,email,'.$user->id,
             'password' => 'sometimes|string|min:6',
             'role' => 'sometimes|in:SuperAdmin,Admin,Customer',
         ]);
@@ -146,7 +158,9 @@ class UserController extends Controller
      *     description="Permite a un SuperAdmin eliminar un usuario.",
      *     tags={"Usuarios"},
      *     security={{"bearerAuth":{}}},
+     *
      *     @OA\Parameter(name="id", in="path", required=true, description="ID del usuario"),
+     *
      *     @OA\Response(response=200, description="Usuario eliminado correctamente"),
      *     @OA\Response(response=403, description="No autorizado"),
      *     @OA\Response(response=404, description="Usuario no encontrado"),

@@ -21,7 +21,7 @@ it('valida correctamente un producto válido', function () {
         'subcategory_id' => $subcategory->id,
     ];
 
-    $validator = Validator::make($data, (new ProductStoreRequest())->rules());
+    $validator = Validator::make($data, (new ProductStoreRequest)->rules());
 
     expect($validator->fails())->toBeFalse();
 });
@@ -35,7 +35,7 @@ it('falla si falta el campo name', function () {
         'product_type_id' => 1,
     ];
 
-    $validator = Validator::make($data, (new ProductStoreRequest())->rules());
+    $validator = Validator::make($data, (new ProductStoreRequest)->rules());
 
     expect($validator->fails())->toBeTrue();
     expect($validator->errors()->has('name'))->toBeTrue();

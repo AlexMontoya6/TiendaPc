@@ -8,8 +8,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class Product extends Model
@@ -53,12 +53,11 @@ class Product extends Model
     }
 
     public function tags(): BelongsToMany
-{
-    return $this->belongsToMany(Tag::class, 'product_tag')
-        ->withPivot('ttl', 'is_active')
-        ->withTimestamps();
-}
-
+    {
+        return $this->belongsToMany(Tag::class, 'product_tag')
+            ->withPivot('ttl', 'is_active')
+            ->withTimestamps();
+    }
 
     public function activeTags(): Collection
     {
@@ -71,11 +70,11 @@ class Product extends Model
             ->get();
     }
 
-
     public function getFormattedPriceAttribute(): ?float
     {
         if ($this->price < 100) {
             Log::error("Precio incorrecto para el producto ID: {$this->id}. Es menor a 100 céntimos.");
+
             return null; // 🔹 Mejor que lanzar una excepción en producción
         }
 

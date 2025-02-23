@@ -2,21 +2,24 @@
 
 namespace App\Livewire\Components\Admin\Products;
 
+use App\Models\Product;
 use Livewire\Component;
 use Livewire\WithPagination;
-use App\Models\Product;
 
 class ProductList extends Component
 {
     use WithPagination;
 
     public $search = ''; // Variable para el buscador
+
     public $perPage = 8; // Cantidad de productos por página
 
     public $confirmingProductDeletion = false;
+
     public $productToDelete;
 
     protected $queryString = ['search']; // Guarda el valor en la URL
+
     protected $listeners = ['deleteProduct' => 'confirmDelete'];
 
     public function updateSearch($value)
@@ -50,8 +53,8 @@ class ProductList extends Component
     {
         $query = Product::with('images');
 
-        if (!empty($this->search)) {
-            $query->where('name', 'like', '%' . $this->search . '%');
+        if (! empty($this->search)) {
+            $query->where('name', 'like', '%'.$this->search.'%');
         }
 
         $products = $query->orderBy('id', 'desc')->paginate($this->perPage);

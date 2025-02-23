@@ -2,13 +2,13 @@
 
 namespace App\Jobs;
 
+use App\Mail\FeedbackEmail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Mail;
-use App\Mail\FeedbackEmail;
 
 class SendFeedbackEmailJob implements ShouldQueue
 {
@@ -29,6 +29,6 @@ class SendFeedbackEmailJob implements ShouldQueue
      */
     public function handle(): void
     {
-        Mail::to($this->user_email)->send(new FeedbackEmail());
+        Mail::to($this->user_email)->send(new FeedbackEmail);
     }
 }

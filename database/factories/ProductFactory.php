@@ -2,9 +2,8 @@
 
 namespace Database\Factories;
 
-use App\Models\Product;
-use App\Models\Image;
 use App\Models\Category;
+use App\Models\Product;
 use App\Models\ProductType;
 use App\Models\Subcategory;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -18,8 +17,8 @@ class ProductFactory extends Factory
     {
         $productType = ProductType::first();
 
-        if (!$productType) {
-            throw new \Exception("Debe existir al menos un ProductType en la base de datos.");
+        if (! $productType) {
+            throw new \Exception('Debe existir al menos un ProductType en la base de datos.');
         }
 
         $category = Category::inRandomOrder()->first();
@@ -29,7 +28,7 @@ class ProductFactory extends Factory
         return [
             'name' => $this->faker->unique()->word(),
             'slug' => function (array $attributes) {
-                return Str::slug($attributes['name']) . '-' . Str::random(5); // 🔹 Agrega sufijo aleatorio
+                return Str::slug($attributes['name']).'-'.Str::random(5); // 🔹 Agrega sufijo aleatorio
             },
             'description' => $this->faker->sentence(),
             'price' => $this->faker->numberBetween(100, 100000),

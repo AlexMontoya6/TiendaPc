@@ -15,7 +15,6 @@ beforeEach(function () {
     ]);
 });
 
-
 it('puede crear una categoría', function () {
     $category = Category::factory()->create([
         'product_type_id' => $this->productType->id, // ✅ Usa el ProductType ya creado
@@ -25,12 +24,10 @@ it('puede crear una categoría', function () {
         ->and($category->product_type_id)->toBe($this->productType->id);
 });
 
-
 it('puede pertenecer a un ProductType', function () {
     expect($this->category->productType)->toBeInstanceOf(ProductType::class)
         ->and($this->category->productType->id)->toBe($this->productType->id);
 });
-
 
 it('puede tener subcategorías asociadas', function () {
     $subcategory = Subcategory::factory()->create([
@@ -54,4 +51,3 @@ it('puede tener productos asociados', function () {
     expect($this->category->products)->toHaveCount(1)
         ->and($this->category->products->first()->id)->toBe($product->id);
 });
-

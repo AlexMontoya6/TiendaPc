@@ -2,15 +2,28 @@
 
 namespace App\Livewire\Pages\Checkout;
 
-use Livewire\Component;
 use App\Models\Address;
 use Illuminate\Support\Facades\Auth;
+use Livewire\Component;
 
 class Direcciones extends Component
 {
     public $addresses;
-    public $name, $street, $city, $postal_code, $country = "España", $is_default = false;
+
+    public $name;
+
+    public $street;
+
+    public $city;
+
+    public $postal_code;
+
+    public $country = 'España';
+
+    public $is_default = false;
+
     public $showForm = false;
+
     public $isResumenPago = false;
 
     public function mount($isResumenPago = false)
@@ -24,7 +37,6 @@ class Direcciones extends Component
             $this->setDefaultAddress($this->addresses->first()->id);
         }
     }
-
 
     public function refreshAddresses()
     {
@@ -61,7 +73,6 @@ class Direcciones extends Component
         $this->showForm = false;
     }
 
-
     public function setDefaultAddress($addressId)
     {
         $user = Auth::user();
@@ -70,8 +81,9 @@ class Direcciones extends Component
 
         $address = Address::where('id', $addressId)->where('user_id', $user->id)->first();
 
-        if (!$address) {
+        if (! $address) {
             session()->flash('error', 'La dirección seleccionada no existe.');
+
             return;
         }
 
@@ -82,14 +94,14 @@ class Direcciones extends Component
         $this->refreshAddresses();
     }
 
-
     public function continueToDelivery()
     {
         $user = Auth::user();
         $defaultAddress = $user->addresses()->where('is_default', true)->first();
 
-        if (!$defaultAddress) {
+        if (! $defaultAddress) {
             session()->flash('error', 'Por favor, selecciona una dirección de envío antes de continuar.');
+
             return;
         }
 
@@ -121,10 +133,10 @@ class Direcciones extends Component
         }
     }
 
-
     public function render()
     {
         $this->isResumenPago = request()->routeIs('cart.checkout.resumen_pago');
+
         return view('livewire.pages.Checkout.direcciones')
             ->layout('layouts.checkout');
     }

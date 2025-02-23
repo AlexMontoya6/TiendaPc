@@ -12,9 +12,6 @@ beforeEach(function () {
 
 class ProductPolicy
 {
-
-
-
     public function create(User $user)
     {
         return $user->hasPermissionTo('crear productos');

@@ -6,16 +6,16 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\UserUpdateRequest;
 use App\Models\User;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rule;
-use Spatie\Permission\Models\Role;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
     use AuthorizesRequests;
+
     /**
      * Display a listing of the resource.
      */
@@ -28,7 +28,6 @@ class UserController extends Controller
 
         return view('admin.users.index', compact('users', 'roles'));
     }
-
 
     public function updateRole(Request $request, User $user)
     {
@@ -58,7 +57,6 @@ class UserController extends Controller
         return view('admin.users.create', compact('roles'));
     }
 
-
     /**
      * Store a newly created resource in storage.
      */
@@ -71,7 +69,7 @@ class UserController extends Controller
         }
 
         // Verificar que el rol realmente existe en la base de datos antes de asignarlo
-        if (!Role::where('name', $request->role)->exists()) {
+        if (! Role::where('name', $request->role)->exists()) {
             return redirect()->route('admin.users.index')->with('error', 'El rol seleccionado no es válido.');
         }
 
@@ -91,7 +89,6 @@ class UserController extends Controller
 
         return redirect()->route('admin.users.index')->with('success', 'Usuario creado correctamente.');
     }
-
 
     /**
      * Display the specified resource.
@@ -117,7 +114,6 @@ class UserController extends Controller
 
         return view('admin.users.edit', compact('user', 'roles'));
     }
-
 
     /**
      * Update the specified resource in storage.
@@ -147,7 +143,6 @@ class UserController extends Controller
             return redirect()->route('admin.users.index')->with('error', 'Hubo un error al actualizar el usuario.');
         }
     }
-
 
     /**
      * Remove the specified resource from storage.

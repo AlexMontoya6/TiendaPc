@@ -15,22 +15,21 @@ class PaypalController extends Controller
         $provider->setApiCredentials(config('paypal'));
         $provider->getAccessToken();
         $response = $provider->createOrder([
-            "intent" => "CAPTURE",
-            "application_context" => [
-                "return_url" => route('success'),
-                "cancel_url" => route('cancel')
+            'intent' => 'CAPTURE',
+            'application_context' => [
+                'return_url' => route('success'),
+                'cancel_url' => route('cancel'),
             ],
-            "purchase_units" => [
+            'purchase_units' => [
                 [
-                    "amount" => [
-                        "currency_code" => "USD",
-                        "value" => $request->price
+                    'amount' => [
+                        'currency_code' => 'USD',
+                        'value' => $request->price,
                     ],
 
-                ]
-            ]
+                ],
+            ],
         ]);
-
 
         $product = Product::findOrFail($request->product_id);
 
@@ -50,18 +49,17 @@ class PaypalController extends Controller
         return redirect()->route('cancel'); // Si falla, redirigir a la cancelación
     }
 
-
-    function success(Request $request)
+    public function success(Request $request)
     {
 
         $provider = new PayPalClient;
         $provider->setApiCredentials(config('paypal'));
         $provider->getAccessToken();
         $response = $provider->capturePaymentOrder($request->token);
-        //dd($response);
+        // dd($response);
 
         if (isset($response['status']) && $response['status'] == 'COMPLETED') {
-            $payment = new Payment();
+            $payment = new Payment;
             $payment->payment_id = $response['id'];
             $payment->product_id = session('product_id');
             $payment->product_name = session('product_name');
@@ -74,9 +72,8 @@ class PaypalController extends Controller
             $payment->payment_method = 'PayPal';
             $payment->user_id = auth()->id();
             $payment->save();
+
             return view('payments.success');
-
-
 
             unset($_SESSION['product_name']);
             unset($_SESSION['quantity']);

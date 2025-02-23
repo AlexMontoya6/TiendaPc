@@ -2,10 +2,10 @@
 
 namespace App\Livewire\Pages\Admin;
 
-use Livewire\Component;
+use App\Models\Order;
 use App\Models\Product;
 use App\Models\User;
-use App\Models\Order;
+use Livewire\Component;
 
 class Dashboard extends Component
 {

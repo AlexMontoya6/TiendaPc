@@ -42,4 +42,3 @@ class ClearGeneratedImages extends Command
         }
     }
 }
-

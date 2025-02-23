@@ -1,8 +1,8 @@
 <?php
 
 use App\Jobs\SendFeedbackEmailJob;
-use Illuminate\Support\Facades\Mail;
 use App\Mail\FeedbackEmail;
+use Illuminate\Support\Facades\Mail;
 
 it('envía un correo de feedback', function () {
     Mail::fake();

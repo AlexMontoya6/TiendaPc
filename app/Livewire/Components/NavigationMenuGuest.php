@@ -8,7 +8,9 @@ use Livewire\Component;
 class NavigationMenuGuest extends Component
 {
     public $isOpen = false; // Estado del menú principal
+
     public $selectedProductType = null; // Tipo de producto seleccionado
+
     public $categories = []; // Categorías cargadas
 
     // Abre el menú principal

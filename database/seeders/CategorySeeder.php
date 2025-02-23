@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\Category;
 use App\Models\ProductType;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
 
@@ -85,7 +84,7 @@ class CategorySeeder extends Seeder
 
             $productType = ProductType::where('name', $productTypeName)->first();
 
-            if (!$productType) {
+            if (! $productType) {
                 continue;
             }
 

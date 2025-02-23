@@ -10,13 +10,13 @@ class AdminSidebar extends Component
 
     public function toggleSidebar()
     {
-        $this->collapsed = !$this->collapsed;
+        $this->collapsed = ! $this->collapsed;
     }
 
     public function render()
     {
         return view('livewire.partials.admin-sidebar', [
-            'collapsed' => $this->collapsed
+            'collapsed' => $this->collapsed,
         ]);
     }
 }

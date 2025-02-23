@@ -2,15 +2,16 @@
 
 namespace App\Livewire\Pages\Admin;
 
+use App\Models\Product;
 use Livewire\Component;
 use Livewire\WithPagination;
-use App\Models\Product;
 
 class Products extends Component
 {
     use WithPagination;
 
     public $search = '';
+
     public $perPage = 8;
 
     protected $queryString = ['search']; // 🔹 Mantiene el valor de búsqueda en la URL
@@ -25,8 +26,8 @@ class Products extends Component
     {
         $query = Product::with('images');
 
-        if (!empty($this->search)) {
-            $query->where('name', 'like', '%' . $this->search . '%');
+        if (! empty($this->search)) {
+            $query->where('name', 'like', '%'.$this->search.'%');
         }
 
         $products = $query->orderBy('id', 'desc')->paginate($this->perPage);

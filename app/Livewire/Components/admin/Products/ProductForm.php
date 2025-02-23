@@ -2,18 +2,23 @@
 
 namespace App\Livewire\Components\admin\Products;
 
-use Livewire\Component;
-use App\Models\ProductType;
 use App\Models\Category;
+use App\Models\ProductType;
 use App\Models\Subcategory;
+use Livewire\Component;
 
 class ProductForm extends Component
 {
     public $productTypes;
+
     public $categories = [];
+
     public $subcategories = [];
+
     public $selectedProductType = null;
+
     public $selectedCategory = null;
+
     public $selectedSubcategory = null;
 
     public function mount()
