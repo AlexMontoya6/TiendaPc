@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CategoryResource;
@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
-    
+
     /**
      * @OA\Get(
      *     path="/api/categories",
