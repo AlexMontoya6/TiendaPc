@@ -24,6 +24,7 @@ return new class extends Migration
             $table->foreignIdFor(Category::class)->nullable()->constrained()->onDelete('restrict');
             $table->foreignIdFor(Subcategory::class)->nullable()->constrained()->onDelete('restrict');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -34,5 +35,4 @@ return new class extends Migration
     {
         Schema::dropIfExists('products');
     }
-
 };
