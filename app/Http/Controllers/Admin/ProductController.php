@@ -40,14 +40,14 @@ class ProductController extends Controller
      */
     public function store(ProductStoreRequest $request)
     {
-
         $this->authorize('create', Product::class);
 
         try {
-            // Crear el producto con los datos validados
+            // 🔍 Depuración antes de guardar
+
             $product = Product::create($request->validated());
 
-            // Subir y asociar imágenes si existen
+            // Subir imágenes si existen
             if ($request->hasFile('images')) {
                 foreach ($request->file('images') as $index => $image) {
                     $path = $image->store('products', 'public');
@@ -55,16 +55,27 @@ class ProductController extends Controller
                     Image::create([
                         'product_id' => $product->id,
                         'path' => $path,
-                        'order' => $index + 1, // Orden secuencial
+                        'order' => $index + 1,
                     ]);
                 }
             }
 
+            // **Asignar etiquetas al producto**
+            if (!empty($request->tags)) {
+                $tags = collect($request->tags)->mapWithKeys(function ($tag) {
+                    return [$tag['id'] => ['is_active' => $tag['is_active'], 'ttl' => $tag['ttl']]];
+                });
+
+                $product->tags()->sync($tags);
+            }
+
             return redirect()->route('admin.products.index')->with('success', 'Producto creado correctamente.');
         } catch (\Exception $e) {
-            return redirect()->route('admin.products.index')->with('error', 'Error al crear el producto.');
+            return redirect()->route('admin.products.index')->with('error', 'Error al crear el producto: ' . $e->getMessage());
         }
     }
+
+
 
 
     /**

@@ -17,6 +17,15 @@ class ProductStoreRequest extends FormRequest
     /**
      * Reglas de validación del formulario.
      */
+    protected function prepareForValidation()
+    {
+        if ($this->has('tags') && is_string($this->tags)) {
+            $this->merge([
+                'tags' => json_decode($this->tags, true),
+            ]);
+        }
+    }
+
     public function rules(): array
     {
         return [
@@ -27,7 +36,12 @@ class ProductStoreRequest extends FormRequest
             'category_id' => 'nullable|exists:categories,id',
             'subcategory_id' => 'nullable|exists:subcategories,id',
             'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+
+            // 🔥 Validamos que `tags` sea un array
+            'tags' => 'nullable|array',
+            'tags.*.id' => 'exists:tags,id',
+            'tags.*.is_active' => 'boolean',
+            'tags.*.ttl' => 'nullable|date',
         ];
     }
 }
-
