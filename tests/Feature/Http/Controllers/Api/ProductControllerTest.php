@@ -14,9 +14,9 @@ it('devuelve una lista de productos en JSON', function () {
     $response = getJson(route('api.products.index'));
 
     $response->assertOk()
-        ->assertJsonCount(5) // 🔥 Confirma que hay 5 productos en el array
+        ->assertJsonCount(5)
         ->assertJsonStructure([
-            '*' => [ // 🔥 El `*` indica que cada producto en la lista tiene esta estructura
+            '*' => [
                 'name',
                 'slug',
                 'description',

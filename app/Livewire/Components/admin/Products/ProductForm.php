@@ -18,7 +18,7 @@ class ProductForm extends Component
 
     public function mount()
     {
-        $this->productTypes = ProductType::all(); // 🔹 Cargar todos los tipos de producto
+        $this->productTypes = ProductType::all();
     }
 
     public function updatedSelectedProductType()
@@ -29,7 +29,6 @@ class ProductForm extends Component
             $this->categories = [];
         }
 
-        // 🔹 Reiniciar subcategorías al cambiar de tipo de producto
         $this->subcategories = [];
         $this->selectedCategory = null;
         $this->selectedSubcategory = null;
@@ -43,7 +42,6 @@ class ProductForm extends Component
             $this->subcategories = [];
         }
 
-        // 🔹 Reiniciar la subcategoría seleccionada
         $this->selectedSubcategory = null;
     }
 
