@@ -7,9 +7,9 @@ use App\Models\ProductType;
 use App\Models\Subcategory;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\UploadedFile;
+use Livewire\Livewire;
 use Tests\Traits\CreatesProducts;
 use Tests\Traits\CreatesUsers;
-use Livewire\Livewire;
 
 uses(CreatesProducts::class, CreatesUsers::class);
 
