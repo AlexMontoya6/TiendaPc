@@ -21,11 +21,14 @@ class UserController extends Controller
      */
     public function index()
     {
+        $this->authorize('viewAny', User::class); // 🔥 Así se usa la Policy
+
         $users = User::paginate(10);
         $roles = Role::all(); // Obtener todos los roles desde la base de datos
 
         return view('admin.users.index', compact('users', 'roles'));
     }
+
 
     public function updateRole(Request $request, User $user)
     {

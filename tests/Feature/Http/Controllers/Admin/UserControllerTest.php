@@ -6,9 +6,8 @@ use Tests\Traits\CreatesUsers;
 
 uses(CreatesUsers::class);
 
-
-//PARA EL INDEX
-it('permite a un admin ver la lista de usuarios', function () {
+// ✅ INDEX
+it('permite a un SuperAdmin ver la lista de usuarios', function () {
     $this->actingAsSuperAdmin();
 
     $this->get(route('admin.users.index'))
@@ -16,31 +15,31 @@ it('permite a un admin ver la lista de usuarios', function () {
         ->assertSee('Usuarios'); // Ajusta esto al título real de la vista
 });
 
-it('impide a un usuario no autorizado ver la lista de usuarios', function () {
+it('impide a un usuario sin permisos ver la lista de usuarios', function () {
     self::loginAsUser();
 
     $this->get(route('admin.users.index'))
         ->assertForbidden();
 });
 
-//PARA EL CREATE
-it('permite a un admin acceder al formulario de creación de usuarios', function () {
+// ✅ CREATE
+it('permite a un SuperAdmin acceder al formulario de creación de usuarios', function () {
     $this->actingAsSuperAdmin();
 
     $this->get(route('admin.users.create'))
         ->assertOk()
-        ->assertSee('Crear Usuario'); // Ajusta esto si el formulario tiene otro título
+        ->assertSee('Crear Usuario');
 });
 
 it('impide a un usuario sin permisos acceder a la creación de usuarios', function () {
     self::loginAsUser();
 
     $this->get(route('admin.users.create'))
-        ->assertForbidden(); // O `assertRedirect()` si el middleware lo redirige
+        ->assertForbidden();
 });
 
-//PARA EL STORE
-it('permite a un admin crear un usuario', function () {
+// ✅ STORE
+it('permite a un SuperAdmin crear un usuario', function () {
     $this->actingAsSuperAdmin();
 
     $role = Role::firstOrCreate(['name' => 'Customer']);
@@ -84,8 +83,8 @@ it('impide a un usuario sin permisos crear un usuario', function () {
         ->assertForbidden();
 });
 
-//PARA EL EDIT
-it('permite a un admin acceder a la página de edición de usuarios', function () {
+// ✅ EDIT
+it('permite a un SuperAdmin acceder a la edición de usuarios', function () {
     $admin = $this->actingAsSuperAdmin();
     $user = User::factory()->create();
 
@@ -104,8 +103,8 @@ it('impide a un usuario sin permisos acceder a la edición de usuarios', functio
         ->assertForbidden();
 });
 
-//PARA EL UPDATE
-it('permite a un admin actualizar un usuario', function () {
+// ✅ UPDATE
+it('permite a un SuperAdmin actualizar un usuario', function () {
     $this->actingAsSuperAdmin();
 
     $user = User::factory()->create();
@@ -115,14 +114,13 @@ it('permite a un admin actualizar un usuario', function () {
         'email' => 'nuevo-email@example.com',
         'password' => 'nuevaPassword123',
         'password_confirmation' => 'nuevaPassword123',
-        'role' => 'SuperAdmin', // Asegurar que el rol existe
+        'role' => 'SuperAdmin',
     ];
 
     $this->put(route('admin.users.update', $user), $data)
         ->assertRedirect(route('admin.users.index'))
         ->assertSessionHas('success', 'Usuario actualizado correctamente.');
 
-    // Verificar en la BD
     $this->assertDatabaseHas('users', [
         'id' => $user->id,
         'name' => 'Usuario Actualizado',
@@ -131,7 +129,7 @@ it('permite a un admin actualizar un usuario', function () {
 });
 
 it('impide a un usuario sin permisos actualizar otro usuario', function () {
-    self::loginAsUser(); // Usuario normal sin permisos
+    self::loginAsUser();
 
     $user = User::factory()->create();
 
@@ -144,17 +142,16 @@ it('impide a un usuario sin permisos actualizar otro usuario', function () {
     ];
 
     $this->put(route('admin.users.update', $user), $data)
-        ->assertForbidden(); // O `assertRedirect()` si hay middleware
+        ->assertForbidden();
 
-    // Verificar que NO se actualizó
     $this->assertDatabaseMissing('users', [
         'id' => $user->id,
         'name' => 'Intento de Cambio',
     ]);
 });
 
-//PARA EL DESTROY
-it('permite a un admin eliminar un usuario', function () {
+// ✅ DESTROY
+it('permite a un SuperAdmin eliminar un usuario', function () {
     $this->actingAsSuperAdmin();
 
     $user = User::factory()->create();
@@ -163,21 +160,19 @@ it('permite a un admin eliminar un usuario', function () {
         ->assertRedirect(route('admin.users.index'))
         ->assertSessionHas('success', 'Usuario eliminado correctamente.');
 
-    // Verificar en la BD que el usuario ya no existe
     $this->assertDatabaseMissing('users', [
         'id' => $user->id,
     ]);
 });
 
 it('impide a un usuario sin permisos eliminar otro usuario', function () {
-    self::loginAsUser(); // Usuario sin permisos
+    self::loginAsUser();
 
     $user = User::factory()->create();
 
     $this->delete(route('admin.users.destroy', $user))
-        ->assertForbidden(); // O `assertRedirect()` si hay middleware
+        ->assertForbidden();
 
-    // Verificar que el usuario sigue existiendo
     $this->assertDatabaseHas('users', [
         'id' => $user->id,
     ]);
