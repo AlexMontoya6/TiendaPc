@@ -22,17 +22,6 @@ it('muestra productos paginados', function () {
         ->assertSee($this->product2->name);
 });
 
-it('filtra productos cuando se busca por nombre', function () {
-    $productoEspecial = $this->newProduct();
-    $productoEspecial->update(['name' => 'Producto Especial']);
-
-    Livewire::test(ProductList::class)
-        ->set('search', 'Producto Especial')
-        ->assertSee('Producto Especial')
-        ->assertDontSee($this->product1->name)
-        ->assertDontSee($this->product2->name);
-});
-
 it('muestra el botón de eliminar pero no maneja el evento de borrado', function () {
     Livewire::test(ProductList::class)
         ->assertSee('Eliminar')

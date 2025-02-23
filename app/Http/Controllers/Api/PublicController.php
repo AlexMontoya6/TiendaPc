@@ -3,48 +3,63 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\ProductResource;
 use App\Models\Product;
+use Illuminate\Http\Request;
 
 class PublicController extends Controller
 {
     /**
      * @OA\Get(
      *     path="/api/public/products",
-     *     summary="Obtener todos los productos disponibles",
-     *     description="Este endpoint devuelve una lista de todos los productos disponibles en la tienda, ordenados por ID descendente para mostrar los más recientes primero.",
+     *     summary="Obtener productos con filtros, búsqueda y paginación",
      *     tags={"Productos Públicos"},
-     *
+     *     @OA\Parameter(
+     *         name="category",
+     *         in="query",
+     *         description="Filtrar por categoría",
+     *         required=false,
+     *         @OA\Schema(type="string", example="Laptops")
+     *     ),
+     *     @OA\Parameter(
+     *         name="search",
+     *         in="query",
+     *         description="Buscar productos por nombre",
+     *         required=false,
+     *         @OA\Schema(type="string", example="MacBook")
+     *     ),
+     *     @OA\Parameter(
+     *         name="page",
+     *         in="query",
+     *         description="Número de página para paginación",
+     *         required=false,
+     *         @OA\Schema(type="integer", example=1)
+     *     ),
      *     @OA\Response(
      *         response=200,
-     *         description="Lista de productos obtenida correctamente",
-     *
-     *         @OA\JsonContent(
-     *             type="object",
-     *
-     *             @OA\Property(property="success", type="boolean", example=true),
-     *             @OA\Property(
-     *                 property="data",
-     *                 type="array",
-     *
-     *                 @OA\Items(
-     *                     type="object",
-     *
-     *                     @OA\Property(property="id", type="integer", example=1),
-     *                     @OA\Property(property="name", type="string", example="Laptop Gamer"),
-     *                     @OA\Property(property="price", type="number", format="float", example="1499.99"),
-     *                     @OA\Property(property="description", type="string", example="Laptop con RTX 3070 y 32GB RAM"),
-     *                     @OA\Property(property="created_at", type="string", format="date-time", example="2025-02-23T12:34:56Z")
-     *                 )
-     *             )
-     *         )
+     *         description="Lista de productos obtenida correctamente"
      *     )
      * )
      */
-    public function allProducts()
+    public function allProducts(Request $request)
     {
-        return response()->json([
-            'success' => true,
-            'data' => Product::query()->withoutTrashed()->orderBy('id', 'desc')->get(),
-        ]);
+        $query = Product::query()->withoutTrashed();
+
+        // 🔍 Filtrar por categoría
+        if ($request->has('category')) {
+            $query->whereHas('category', function ($q) use ($request) {
+                $q->where('name', $request->category);
+            });
+        }
+
+        // 🔎 Buscar por nombre
+        if ($request->has('search')) {
+            $query->where('name', 'like', '%' . $request->search . '%');
+        }
+
+        // 📜 Paginación
+        $products = $query->orderBy('id', 'desc')->paginate(10);
+
+        return ProductResource::collection($products);
     }
 }

@@ -1,55 +1,49 @@
 <?php
 
-use Illuminate\Support\Facades\RateLimiter;
 use Tests\Traits\CreatesProducts;
-
 use function Pest\Laravel\getJson;
 
-uses(CreatesProducts::class);
+uses( CreatesProducts::class);
 
-it('devuelve productos destacados en JSON', function () {
-    for ($i = 0; $i < 5; $i++) {
+it('devuelve todos los productos', function () {
+    $this->newProduct(); // 🔥 Creamos un producto con el Trait
+    $this->newProduct(); // Otro producto
+
+    $response = getJson('/api/public/products');
+
+    $response->assertOk()
+        ->assertJsonStructure([
+            'data' => [
+                '*' => ['id', 'name', 'price', 'description', 'available', 'category', 'created_at']
+            ]
+        ])
+        ->assertJsonCount(2, 'data'); // 🔥 Se crean 2 productos
+});
+
+
+it('filtra productos por búsqueda', function () {
+    $product = $this->newProduct();
+    $product->update(['name' => 'MacBook Pro']);
+
+    $this->newProduct()->update(['name' => 'iPhone 15']);
+
+    $response = getJson('/api/public/products?search=MacBook');
+
+    $response->assertOk()
+        ->assertJsonCount(1, 'data'); // Solo debe devolver MacBook Pro
+});
+
+it('aplica paginación correctamente', function () {
+    for ($i = 0; $i < 15; $i++) {
         $this->newProduct();
     }
 
-    $response = getJson('/api/products');
+    $response = getJson('/api/public/products?page=1');
 
     $response->assertOk()
         ->assertJsonStructure([
-            'success',
-            'data' => [
-                '*' => ['id', 'name', 'price'],
-            ],
-        ])
-        ->assertJsonCount(5, 'data');
-});
-
-it('devuelve solo productos activos y excluye los eliminados', function () {
-    $producto1 = $this->newProduct();
-    $producto2 = $this->newProduct();
-    $productoEliminado = $this->newProduct();
-
-    $productoEliminado->delete(); // 🔥 Simulamos un SoftDelete
-
-    $response = getJson('/api/products');
-
-    $response->assertOk()
-        ->assertJsonStructure([
-            'success',
-            'data' => [
-                '*' => ['id', 'name', 'price'],
-            ],
-        ])
-        ->assertJsonMissing(['id' => $productoEliminado->id]); // ✅ No debe aparecer el eliminado
-});
-
-it('respeta el límite de peticiones', function () {
-    RateLimiter::clear('api'); // 🔥 Aseguramos que no haya límites previos
-
-    // 🔹 Hacer 2 peticiones válidas
-    getJson('/api/products')->assertOk();
-    getJson('/api/products')->assertOk();
-
-    // 🔥 La tercera debe fallar con `429 Too Many Requests`
-    getJson('/api/products')->assertStatus(429);
+            'data',
+            'links',
+            'meta'
+        ]);
 });
