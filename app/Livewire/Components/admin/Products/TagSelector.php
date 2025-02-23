@@ -17,17 +17,26 @@ class TagSelector extends Component
 
     public function toggleTag($tagId)
     {
-        if (isset($this->selectedTags[$tagId])) {
+        // 🔥 Verificamos que la etiqueta exista antes de modificarla
+        $tag = Tag::find($tagId);
+        if (!$tag) return;
+
+        // ✅ Si la etiqueta ya está en el array, la eliminamos
+        if (array_key_exists($tagId, $this->selectedTags)) {
             unset($this->selectedTags[$tagId]);
         } else {
+            // ✅ Si no está en el array, la agregamos correctamente
             $this->selectedTags[$tagId] = [
                 'id' => $tagId,
                 'is_active' => true,
                 'ttl' => null,
             ];
         }
-        $this->updateSelectedTags();
+
+        // 🔥 Actualizamos `selectedTags` limpiando el array
+        $this->selectedTags = array_filter($this->selectedTags);
     }
+
 
     public function toggleActive($tagId)
     {
