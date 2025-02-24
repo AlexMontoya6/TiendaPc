@@ -14,27 +14,34 @@ class PublicController extends Controller
      *     path="/api/public/products",
      *     summary="Obtener productos con filtros, búsqueda y paginación",
      *     tags={"Productos Públicos"},
+     *
      *     @OA\Parameter(
      *         name="category",
      *         in="query",
      *         description="Filtrar por categoría",
      *         required=false,
+     *
      *         @OA\Schema(type="string", example="Laptops")
      *     ),
+     *
      *     @OA\Parameter(
      *         name="search",
      *         in="query",
      *         description="Buscar productos por nombre",
      *         required=false,
+     *
      *         @OA\Schema(type="string", example="MacBook")
      *     ),
+     *
      *     @OA\Parameter(
      *         name="page",
      *         in="query",
      *         description="Número de página para paginación",
      *         required=false,
+     *
      *         @OA\Schema(type="integer", example=1)
      *     ),
+     *
      *     @OA\Response(
      *         response=200,
      *         description="Lista de productos obtenida correctamente"
@@ -54,7 +61,7 @@ class PublicController extends Controller
 
         // 🔎 Buscar por nombre
         if ($request->has('search')) {
-            $query->where('name', 'like', '%' . $request->search . '%');
+            $query->where('name', 'like', '%'.$request->search.'%');
         }
 
         // 📜 Paginación

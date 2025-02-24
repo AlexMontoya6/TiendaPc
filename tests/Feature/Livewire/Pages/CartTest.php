@@ -24,7 +24,6 @@ it('muestra correctamente el carrito con productos', function () {
         ->assertSee('2');
 });
 
-
 it('agrega un producto al carrito correctamente', function () {
     $product = $this->newProduct();
 
@@ -37,7 +36,6 @@ it('agrega un producto al carrito correctamente', function () {
 
     expect(Shoppingcart::count())->toBe(1);
 });
-
 
 it('actualiza la cantidad de un producto en el carrito', function () {
     $product = $this->newProduct();

@@ -1,9 +1,10 @@
 <?php
 
 use Tests\Traits\CreatesProducts;
+
 use function Pest\Laravel\getJson;
 
-uses( CreatesProducts::class);
+uses(CreatesProducts::class);
 
 it('devuelve todos los productos', function () {
     $this->newProduct(); // 🔥 Creamos un producto con el Trait
@@ -14,12 +15,11 @@ it('devuelve todos los productos', function () {
     $response->assertOk()
         ->assertJsonStructure([
             'data' => [
-                '*' => ['id', 'name', 'price', 'description', 'available', 'category', 'created_at']
-            ]
+                '*' => ['id', 'name', 'price', 'description', 'available', 'category', 'created_at'],
+            ],
         ])
         ->assertJsonCount(2, 'data'); // 🔥 Se crean 2 productos
 });
-
 
 it('filtra productos por búsqueda', function () {
     $product = $this->newProduct();
@@ -44,6 +44,6 @@ it('aplica paginación correctamente', function () {
         ->assertJsonStructure([
             'data',
             'links',
-            'meta'
+            'meta',
         ]);
 });

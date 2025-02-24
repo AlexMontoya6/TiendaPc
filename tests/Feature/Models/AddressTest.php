@@ -2,10 +2,10 @@
 
 use App\Models\Address;
 use App\Models\User;
+use Tests\Traits\CreatesUsers;
 
 use function Pest\Laravel\assertDatabaseHas;
 use function Pest\Laravel\assertDatabaseMissing;
-use Tests\Traits\CreatesUsers;
 
 uses(CreatesUsers::class);
 

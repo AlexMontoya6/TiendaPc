@@ -1,8 +1,8 @@
 <?php
 
-use Livewire\Livewire;
 use App\Livewire\Pages\Checkout\Entrega;
 use Illuminate\Support\Facades\Session;
+use Livewire\Livewire;
 
 it('carga el método de entrega por defecto', function () {
     Livewire::test(Entrega::class)

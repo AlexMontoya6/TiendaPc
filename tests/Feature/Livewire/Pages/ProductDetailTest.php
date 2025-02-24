@@ -1,9 +1,8 @@
 <?php
 
-use Livewire\Livewire;
 use App\Livewire\Pages\ProductDetail;
+use Livewire\Livewire;
 use Tests\Traits\CreatesProducts;
-use Gloudemans\Shoppingcart\Facades\Cart;
 
 uses(CreatesProducts::class);
 
@@ -33,4 +32,3 @@ it('renderiza la vista correcta', function () {
     Livewire::test(ProductDetail::class, ['product' => $product])
         ->assertViewIs('livewire.pages.product-detail');
 });
-

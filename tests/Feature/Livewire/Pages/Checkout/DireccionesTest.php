@@ -1,7 +1,6 @@
 <?php
 
 use App\Livewire\Pages\Checkout\Direcciones;
-use App\Models\User;
 use App\Models\Address;
 use Livewire\Livewire;
 use Tests\Traits\CreatesUsers;

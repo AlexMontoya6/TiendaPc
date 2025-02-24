@@ -9,7 +9,7 @@ it('genera correctamente un test de Pest', function () {
 
     File::delete($testPath);
 
-    Artisan::call("make:test-pest", ['name' => $testName]);
+    Artisan::call('make:test-pest', ['name' => $testName]);
 
     expect(File::exists($testPath))->toBeTrue();
 

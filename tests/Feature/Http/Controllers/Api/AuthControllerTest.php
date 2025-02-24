@@ -1,10 +1,10 @@
 <?php
 
-use function Pest\Laravel\postJson;
 use Tests\Traits\CreatesUsers;
 
-uses(CreatesUsers::class);
+use function Pest\Laravel\postJson;
 
+uses(CreatesUsers::class);
 
 it('impide el registro con datos inválidos', function () {
     $response = postJson('/api/register', [
@@ -32,7 +32,6 @@ it('permite a un usuario iniciar sesión con credenciales correctas', function (
         ->assertJsonStructure(['token']);
 });
 
-
 it('impide iniciar sesión con credenciales incorrectas', function () {
     $user = $this->loginAsUser();
 
@@ -42,5 +41,5 @@ it('impide iniciar sesión con credenciales incorrectas', function () {
     ]);
 
     $response->assertUnauthorized()
-        ->assertJsonPath('message', fn($msg) => str_contains($msg, 'Credenciales'));
+        ->assertJsonPath('message', fn ($msg) => str_contains($msg, 'Credenciales'));
 });
