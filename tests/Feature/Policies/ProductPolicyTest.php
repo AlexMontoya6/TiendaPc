@@ -1,29 +1,34 @@
 <?php
 
-namespace App\Policies;
 
-use App\Models\Product;
-use App\Models\User;
-use Spatie\Permission\Models\Permission;
+use Tests\Traits\CreatesProducts;
+use Tests\Traits\CreatesUsers;
 
-beforeEach(function () {
-    Permission::firstOrCreate(['name' => 'crear productos', 'guard_name' => 'web']);
+uses(CreatesProducts::class, CreatesUsers::class);
+
+it('permite a un admin crear un producto', function () {
+    $admin = self::actingAsSuperAdmin();
+    $product = $this->newProduct();
+
+    $policy = new \App\Policies\ProductPolicy();
+
+    expect($policy->create($admin, $product))->toBeTrue();
 });
 
-class ProductPolicy
-{
-    public function create(User $user)
-    {
-        return $user->hasPermissionTo('crear productos');
-    }
+it('permite a un admin actualizar un producto', function () {
+    $admin = self::actingAsSuperAdmin();
+    $product = $this->newProduct();
 
-    public function update(User $user, Product $product)
-    {
-        return $user->hasPermissionTo('editar productos');
-    }
+    $policy = new \App\Policies\ProductPolicy();
 
-    public function delete(User $user, Product $product)
-    {
-        return $user->hasPermissionTo('eliminar productos');
-    }
-}
+    expect($policy->update($admin, $product))->toBeTrue();
+});
+
+it('permite a un admin eliminar un producto', function () {
+    $admin = self::actingAsSuperAdmin();
+    $product = $this->newProduct();
+
+    $policy = new \App\Policies\ProductPolicy();
+
+    expect($policy->delete($admin, $product))->toBeTrue();
+});
