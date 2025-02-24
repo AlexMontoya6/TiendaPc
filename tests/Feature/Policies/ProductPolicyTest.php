@@ -1,6 +1,5 @@
 <?php
 
-
 use Tests\Traits\CreatesProducts;
 use Tests\Traits\CreatesUsers;
 
